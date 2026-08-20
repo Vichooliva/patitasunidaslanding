@@ -1,0 +1,47 @@
+{
+  "generado": "2026-08-20T23:09:31.126Z",
+  "cifras": {
+    "fundacion": {
+      "slug": "patitas-unidas",
+      "nombre": "Patitas Unidas"
+    },
+    "casos": {
+      "total": 64,
+      "abiertos": 34,
+      "enProgreso": 11,
+      "listosParaAdopcion": 10,
+      "resueltos": 5,
+      "cerrados": 4,
+      "porUrgencia": {
+        "urgent": 22,
+        "normal": 30,
+        "critical": 12
+      },
+      "porRegion": {
+        "Atacama": 1,
+        "Maule": 4,
+        "La Araucanía": 1,
+        "Los Lagos": 3,
+        "Ñuble": 3,
+        "Metropolitana": 44,
+        "Valparaíso": 4,
+        "Arica y Parinacota": 4
+      }
+    },
+    "esterilizaciones": {
+      "realizadas": 0
+    },
+    "casitas": {
+      "instaladas": 1,
+      "enProceso": 0
+    },
+    "voluntarios": {
+      "activos": 96
+    },
+    "adopciones": {
+      "concretadas": 2,
+      "disponibles": 15
+    },
+    "actualizadoEn": "2026-08-20T23:09:33.280Z"
+  }
+}

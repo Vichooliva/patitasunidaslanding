@@ -31,6 +31,7 @@
               <nav class="site-nav" aria-label="Menú principal">
                 <a href="#cinema" data-scroll="0">Inicio</a>
                 <a href="#nosotros">Nosotros</a>
+                <a href="#adopta">Adopta</a>
                 <a href="#ayuda">Ayuda</a>
                 <a href="#veterinarios">Veterinarios</a>
               </nav>
@@ -194,6 +195,38 @@
               <p>El eje de todo. Es la &uacute;nica forma de disminuir significativamente la poblaci&oacute;n en calle.</p>
             </li>
           </ol>
+        </div>
+      </section>
+
+      <!-- ================= ADOPTA =================
+        Las tarjetas las pinta script.js con lo que hay en data/adopciones.json,
+        que genera scripts/traer-datos.mjs desde la API de MascotaApp. Si el
+        archivo no existe todavia, la seccion entera se oculta: mas vale que no
+        aparezca a que aparezca vacia.
+      -->
+      <section class="sheet sheet-adopta" id="adopta" aria-labelledby="adopta-title" hidden>
+        <div class="wrap">
+          <div class="sheet-head">
+            <div>
+              <p class="eyebrow">Adopta</p>
+              <h2 class="sheet-title" id="adopta-title">Est&aacute;n esperando una familia.</h2>
+            </div>
+            <div class="sheet-head-aside">
+              <p class="lede">
+                Cada uno de estos animales fue rescatado por la fundaci&oacute;n y hoy busca
+                hogar. Escr&iacute;benos desde MascotaApp si te interesa alguno.
+              </p>
+              <p class="fine" data-adopta-resumen></p>
+            </div>
+          </div>
+
+          <div class="adopta-grid" data-adopta-lista></div>
+
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://mascotaapp.cl" target="_blank" rel="noopener noreferrer">
+              Ver todos en MascotaApp
+            </a>
+          </div>
         </div>
       </section>
 

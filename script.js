@@ -434,6 +434,134 @@
 
   cargarCifras();
 
+  /* ---------- animales en adopción ----------
+     Se pintan desde data/adopciones.json. Los datos vienen de personas
+     escribiendo en una app, así que llegan como llegan: nombres tipo
+     "Sin nombre", especie y sexo en null, historias con saltos de línea.
+     Se limpian aquí en vez de exigirle formato a quien rescata un perro. */
+
+  const SIN_NOMBRE = /^(sin nombre|no tiene|s\/n|-+)$/i;
+
+  function nombreDigno(n) {
+    const t = (n || "").trim();
+    return !t || SIN_NOMBRE.test(t) ? "Aún sin nombre" : t;
+  }
+
+  /** La historia suele acabar con "Rescatado el DD-MM-AAAA en X." Se separa
+      para mostrarlo como dato aparte y que el párrafo respire. */
+  function partirHistoria(texto) {
+    const limpio = (texto || "").replace(/\s*\n+\s*/g, " ").trim();
+    const m = limpio.match(/^(.*?)\s*(Rescatad[oa]\s+el\s+.+?)\.?$/i);
+    return m
+      ? { cuerpo: m[1].trim(), rescate: m[2].trim() }
+      : { cuerpo: limpio, rescate: "" };
+  }
+
+  function recortar(texto, max) {
+    if (texto.length <= max) return texto;
+    const corte = texto.slice(0, max);
+    const esp = corte.lastIndexOf(" ");
+    return (esp > max * 0.6 ? corte.slice(0, esp) : corte).replace(/[.,;]$/, "") + "…";
+  }
+
+  async function cargarAdopciones() {
+    const seccion = document.getElementById("adopta");
+    const lista = document.querySelector("[data-adopta-lista]");
+    if (!seccion || !lista) return;
+
+    let datos;
+    try {
+      const r = await fetch("data/adopciones.json", { cache: "no-cache" });
+      if (!r.ok) return;
+      datos = await r.json();
+    } catch {
+      return; // sin datos: la sección se queda oculta
+    }
+
+    const animales = (datos.animales || []).filter((a) => a.foto);
+    if (!animales.length) return; // sin fotos no hay sección que mostrar
+
+    lista.replaceChildren(
+      ...animales.map((a) => {
+        const { cuerpo, rescate } = partirHistoria(a.historia);
+        const art = document.createElement("article");
+        art.className = "adopta-card";
+
+        const fig = document.createElement("img");
+        fig.className = "adopta-foto";
+        fig.src = a.foto;
+        fig.alt = `Foto de ${nombreDigno(a.nombre)}`;
+        fig.loading = "lazy";
+        fig.decoding = "async";
+
+        const cuerpoEl = document.createElement("div");
+        cuerpoEl.className = "adopta-cuerpo";
+
+        const h3 = document.createElement("h3");
+        h3.textContent = nombreDigno(a.nombre);
+        cuerpoEl.appendChild(h3);
+
+        if (a.comuna) {
+          const loc = document.createElement("p");
+          loc.className = "adopta-comuna";
+          loc.textContent = a.comuna;
+          cuerpoEl.appendChild(loc);
+        }
+
+        if (cuerpo) {
+          const p = document.createElement("p");
+          p.className = "adopta-historia";
+          p.textContent = recortar(cuerpo, 190);
+          cuerpoEl.appendChild(p);
+        }
+
+        // sólo se muestran las marcas de salud que son ciertas: un listado de
+        // "no vacunado / no esterilizado" no ayuda a que lo adopten
+        const salud = a.salud || {};
+        const marcas = [
+          salud.vacunado && "Vacunado",
+          salud.esterilizado && "Esterilizado",
+          salud.desparasitado && "Desparasitado",
+          salud.necesidadesEspeciales && "Necesidades especiales",
+        ].filter(Boolean);
+
+        if (marcas.length) {
+          const ul = document.createElement("ul");
+          ul.className = "adopta-salud";
+          for (const m of marcas) {
+            const li = document.createElement("li");
+            li.textContent = m;
+            ul.appendChild(li);
+          }
+          cuerpoEl.appendChild(ul);
+        }
+
+        if (rescate) {
+          const r = document.createElement("p");
+          r.className = "adopta-rescate";
+          r.textContent = rescate;
+          cuerpoEl.appendChild(r);
+        }
+
+        art.append(fig, cuerpoEl);
+        return art;
+      })
+    );
+
+    const resumen = document.querySelector("[data-adopta-resumen]");
+    if (resumen && datos.total) {
+      const n = datos.total;
+      resumen.textContent =
+        n > animales.length
+          ? `Mostramos ${animales.length} de ${n} animales disponibles ahora mismo.`
+          : `${n} ${n === 1 ? "animal disponible" : "animales disponibles"} ahora mismo.`;
+    }
+
+    seccion.hidden = false;
+  }
+
+  cargarAdopciones();
+
   setupSightSlider();
   requestTick();
 })();
