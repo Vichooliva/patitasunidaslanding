@@ -1567,3 +1567,235 @@ button {
     gap: 8px;
   }
 }
+
+
+/* =====================================================================
+   CAPA ESTETICA DE LAS SECCIONES
+   Las secciones eran texto sobre color plano. Aqui entran las fotos de
+   fondo traslucidas, el patron de huellas del logo y los botones de
+   tienda con icono.
+   ===================================================================== */
+
+/* ---------- huellas ----------
+   Tomadas del logo, que lleva dos huellas a los lados. Van como patron
+   repetido a opacidad muy baja: dan textura sin competir con el texto. */
+
+:root {
+  --huellas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='%23c4634c'%3E%3Cellipse cx='30' cy='34' rx='7' ry='9.5' transform='rotate(-20 30 34)'/%3E%3Cellipse cx='45' cy='24' rx='7' ry='10'/%3E%3Cellipse cx='60' cy='26' rx='7' ry='10' transform='rotate(12 60 26)'/%3E%3Cellipse cx='73' cy='38' rx='6.5' ry='9' transform='rotate(28 73 38)'/%3E%3Cpath d='M50 40c10 0 19 8 19 17 0 7-6 11-12 11-3 0-6-1-7-1s-4 1-7 1c-6 0-12-4-12-11 0-9 9-17 19-17z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.sheet {
+  position: relative;
+  overflow: hidden;
+}
+
+/* foto de fondo, casi imperceptible: da profundidad sin restar lectura */
+.sheet::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background-image: var(--sheet-foto, none);
+  background-size: cover;
+  background-position: center;
+  opacity: var(--sheet-foto-op, 0);
+  pointer-events: none;
+}
+
+/* huellas por encima de la foto, tambien muy tenues */
+.sheet::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: var(--huellas);
+  background-size: 190px 190px;
+  opacity: 0.045;
+  pointer-events: none;
+  /* se desvanecen hacia el centro para no cruzarse con el texto */
+  -webkit-mask-image: radial-gradient(78% 68% at 50% 50%, transparent 26%, #000 88%);
+  mask-image: radial-gradient(78% 68% at 50% 50%, transparent 26%, #000 88%);
+}
+
+#nosotros {
+  --sheet-foto: url("img/split-left.jpg");
+  --sheet-foto-op: 0.06;
+}
+
+#ayuda {
+  --sheet-foto: url("img/frame-two.jpg");
+  --sheet-foto-op: 0.1;
+}
+
+#veterinarios {
+  --sheet-foto: url("img/ground.jpg");
+  --sheet-foto-op: 0.05;
+}
+
+.sheet-dark::after {
+  opacity: 0.07;
+}
+
+/* halo calido en la esquina, para que el fondo no sea un rectangulo liso */
+.sheet .wrap {
+  position: relative;
+  z-index: 1;
+}
+
+#ayuda .wrap::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -14%;
+  right: -18%;
+  width: 46vw;
+  height: 46vw;
+  max-width: 620px;
+  max-height: 620px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 99, 76, 0.22) 0%, rgba(196, 99, 76, 0) 68%);
+  pointer-events: none;
+}
+
+/* ---------- botones de tienda ---------- */
+
+.stores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.store {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px 10px 16px;
+  border: 1px solid rgba(250, 242, 234, 0.3);
+  border-radius: 14px;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 200ms ease, background-color 200ms ease;
+}
+
+.store:hover {
+  transform: translateY(-2px);
+  border-color: var(--terracota);
+  background: rgba(196, 99, 76, 0.12);
+}
+
+.store:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 3px;
+}
+
+.store-ico {
+  width: 26px;
+  height: 26px;
+  flex: none;
+}
+
+.store span {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.store small {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  opacity: 0.66;
+}
+
+/* ---------- bloque del QR ---------- */
+
+.qr-block {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid rgba(250, 242, 234, 0.16);
+  border-radius: 16px;
+  background: rgba(250, 242, 234, 0.04);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 200ms ease, background-color 200ms ease;
+}
+
+.qr-block:hover {
+  transform: translateY(-2px);
+  border-color: var(--terracota);
+  background: rgba(196, 99, 76, 0.1);
+}
+
+.qr-block:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 3px;
+}
+
+/* el QR es oscuro sobre transparente: necesita fondo claro para leerse */
+.qr {
+  width: 92px;
+  height: 92px;
+  flex: none;
+  padding: 7px;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.qr-block span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  opacity: 0.82;
+}
+
+.qr-block strong {
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 1;
+}
+
+/* ---------- tiendas en el pie ---------- */
+
+.footer-stores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.footer-stores a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+}
+
+.footer-stores svg {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 520px) {
+  .stores {
+    flex-direction: column;
+  }
+
+  .store {
+    justify-content: flex-start;
+  }
+
+  .qr-block {
+    flex-direction: column;
+    text-align: center;
+  }
+}
