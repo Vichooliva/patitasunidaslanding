@@ -1,0 +1,1569 @@
+/* Tipografía de display.
+   Playfair Display (SIL Open Font License, gratuita) sustituye a "Ogg Medium",
+   que es un tipo comercial de Sharp Type y se cargaba desde el CDN de un tercero.
+   Si la fundación compra licencia de Ogg, basta con volver a poner el @font-face
+   original y cambiar el valor de --font-display. */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&display=swap");
+
+:root {
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  /* El tono calido (sepia .24 / saturate 1.18 / hue-rotate -14deg) esta
+     HORNEADO en los propios JPEG. Aplicarlo por CSS obligaba al navegador a
+     recalcular un filtro sobre imagenes a pantalla completa en cada frame:
+     era la causa principal del scroll a tirones. Ver scratchpad/bake.py. */
+  --scene-filter: none;
+
+  --mx: 0;
+  --my: 0;
+  --back-opacity: 1;
+  --back-x: 0px;
+  --back-y: 0px;
+  --back-scale: 0.76;
+  --four-y: 10vh;
+  --four-scale: 0.78;
+  --bazaar-y: 20vh;
+  --blur-px: 0px;
+  --back-brightness: 1;
+  --bazaar-blur-px: 0px;
+  --bazaar-brightness: 1;
+  --bazaar-saturation: 1;
+  --shade-opacity: 1;
+  --shade-z: 2;
+  --shade-top-alpha: 0;
+  --shade-mid-alpha: 0;
+  --shade-bottom-alpha: 0;
+  --blur-tint: 75, 58, 41;
+  --title-y: 0px;
+  --title-scale: 1;
+  --title-opacity: 1;
+  --bridge-x: -50%;
+  --bridge-y: 0px;
+  --bridge-bottom: 26vh;
+  --bridge-width: 44vw;
+  --bridge-height: 34vh;
+  --bridge-opacity: 1;
+  --bridge-scale: 1.02;
+  --split-left-x: -50%;
+  --split-left-y: 0px;
+  --split-left-scale: 1;
+  --split-right-x: -50%;
+  --split-right-y: 0px;
+  --split-right-scale: 1;
+  --frame2-opacity: 0;
+  --frame2-x: -50%;
+  --frame2-y: -50%;
+  --frame2-scale: 1.06;
+  --intro-copy-y: 0px;
+  --intro-copy-opacity: 1;
+  --panel2-opacity: 0;
+  --panel2-y: calc(-50% + 58px);
+  --panel3-opacity: 0;
+  --panel3-y: calc(-50% + 58px);
+  --sights-opacity: 0;
+  --sights-controls-opacity: 0;
+  --sights-y: 0px;
+  --sights-enter-x: 420vw;
+  --sights-visibility: hidden;
+  --sights-shift: 0px;
+  --sights-scale: 1;
+  --sights-top: clamp(112px, 19vh, 220px);
+  --sights-screen-top: clamp(112px, 19vh, 220px);
+  /* Paleta tomada del logo: crema, marrón oscuro, terracota y caramelo. */
+  --ink: #2b2420;
+  --paper: #faf2ea;
+  --terracota: #c4634c;
+  --caramelo: #c79a6e;
+  --marron: #4b3a29;
+  --shadow: rgba(43, 36, 32, 0.34);
+
+  font-family: Inter, Satoshi, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--paper);
+  background: #0b1110;
+  letter-spacing: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+  background: #0b1110;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  overflow-x: clip;
+  background: #0b1110;
+}
+
+button {
+  border: 0;
+  font: inherit;
+}
+
+.site-shell {
+  min-height: 100vh;
+}
+
+/* ---------- scroll rig ---------- */
+
+.cinema-scroll {
+  position: relative;
+  height: calc(100vh + 3700px);
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 620px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #7fb4d4;
+}
+
+.world,
+.back-stack,
+.sky-img,
+.shade,
+.scene-img,
+.site-header,
+.sights-slider,
+.sights-controls,
+.hero-title,
+.intro-copy,
+.story-panel {
+  position: absolute;
+}
+
+.world {
+  inset: 0;
+  overflow: hidden;
+  background: #79b7dd;
+}
+
+/* ---------- header ---------- */
+
+.site-header {
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) auto minmax(260px, 1fr);
+  align-items: center;
+  gap: 32px;
+  padding: 32px;
+  color: rgba(253, 241, 225, 0.86);
+  pointer-events: auto;
+  /* Velo superior: el follaje claro se comía el logo y el menú. */
+  background: linear-gradient(180deg, rgba(6, 14, 9, 0.42) 0%, rgba(6, 14, 9, 0) 100%);
+}
+
+.site-logo {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* El logotipo es un círculo crema; el borde redondo y la sombra lo separan
+   del follaje sin necesidad de recortarlo. */
+.site-logo-mark {
+  width: 66px;
+  height: 66px;
+  border-radius: 999px;
+  object-fit: cover;
+  /* el PNG ya viene recortado en círculo con fondo transparente */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.34);
+}
+
+.site-logo-text {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.site-logo-text small {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  /* el caramelo del logo se perdía sobre el follaje; crema al 78 % sí lee */
+  color: rgba(250, 242, 234, 0.78);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 2.2vw, 44px);
+}
+
+.site-nav a,
+.language-switcher {
+  color: rgba(253, 241, 225, 0.86);
+  font-weight: 700;
+  line-height: 1;
+  /* Sombra reforzada: el fondo es follaje claro, no el cielo plano del original. */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.site-nav a {
+  position: relative;
+  padding-bottom: 6px;
+  font-size: 20px;
+  font-weight: 400;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 220ms ease;
+}
+
+/* Subrayado en terracota, el acento del logo. */
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--terracota);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible,
+.site-nav a.is-current {
+  color: var(--paper);
+}
+
+.site-nav a:hover::after,
+.site-nav a:focus-visible::after,
+.site-nav a.is-current::after {
+  transform: scaleX(1);
+}
+
+.language-switcher {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.language-switcher span {
+  display: inline-flex;
+  line-height: 1;
+}
+
+/* ---------- scene images ---------- */
+
+.scene-img {
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.sky-img {
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: none;
+  filter: var(--scene-filter);
+}
+
+.back-stack {
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: -3vw;
+  right: -3vw;
+  opacity: var(--back-opacity);
+  transform: translate3d(var(--back-x), var(--back-y), 0) scale(var(--back-scale));
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+.back-img {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: var(--scene-filter);
+}
+
+/* Banda de suelo. La capa original era un PNG recortado (skyline del bazar);
+   como ahora es una foto rectangular, la fundimos por arriba con una máscara
+   para que no se vea el borde recto contra el cielo. */
+.back-ground {
+  z-index: 3;
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 48%;
+  right: auto;
+  width: 112%;
+  height: 62%;
+  object-fit: cover;
+  object-position: 50% 60%;
+  opacity: 1;
+  filter: var(--ground-filter);
+  transform: translate3d(-50%, var(--bazaar-y), 0) scale(0.86);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 34%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 34%, #000 100%);
+}
+
+/* Antes era un PNG con brillo en mix-blend-mode:screen. Un JPG opaco ahí
+   lavaría la escena entera, así que el resplandor pasa a ser puro CSS. */
+.back-glow {
+  position: absolute;
+  z-index: 1;
+  top: auto;
+  bottom: 0;
+  left: 48%;
+  right: auto;
+  width: 112%;
+  height: 90%;
+  opacity: 0.5;
+  pointer-events: none;
+  background: radial-gradient(
+    62% 48% at 50% 74%,
+    rgba(255, 232, 186, 0.62) 0%,
+    rgba(255, 214, 150, 0.28) 42%,
+    rgba(255, 214, 150, 0) 72%
+  );
+  transform: translate3d(-50%, calc(var(--four-y) - 110px), 0) scale(var(--four-scale));
+  will-change: transform;
+}
+
+/* ---------- sights slider ---------- */
+
+/* z 4: por encima de .back-ground (3). En el original el slider iba en z 2
+   porque la capa del bazar era un recorte y las tarjetas asomaban por detrás;
+   con una foto opaca delante quedaban ocultas. */
+.sights-slider {
+  z-index: 4;
+  left: 0;
+  right: 0;
+  /* top fijo: el desplazamiento vertical va dentro del transform,
+     para no provocar relayout de las 15 tarjetas en cada frame. */
+  top: 0;
+  padding: 0;
+  opacity: 1;
+  visibility: var(--sights-visibility);
+  transform: translate3d(var(--sights-enter-x), var(--sights-y), 0) scale(var(--sights-scale));
+  transform-origin: 0 0;
+  pointer-events: auto;
+  will-change: transform;
+}
+
+.sights-track {
+  display: flex;
+  gap: clamp(16px, 1.15vw, 24px);
+  align-items: stretch;
+  transform: translate3d(calc(var(--sights-shift) - 18vw), 0, 0);
+  transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.sights-track.is-jumping {
+  transition: none;
+}
+
+.sight-card {
+  position: relative;
+  flex: 0 0 clamp(360px, 19.4vw, 430px);
+  height: 220px;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(253, 241, 225, 0.42);
+  border-radius: 24px;
+  color: #000;
+  background: #fdf1e1;
+  box-shadow: 0 18px 52px rgba(2, 47, 64, 0.12);
+  backdrop-filter: none;
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.sight-card::before,
+.sight-card::after {
+  content: none;
+}
+
+.sight-card .sight-kicker,
+.sight-card h3,
+.sight-card p {
+  position: relative;
+  z-index: 1;
+  text-shadow: none;
+}
+
+.sight-card:focus-visible,
+.sight-card.is-active {
+  outline: none;
+}
+
+.sight-kicker {
+  display: block;
+  margin-bottom: 56px;
+  color: #000;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+/* Los pines originales eran recortes PNG con fondo transparente; ahora son
+   fotos cuadradas, así que se redondean para que no lean como sellos pegados. */
+.sight-pin {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 67.2px;
+  height: 67.2px;
+  object-fit: cover;
+  border-radius: 18px;
+  pointer-events: none;
+}
+
+.sight-card h3 {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: calc(24px + (16px * 1.16 * 2) + 12px);
+  max-width: calc(100% - 76px);
+  margin: 0;
+  color: #000;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 0.95;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sight-card p {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  max-width: 100%;
+  margin: 12px 0 0;
+  color: #000;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.16;
+  display: -webkit-box;
+  max-height: calc(2em * 1.16);
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.sights-controls {
+  z-index: 5;
+  left: 48px;
+  right: auto;
+  top: calc(var(--sights-screen-top) + 220px + 16px);
+  display: flex;
+  justify-content: flex-start;
+  gap: 14px;
+  opacity: var(--sights-controls-opacity);
+  transform: translate3d(0, var(--sights-y), 0);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.sights-controls.is-ready {
+  pointer-events: auto;
+}
+
+.sight-nav {
+  width: 54px;
+  height: 54px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #111411;
+  background: rgba(253, 241, 225, 0.94);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+/* ---------- hero ---------- */
+
+/* z 8: por encima de la lámina protagonista (4) y de las hojas (6).
+   En el diseño original bastaba z 3 porque aquellas capas eran PNGs
+   transparentes por el centro y el título se leía a través. */
+.hero-title {
+  z-index: 8;
+  left: 50%;
+  /* Subido respecto al original (19vh): el título ocupa dos líneas y a 19vh
+     su segunda línea se solapaba con el borde superior de la lámina central. */
+  top: clamp(84px, 12vh, 150px);
+  width: min(94vw, 1780px);
+  margin: 0;
+  color: #fdf1e1;
+  font-family: var(--font-display);
+  font-size: 9rem;
+  font-weight: 500;
+  line-height: 0.86;
+  text-align: center;
+  /* Sobre fotos reales el título necesita sombra; el original iba sobre PNGs
+     compuestos a medida y podía permitirse text-shadow: none. */
+  text-shadow: 0 10px 44px rgba(0, 0, 0, 0.42);
+  transform: translate3d(-50%, var(--title-y), 0) scale(var(--title-scale));
+  opacity: var(--title-opacity);
+  will-change: transform, opacity;
+}
+
+/* Foto protagonista. Antes era un PNG recortado del puente; al ser ahora una
+   foto rectangular le damos radio y sombra para que lea como una lámina y no
+   como un recorte pegado. */
+.bridge-img {
+  z-index: 4;
+  left: 50%;
+  /* Medidas FIJAS: el crecimiento va por scale() dentro del transform.
+     Animar width/height/bottom obligaba a relayout en cada frame. */
+  bottom: 26vh;
+  width: min(44vw, 900px);
+  height: 34vh;
+  object-fit: cover;
+  object-position: 50% 62%;
+  border-radius: 28px;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.4);
+  /* El PNG del puente desaparecía al salir de cuadro por su propia
+     transparencia; un rectángulo opaco se queda asomando arriba, así que
+     se desvanece explícitamente. */
+  opacity: var(--bridge-opacity);
+  transform: translate3d(var(--bridge-x), var(--bridge-y), 0) scale(var(--bridge-scale));
+  transform-origin: 50% 48%;
+}
+
+/* Las dos hojas que se abren como cortina. En el original eran las mitades
+   transparentes de un mismo marco; aquí son dos fotos independientes, así que
+   cada una arranca desplazada a su lado (∓28vw) y lleva el borde interior
+   difuminado para que el centro quede libre y el título se lea. */
+.splitframe-img {
+  z-index: 6;
+  left: 50%;
+  bottom: 28vh;
+  width: min(30vw, 470px);
+  height: 28vh;
+  object-fit: cover;
+  border-radius: 24px;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.36);
+  pointer-events: none;
+}
+
+.splitframe-left {
+  transform: translate3d(calc(var(--split-left-x) - 33vw), var(--split-left-y), 0)
+    scale(var(--split-left-scale));
+  transform-origin: 21% 52%;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 46%, transparent 94%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 46%, transparent 94%);
+}
+
+.splitframe-right {
+  transform: translate3d(calc(var(--split-right-x) + 33vw), var(--split-right-y), 0)
+    scale(var(--split-right-scale));
+  transform-origin: 79% 52%;
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 46%, transparent 94%);
+  mask-image: linear-gradient(270deg, #000 0%, #000 46%, transparent 94%);
+}
+
+.frame-two-img {
+  z-index: 5;
+  filter: none !important;
+  backdrop-filter: none;
+  left: 50%;
+  top: 50%;
+  width: min(122vw, 2160px);
+  height: auto;
+  opacity: var(--frame2-opacity);
+  transform: translate3d(var(--frame2-x), var(--frame2-y), 0) scale(var(--frame2-scale));
+  transform-origin: 50% 48%;
+}
+
+.shade {
+  inset: 0;
+  z-index: var(--shade-z);
+  pointer-events: none;
+  opacity: var(--shade-opacity);
+  background: linear-gradient(
+    180deg,
+    rgba(var(--blur-tint), var(--shade-top-alpha)) 0%,
+    rgba(var(--blur-tint), var(--shade-mid-alpha)) 48%,
+    rgba(var(--blur-tint), var(--shade-bottom-alpha)) 100%
+  );
+}
+
+/* Viñeta cálida.
+   Sólo oscurece bordes y esquinas para dar foco; el calentado del color lo
+   hace --warm sobre las propias fotos. Va en z 2, por debajo de la lámina
+   central (4) y del carrusel, para no apagar las tarjetas crema. */
+.warmth {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    116% 84% at 50% 44%,
+    rgba(199, 154, 110, 0.18) 0%,
+    rgba(120, 84, 54, 0.24) 54%,
+    rgba(43, 33, 24, 0.5) 100%
+  );
+}
+
+/* ---------- copy blocks ---------- */
+
+.intro-copy {
+  z-index: 9;
+  left: 50%;
+  bottom: clamp(40px, 9vh, 110px);
+  width: min(560px, calc(100vw - 40px));
+  text-align: center;
+  transform: translate3d(-50%, var(--intro-copy-y), 0);
+  opacity: var(--intro-copy-opacity);
+  will-change: transform, opacity;
+}
+
+.intro-copy p {
+  margin: 0 auto;
+  max-width: 560px;
+  color: #fdf1e1;
+  font-size: 1.18rem;
+  font-weight: 500;
+  line-height: 1.18;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.42);
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.hero-tags a {
+  min-height: 42px;
+  text-decoration: none;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 200ms ease,
+    background-color 200ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 25px;
+  color: var(--ink);
+  border-radius: 999px;
+  background: #fdf1e1;
+  font-size: 0.98rem;
+  font-weight: 500;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.hero-tags a:hover {
+  transform: translateY(-2px);
+  background: #fffaf3;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.26);
+}
+
+.hero-tags a:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 3px;
+}
+
+.story-panel {
+  z-index: 10;
+  left: 50%;
+  top: 45%;
+  width: min(760px, calc(100vw - 42px));
+  text-align: center;
+  pointer-events: none;
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform, opacity;
+}
+
+/* Velo propio de cada bloque de texto.
+   El .shade global vive en z 2 y la foto de frame-two en z 5, así que el velo
+   nunca la oscurece y el texto quedaba ilegible sobre hierba clara. */
+.story-panel::before,
+.intro-copy::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -14% -18%;
+  pointer-events: none;
+  background: radial-gradient(
+    66% 64% at 50% 50%,
+    rgba(9, 17, 11, 0.8) 0%,
+    rgba(9, 17, 11, 0.56) 52%,
+    rgba(9, 17, 11, 0) 84%
+  );
+}
+
+.story-panel h2 {
+  margin: 0;
+  color: #fdf1e1;
+  font-family: var(--font-display);
+  font-size: 4.75rem;
+  font-weight: 500;
+  line-height: 0.95;
+  text-shadow: 0 16px 38px var(--shadow);
+}
+
+.story-panel p {
+  width: min(520px, 100%);
+  margin: 26px auto 0;
+  color: #fdf1e1;
+  font-size: 1.14rem;
+  font-weight: 500;
+  line-height: 1.18;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.42);
+}
+
+.story-panel-bridge {
+  top: 60%;
+  opacity: var(--panel2-opacity);
+  transform: translate3d(-50%, var(--panel2-y), 0);
+}
+
+.story-panel-bazaar {
+  top: 29%;
+  opacity: var(--panel3-opacity);
+  transform: translate3d(-50%, var(--panel3-y), 0);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 86px;
+  width: min(470px, 100%);
+  margin: 72px auto 0;
+}
+
+.facts dt {
+  color: #fdf1e1;
+  font-family: var(--font-display);
+  font-size: 4.2rem;
+  font-weight: 500;
+  line-height: 0.9;
+  text-shadow: 0 14px 34px var(--shadow);
+}
+
+.facts dd {
+  margin: 18px 0 0;
+  color: #fdf1e1;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.14;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.42);
+}
+
+.note-button {
+  min-height: 50px;
+  margin-top: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 28px;
+  border-radius: 999px;
+  color: var(--ink);
+  background: #fdf1e1;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.note-button span:first-child {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* ---------- estados interactivos ----------
+   El diseño original no traía ninguno: nada respondía al ratón ni al teclado,
+   que es parte de por qué los botones parecían muertos. */
+
+.note-button,
+.sight-nav,
+.sight-card,
+.language-switcher {
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.note-button:hover,
+.sight-nav:hover {
+  transform: translateY(-2px);
+  background: #fffaf3;
+  box-shadow: 0 22px 44px rgba(43, 33, 24, 0.32);
+}
+
+.note-button:active,
+.sight-nav:active {
+  transform: translateY(0);
+}
+
+.sight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 26px 60px rgba(43, 33, 24, 0.26);
+}
+
+.language-switcher:hover {
+  color: var(--paper);
+}
+
+/* Foco visible y consistente para navegación por teclado. */
+.site-nav a:focus-visible,
+.site-logo:focus-visible,
+.note-button:focus-visible,
+.sight-nav:focus-visible,
+.language-switcher:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* La tarjeta activa del carrusel se marca con el acento del logo.
+   El diseño original la dejaba idéntica al resto (outline: none). */
+.sight-card.is-active {
+  border-color: var(--terracota);
+  box-shadow: 0 0 0 2px var(--terracota), 0 22px 56px rgba(43, 33, 24, 0.28);
+}
+
+.sight-card:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 3px;
+}
+
+/* ---------- media queries ---------- */
+
+@media (max-width: 1500px) {
+  .hero-title {
+    font-size: 7.4rem;
+  }
+
+  .story-panel h2 {
+    font-size: 4.1rem;
+  }
+}
+
+@media (max-width: 1100px) {
+  .hero-title {
+    top: 15vh;
+    font-size: 5.4rem;
+  }
+
+  .splitframe-img {
+    width: min(64vw, 720px);
+  }
+
+  .bridge-img {
+    width: 138vw;
+  }
+
+  .frame-two-img {
+    width: 132vw;
+  }
+
+  .story-panel h2 {
+    font-size: 3.2rem;
+  }
+
+  .facts {
+    gap: 34px;
+    margin-top: 44px;
+  }
+
+  .facts dt {
+    font-size: 3.2rem;
+  }
+
+  .sight-card {
+    flex-basis: clamp(320px, 40vw, 390px);
+    min-height: 178px;
+  }
+}
+
+@media (max-width: 640px) {
+  .stage {
+    min-height: 640px;
+  }
+
+  .site-header {
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    padding: 24px;
+  }
+
+  .site-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
+    gap: 18px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .site-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hero-title {
+    top: 16vh;
+    font-size: 3.4rem;
+  }
+
+  .splitframe-img {
+    bottom: 12vh;
+    width: min(78vw, 420px);
+  }
+
+  .bridge-img {
+    bottom: 2vh;
+    width: 190vw;
+  }
+
+  .frame-two-img {
+    width: 176vw;
+  }
+
+  .intro-copy {
+    bottom: 42px;
+  }
+
+  .intro-copy p,
+  .story-panel p {
+    font-size: 1rem;
+  }
+
+  .hero-tags {
+    gap: 8px;
+  }
+
+  .hero-tags a {
+    min-height: 38px;
+    padding: 0 16px;
+    font-size: 0.88rem;
+  }
+
+  .story-panel {
+    top: 42%;
+  }
+
+  .story-panel-bazaar {
+    top: 26%;
+  }
+
+  .story-panel h2 {
+    font-size: 2.45rem;
+  }
+
+  .facts {
+    gap: 18px;
+    margin-top: 34px;
+  }
+
+  .facts dt {
+    font-size: 2.5rem;
+  }
+
+  .sights-slider {
+    padding: 0;
+  }
+
+  .sights-track {
+    gap: 12px;
+    transform: translate3d(calc(var(--sights-shift) - 18vw), 0, 0);
+  }
+
+  .sight-card {
+    flex-basis: min(82vw, 330px);
+    height: 220px;
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .sights-controls {
+    top: calc(var(--sights-screen-top) + 236px);
+  }
+
+  .sight-card h3 {
+    max-width: 78%;
+  }
+
+  .sight-card p {
+    max-width: 100%;
+    margin-top: 10px;
+  }
+
+  .sight-kicker {
+    margin-bottom: 56px;
+  }
+
+  .sight-pin {
+    top: 24px;
+    right: 24px;
+    width: 57.6px;
+    height: 57.6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .scene-img,
+  .back-stack,
+  .hero-title,
+  .intro-copy,
+  .story-panel,
+  .sights-track,
+  .sights-slider {
+    transition: none;
+  }
+}
+
+/* =====================================================================
+   SECCIONES DE CONTENIDO
+   Debajo de la escena. Paleta del logo: crema, terracota, marron.
+   ===================================================================== */
+
+.sheet {
+  position: relative;
+  z-index: 1;
+  /* no se pintan mientras estan lejos del viewport */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+  padding: clamp(64px, 7.5vw, 116px) 24px;
+  color: var(--ink);
+  background: var(--paper);
+  scroll-margin-top: 0;
+}
+
+.sheet-dark {
+  color: var(--paper);
+  /* degradado sutil en vez de un marron plano, que se veia muerto */
+  background: radial-gradient(120% 90% at 18% 0%, #33271f 0%, #1e1814 62%, #191310 100%);
+}
+
+.wrap {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+/* ---------- cabecera de seccion ----------
+   Titulo a la izquierda y entradilla a la derecha: llena el ancho y evita
+   la columna estrecha de texto flotando en un mar de vacio. */
+
+.sheet-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(28px, 4vw, 72px);
+  align-items: end;
+  padding-bottom: clamp(30px, 3.4vw, 52px);
+  border-bottom: 1px solid currentColor;
+}
+
+.sheet-dark .sheet-head,
+.sheet .sheet-head {
+  border-bottom-color: rgba(196, 99, 76, 0.34);
+}
+
+.sheet-head-aside {
+  padding-bottom: 4px;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  color: var(--terracota);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.sheet-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.9vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.lede {
+  margin: 0 0 14px;
+  font-size: clamp(1rem, 1.2vw, 1.12rem);
+  line-height: 1.6;
+  opacity: 0.88;
+}
+
+.lede:last-child {
+  margin-bottom: 0;
+}
+
+/* la frase que carga el mensaje central va destacada */
+.lede-accent {
+  padding-left: 16px;
+  border-left: 3px solid var(--terracota);
+  font-weight: 600;
+  opacity: 1;
+}
+
+.fine {
+  margin: 16px 0 0;
+  opacity: 0.7;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* ---------- pilares ---------- */
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(24px, 2.8vw, 46px);
+  margin: clamp(36px, 4vw, 58px) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.pillars li {
+  position: relative;
+  padding-top: 4px;
+}
+
+.pillar-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 16px;
+  border-radius: 999px;
+  color: var(--paper);
+  background: var(--terracota);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.pillars h3 {
+  margin: 0 0 8px;
+  font-size: 1.18rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.pillars p {
+  margin: 0;
+  opacity: 0.78;
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+/* ---------- ayuda ---------- */
+
+.help-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(20px, 2.2vw, 32px);
+  /* start, no stretch: antes las tarjetas se estiraban a la mas alta y
+     dejaban un hueco muerto enorme debajo del contenido */
+  align-items: start;
+  margin-top: clamp(34px, 4vw, 54px);
+}
+
+.help-card {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(26px, 2.6vw, 38px);
+  border: 1px solid rgba(250, 242, 234, 0.14);
+  border-radius: 20px;
+  background: rgba(250, 242, 234, 0.045);
+}
+
+.help-card-accent {
+  border-color: rgba(196, 99, 76, 0.5);
+  background: rgba(196, 99, 76, 0.09);
+}
+
+.card-tag {
+  margin: 0 0 10px;
+  color: var(--caramelo);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.help-card h3 {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2vw, 1.9rem);
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.help-card > p {
+  margin: 0 0 16px;
+  font-size: 0.99rem;
+  line-height: 1.58;
+}
+
+.card-foot {
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chips li {
+  padding: 7px 14px;
+  border: 1px solid rgba(250, 242, 234, 0.24);
+  border-radius: 999px;
+  font-size: 0.87rem;
+  white-space: nowrap;
+}
+
+.store-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 0;
+  font-size: 0.92rem;
+}
+
+.store-links a {
+  color: inherit;
+  opacity: 0.78;
+  text-underline-offset: 3px;
+}
+
+.store-links a:hover {
+  opacity: 1;
+  color: var(--caramelo);
+}
+
+/* ---------- datos bancarios ---------- */
+
+.bank {
+  margin: 0;
+}
+
+.bank > div {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: 4px 16px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(250, 242, 234, 0.12);
+}
+
+.bank > div:last-child {
+  border-bottom: 0;
+}
+
+.bank dt {
+  opacity: 0.62;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bank dd {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+
+/* el correo es largo: que no fuerce la columna */
+.dd-mail {
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+/* ---------- veterinarios ---------- */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(32px, 4.5vw, 76px);
+  align-items: center;
+}
+
+.split-media {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(43, 33, 24, 0.22);
+}
+
+.split-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  object-fit: cover;
+}
+
+.split-text .sheet-title {
+  margin-bottom: 22px;
+}
+
+/* el descuento es el gancho: se trata como dato, no como frase */
+.discount {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 26px 0;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: rgba(196, 99, 76, 0.1);
+}
+
+.discount strong {
+  color: var(--terracota);
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3.4vw, 3rem);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.discount span {
+  font-size: 0.98rem;
+  line-height: 1.4;
+}
+
+.ticks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ticks li {
+  position: relative;
+  padding: 9px 0 9px 30px;
+  font-size: 0.99rem;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(43, 36, 32, 0.1);
+}
+
+.ticks li:last-child {
+  border-bottom: 0;
+}
+
+.ticks li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 17px;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--terracota);
+}
+
+/* ---------- botones ---------- */
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 26px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.99rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--terracota);
+  box-shadow: 0 12px 26px rgba(196, 99, 76, 0.28);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: #d0705a;
+  box-shadow: 0 18px 34px rgba(196, 99, 76, 0.38);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 3px;
+}
+
+.sheet-dark .btn:focus-visible {
+  outline-color: var(--paper);
+}
+
+/* ---------- pie ---------- */
+
+.site-footer {
+  position: relative;
+  z-index: 1;
+  padding: clamp(44px, 4.6vw, 72px) 24px;
+  color: var(--paper);
+  background: #191310;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 34px;
+}
+
+.footer-logo {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+}
+
+.footer-brand {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+}
+
+.footer-head {
+  margin: 0 0 10px;
+  color: var(--caramelo);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.site-footer p {
+  margin: 0 0 6px;
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
+.site-footer .fine {
+  margin-top: 0;
+}
+
+.site-footer a {
+  color: var(--paper);
+  text-decoration-color: rgba(250, 242, 234, 0.35);
+  text-underline-offset: 3px;
+  word-break: break-word;
+}
+
+.site-footer a:hover {
+  color: var(--caramelo);
+}
+
+.site-footer a:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- adaptacion ---------- */
+
+@media (max-width: 900px) {
+  .sheet-head,
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .split-media {
+    order: -1;
+  }
+
+  .split-media img {
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 640px) {
+  .bank > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .discount {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

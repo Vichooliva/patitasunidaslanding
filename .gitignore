@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+.vscode/
+.idea/
+node_modules/
+
+# nunca subir la llave de la API de MascotaApp
+.env
+.env.*
+*.key

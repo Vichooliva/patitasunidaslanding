@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selección de imágenes — Patitas Unidas</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; padding:32px; background:#12100e; color:#f4ece0;
+         font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  h1 { margin:0 0 8px; font-size:1.6rem; }
+  .lead { margin:0 0 8px; max-width:70ch; color:#bdb2a4; line-height:1.5; }
+  .lead b { color:#f4ece0; }
+  h2 { margin:44px 0 4px; font-size:1.05rem; letter-spacing:.08em; text-transform:uppercase; color:#e8b06a; }
+  h2 + p { margin:0 0 20px; color:#9d9488; }
+  .note { margin:0 0 20px; color:#9d9488; font-size:.9rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:18px; }
+  figure { margin:0; background:#1c1916; border:1px solid #2e2924; border-radius:12px; overflow:hidden; }
+  .ph { position:relative; aspect-ratio:3/2; background:#26221e; }
+  .ph img { width:100%; height:100%; object-fit:cover; display:block; }
+  .num { position:absolute; top:8px; left:8px; min-width:30px; height:30px; padding:0 8px;
+         display:inline-flex; align-items:center; justify-content:center;
+         border-radius:8px; background:#e8b06a; color:#12100e; font-weight:800; font-size:.9rem; }
+  figcaption { padding:10px 12px 12px; font-size:.82rem; line-height:1.45; }
+  .t { display:block; font-weight:600; margin-bottom:4px;
+       overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .meta { color:#9d9488; }
+  .tag { display:inline-block; padding:1px 7px; margin-right:5px; border-radius:99px;
+         background:#2e2924; color:#cbbfae; font-size:.72rem; }
+  .cc0 { background:#1f3a2a; color:#8fd6a6; }
+  .hi  { background:#3a2f1f; color:#e8b06a; }
+</style>
+</head>
+<body>
+
+<h1>Selección de imágenes — Patitas Unidas</h1>
+<p class="lead">Todas son de uso libre y con licencia verificada vía API (Openverse / Wikimedia Commons). Dime los <b>números</b> que te gusten y con esos armo la escena.</p>
+<p class="lead">La etiqueta <span class="tag cc0">CC0</span> = dominio público, sin atribución obligatoria. <span class="tag">CC BY</span> / <span class="tag">CC BY-SA</span> = libre pero <b>obliga a citar autor</b> en la web. <span class="tag hi">ALTA RES</span> = sirve para fondo a pantalla completa; el resto llega a ~1000px y sólo funciona bien en capas pequeñas o tarjetas.</p>
+
+<h2>A · Perros en parque / hierba — CC0</h2>
+<p class="note">Las más “editoriales”. Límite 1024px de ancho.</p>
+<div class="grid" id="gA"></div>
+
+<h2>B · Parques caninos reales — alta resolución</h2>
+<p class="note">Wikimedia. Menos bonitas pero sirven de fondo grande.</p>
+<div class="grid" id="gB"></div>
+
+<h2>C · Rescate, refugio y voluntariado</h2>
+<p class="note">Encajan con el mensaje de una fundación.</p>
+<div class="grid" id="gC"></div>
+
+<script>
+const wm = (f, w) => "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(f) + "?width=" + w;
+
+const A = [
+  ["Perro feliz corriendo en el parque","CC0","rawpixel · 2537px","https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTEyL2ZsNTE3NjQ3ODgwODUtaW1hZ2UuanBn.jpg"],
+  ["Dos perros jugando (Dogs Playing)","CC0","StockSnap · 960px","https://cdn.stocksnap.io/img-thumbs/960w/NDBK7KEUR5.jpg"],
+  ["Border collie corriendo","CC0","rawpixel · 2358px","https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyYm9yZGVyX2NvbGxpZV9ydW5uaW5nX2RvZ18wLWltYWdlLWt5YmMyN25sLmpwZw.jpg"],
+  ["Border collie corriendo (2)","CC0","rawpixel · 2464px","https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyYm9yZGVyX2NvbGxpZV9ydW5uaW5nX2RvZ18yLWltYWdlLWt5YmMyOHd6LmpwZw.jpg"],
+  ["Golden retriever tumbado en hierba","CC0","rawpixel · 2922px","https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyZG9nX2dyYXNzX2FuaW1hbF9ncmVlbi1pbWFnZS1reWJicXJlMi5qcGc.jpg"],
+  ["Perro blanco de pie en hierba","CC0","rawpixel · 6372px","https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyZ29sZGVuX3JldHJpZXZlcl9kb2dzXzExMTk1NjMtaW1hZ2Uta3liYmU5cDMuanBn.jpg"],
+  ["Bulldog marrón corriendo","CC0","rawpixel · 5184px","https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4NzA1NzE3LWltYWdlLWt3dnY0eWg0LmpwZw.jpg"],
+  ["Cachorro terrier corriendo","CC0","rawpixel · 3131px","https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4MzQxODk3LWltYWdlLWt3dnZnMngyLmpwZw.jpg"],
+  ["Labrador negro en el parque","CC0","rawpixel · 4896px","https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZnJkb2dfYmxhY2tfbGFicmFkb3JfeW91bmdfMC1pbWFnZS1reWJkdXNoNi5qcGc.jpg"],
+  ["Beagle y bulldog jugando juntos","CC0","rawpixel · 4928px","https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZnJmcmVuY2hfYnVsbGRvZ19wdXBweV9iZWFnbGUtaW1hZ2Uta3liZG00cmIuanBn.jpg"],
+  ["Perro blanco y negro jugando","CC0","rawpixel · 4928px","https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyYm9yZGVyX2NvbGxpZV9kb2dfd2l0aF8wLWltYWdlLWt5YmMyMDg3LmpwZw.jpg"],
+  ["Paseo con correa en la hierba","CC0","rawpixel · 6000px","https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw1MDE4NTgyNzgxMS1pbWFnZS1reWJlZm9kdS5qcGc.jpg"],
+  ["Cachorro golden retriever","CC0","rawpixel · 5472px","https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL25zNTc3OC1pbWFnZS1rd3Z3cDlhcy5qcGc.jpg"],
+  ["Retrato de familia con perro","CC0","StockSnap · 960px","https://cdn.stocksnap.io/img-thumbs/960w/PH5WMKAYZY.jpg"],
+  ["Labrador chocolate con pelota","CC0","w.org · 2048px","https://pd.w.org/2024/11/2316734abafa97e69.56576607-2048x1536.jpg"]
+];
+
+const B = [
+  ["Parque canino Grunewald 70","CC0","Wikimedia · 8368px",wm("Dog park Grunewald 2021-06-10 70.jpg",1800),1],
+  ["Parque canino Grunewald 27","CC0","Wikimedia · 8368px",wm("Dog park Grunewald 2021-06-10 27.jpg",1800),1],
+  ["Parque canino Grunewald 22","CC0","Wikimedia · 8368px",wm("Dog park Grunewald 2021-06-10 22.jpg",1800),1],
+  ["Parque canino Grunewald 57","CC0","Wikimedia · 8368px",wm("Dog park Grunewald 2021-06-10 57.jpg",1800),1],
+  ["Parque canino Grunewald oct. 05","CC0","Wikimedia · 8368px",wm("Dog park Grunewald 2021-10-13 05.jpg",1800),1],
+  ["Shubie Off-Leash Dog Park","CC BY-SA 4.0","Wikimedia · 4608px",wm("Shubie Off-Leash Dog Park.jpg",1800),1],
+  ["Shale Hills Dog Park","CC0","Wikimedia · 6670px",wm("Shale Hills Dog Park 2.jpg",1800),1],
+  ["Freedom Park Dog Park","CC0","Wikimedia · 4032px",wm("Freedom Park Dog Park.jpeg",1800),1],
+  ["Perro en Madison Square Park","CC BY 4.0","Wikimedia · 5319px",wm("Dog in Jemmy’s Dog Run, Madison Square Park.jpg",1800),1],
+  ["Homer's Dog Run, Inwood Hill Park","CC BY-SA 4.0","Wikimedia · 5472px",wm("Inwood Hill Park td (2019-04-27) 145 - Homer's Dog Run.jpg",1800),1],
+  ["Sentral Bark Dog Park","CC BY 4.0","Wikimedia · 4032px",wm("Sentral Bark Dog Park - Lindsborg KS.jpg",1800),1],
+  ["Perros y gente en parque nevado","CC BY 2.0","Wikimedia · 1600px",wm("Dogs and people in snowy dog park.jpg",1600)],
+  ["Tompkins Square Big Dog Run","CC BY-SA 3.0","Wikimedia · 3264px",wm("Tompkins Square Big Dog Run.JPG",1800),1],
+  ["Paseando perros bajo la nieve","CC BY-SA 4.0","Wikimedia · 3000px",wm("Тернопіль - Старий парк - Жінка вигулює собак під час снігопаду - 22111137.jpg",1800),1]
+];
+
+const C = [
+  ["Día de perros rescatados","CC0","rawpixel · 5184px","https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3B1MjM1MjYzNC1pbWFnZS1rd3Z5OGx4Ny5qcGc.jpg"],
+  ["Voluntarios en refugio de animales","Dominio público","Wikimedia · 6576px",wm("Military police and Civil Affairs Soldiers volunteer at Vilnius animal shelter (9876965).jpg",1800),1],
+  ["Voluntariado en refugio (Souda Bay)","Dominio público","Wikimedia · 5874px",wm("NSA Souda Bay, Greece, Sailors Volunteer at Local Animal Shelter (6303127).jpg",1800),1],
+  ["Perros en refugio de acogida","Dominio público","Wikimedia · 4256px",wm("FEMA - 38417 - Dogs at a shelter for displaced pets in Texas.jpg",1800),1],
+  ["Perro rescatado en refugio","Dominio público","Wikimedia · 4256px",wm("FEMA - 38418 - Rescued dog at a shelter in Texas.jpg",1800),1],
+  ["Cachorros rescatados","Dominio público","Wikimedia · 4000px",wm("SC Military Department helps rescue efforts of over 150 puppies at suspected puppy mill 130810-Z-LJ054-003.jpg",1800),1],
+  ["Perro típico de rescate","CC BY 2.0","Wikimedia · 1923px",wm("This is Fresia^^^ A typical rescue dog - Un perro típico de rescate - Flickr - AmazonCARES.jpg",1800),1],
+  ["Perro callejero (Guatemala)","CC BY 2.0","Wikimedia · 1920px",wm("Street Dogs Guatemala.jpg",1800),1],
+  ["Perro callejero 45","CC BY-SA 4.0","Wikimedia · 4904px",wm("Street Dog 45.jpg",1800),1],
+  ["Niños jugando con perros (1970s)","Dominio público","Wikimedia · 2000px",wm("YOUNGSTERS PLAYING WITH DOGS AT STILLWATER, NEW YORK, NEAR THE ADIRONDACK FOREST PRESERVE - NARA - 554497.jpg",1800),1],
+  ["Perro mirando tras una valla","Dominio público","Wikimedia · 3000px",wm("Blue brindle dog looking on a fence.jpg",1800),1]
+];
+
+let n = 0;
+function render(list, elId) {
+  const el = document.getElementById(elId);
+  el.innerHTML = list.map(([title, lic, src, url, hires]) => {
+    n++;
+    const licClass = (lic === "CC0" || lic === "Dominio público") ? "cc0" : "";
+    return `<figure>
+      <div class="ph"><img loading="lazy" src="${url}" alt="${title}">
+        <span class="num">${n}</span></div>
+      <figcaption>
+        <span class="t" title="${title}">${title}</span>
+        <span class="tag ${licClass}">${lic}</span>${hires ? '<span class="tag hi">ALTA RES</span>' : ''}
+        <div class="meta">${src}</div>
+      </figcaption></figure>`;
+  }).join("");
+}
+render(A, "gA"); render(B, "gB"); render(C, "gC");
+</script>
+</body>
+</html>

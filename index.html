@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patitas Unidas Chile</title>
+    <meta name="description" content="Fundación chilena dedicada a los animales en situación de calle: hogar, techo, alimento y esterilización." />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <main class="site-shell">
+      <section class="cinema-scroll" id="cinema" aria-label="Historia visual de Patitas Unidas Chile">
+        <div class="stage">
+          <div class="world">
+            <img class="scene-img sky-img" src="img/sky.jpg" alt="" />
+
+            <header class="site-header" aria-label="Navegación principal">
+              <a class="site-logo" href="#cinema" data-scroll="0">
+                <!-- Guarda el logo como img/logo.png y aparecerá solo.
+                     Si el archivo no existe, el onerror deja el texto. -->
+                <img
+                  class="site-logo-mark"
+                  src="img/logo.png"
+                  alt="Patitas Unidas Chile"
+                  onerror="this.remove()"
+                />
+                <span class="site-logo-text">Patitas Unidas<small>Chile</small></span>
+              </a>
+              <nav class="site-nav" aria-label="Menú principal">
+                <a href="#cinema" data-scroll="0">Inicio</a>
+                <a href="#nosotros">Nosotros</a>
+                <a href="#ayuda">Ayuda</a>
+                <a href="#veterinarios">Veterinarios</a>
+              </nav>
+              <button class="language-switcher" aria-label="Cambiar idioma" aria-expanded="false">
+                <span class="lang-current">ES</span>
+                <span aria-hidden="true">⌄</span>
+              </button>
+            </header>
+
+            <div class="back-stack">
+              <div class="back-glow back-four" aria-hidden="true"></div>
+
+              <section class="sights-slider" aria-label="Qué hacemos">
+                <div class="sights-track">
+                  <article class="sight-card" tabindex="0" role="button" aria-label="Abrir tarjeta de Adopción">
+                    <span class="sight-kicker">Adopción</span>
+                    <img class="sight-pin" src="img/pin-1.jpg" alt="" />
+                    <h3>Buscamos familia</h3>
+                    <p>Siempre la primera opción: hogar temporal o definitivo.</p>
+                  </article>
+
+                  <article class="sight-card" tabindex="0" role="button" aria-label="Abrir tarjeta de Rescate">
+                    <span class="sight-kicker">Rescate</span>
+                    <img class="sight-pin" src="img/pin-2.jpg" alt="" />
+                    <h3>Rescate en calle</h3>
+                    <p>Atendemos avisos de animales heridos o en riesgo.</p>
+                  </article>
+
+                  <article class="sight-card" tabindex="0" role="button" aria-label="Abrir tarjeta de Salud">
+                    <span class="sight-kicker">Salud</span>
+                    <img class="sight-pin" src="img/pin-3.jpg" alt="" />
+                    <h3>Esterilización</h3>
+                    <p>El eje de todo: menos animales en la calle.</p>
+                  </article>
+
+                  <article class="sight-card" tabindex="0" role="button" aria-label="Abrir tarjeta de Voluntariado">
+                    <span class="sight-kicker">Voluntariado</span>
+                    <img class="sight-pin" src="img/pin-1.jpg" alt="" />
+                    <h3>Hazte voluntario</h3>
+                    <p>Mano de obra, materiales, traslados y difusión.</p>
+                  </article>
+
+                  <article class="sight-card" tabindex="0" role="button" aria-label="Abrir tarjeta de Apadrinamiento">
+                    <span class="sight-kicker">Apadrinamiento</span>
+                    <img class="sight-pin" src="img/pin-2.jpg" alt="" />
+                    <h3>Apadrina</h3>
+                    <p>Cubre el tratamiento de un animal que aún espera.</p>
+                  </article>
+                </div>
+              </section>
+
+              <img class="scene-img back-img back-ground" src="img/ground.jpg" alt="" />
+            </div>
+
+            <div class="sights-controls" aria-label="Controles del carrusel">
+              <button class="sight-nav sight-prev" aria-label="Anterior">←</button>
+              <button class="sight-nav sight-next" aria-label="Siguiente">→</button>
+            </div>
+
+            <h1 class="hero-title">Patitas<br />Unidas</h1>
+
+            <img class="scene-img splitframe-img splitframe-left" src="img/split-left.jpg" alt="" />
+            <img class="scene-img splitframe-img splitframe-right" src="img/split-right.jpg" alt="" />
+
+            <img class="scene-img bridge-img" src="img/hero.jpg" alt="" />
+
+            <img class="scene-img frame-two-img" src="img/frame-two.jpg" alt="" />
+
+            <div class="shade"></div>
+            <!-- Velo cálido: liga el verde frío de las fotos con la paleta
+                 crema/terracota/marrón del logo. -->
+            <div class="warmth" aria-hidden="true"></div>
+          </div>
+
+          <section class="intro-copy" aria-label="Sobre Patitas Unidas Chile">
+            <p>Siempre buscamos familia. Cuando no se puede, les damos un techo y seguimiento. Y esterilizamos, porque es lo único que reduce de verdad la población en calle.</p>
+            <!-- Eran <span>: parecían botones y no hacían nada. Ahora llevan
+                 a la sección que corresponde. -->
+            <nav class="hero-tags" aria-label="Áreas de trabajo">
+              <a href="#nosotros">Rescate</a>
+              <a href="#nosotros">Adopción</a>
+              <a href="#ayuda">Voluntariado</a>
+            </nav>
+          </section>
+
+          <section class="story-panel story-panel-bridge" aria-label="Nuestra misión">
+            <h2>Primero, una familia.</h2>
+            <p>Siempre optamos por conseguirles familia. Cuando no es posible, les construimos un techo, los alimentamos y les damos seguimiento con nuestros voluntarios. Entre todos podemos lograr cosas muy grandes.</p>
+            <!--
+              Estas cifras las rellena script.js desde data/cifras.json, que
+              genera scripts/traer-datos.mjs contra la API de MascotaApp.
+              Mientras no exista ese archivo se queda el marcador 000: nunca se
+              inventa un número en la web de una organización real.
+            -->
+            <dl class="facts">
+              <div>
+                <dt data-placeholder data-cifra="voluntarios.activos">000</dt>
+                <dd data-cifra-pie="Voluntarios activos">Voluntarios activos <em>(dato pendiente)</em></dd>
+              </div>
+              <div>
+                <dt data-placeholder data-cifra="casos.total">000</dt>
+                <dd data-cifra-pie="Casos atendidos">Casos atendidos <em>(dato pendiente)</em></dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="story-panel story-panel-bazaar" aria-label="Cómo ayudar">
+            <h2>Entre todos, cosas muy grandes.</h2>
+            <p>Mano de obra, materiales, traslados, donaciones u hogar temporal. Te inscribes en MascotaApp y eliges cómo aportar.</p>
+            <a class="note-button" href="#ayuda">
+              <span aria-hidden="true">↗</span>
+              <span>Quiero ayudar</span>
+            </a>
+          </section>
+        </div>
+      </section>
+
+      <!-- ================= NOSOTROS ================= -->
+      <section class="sheet" id="nosotros" aria-labelledby="nosotros-title">
+        <div class="wrap">
+          <div class="sheet-head">
+            <div>
+              <p class="eyebrow">Nosotros</p>
+              <h2 class="sheet-title" id="nosotros-title">
+                Siempre buscamos familia. Cuando no se puede, buscamos un techo.
+              </h2>
+            </div>
+            <div class="sheet-head-aside">
+              <p class="lede">
+                Nos dedicamos a los animales en situaci&oacute;n de calle en Chile. La primera
+                opci&oacute;n es siempre conseguirles un hogar; cuando no es posible, les
+                construimos un techo, los alimentamos y les hacemos seguimiento con
+                nuestros voluntarios.
+              </p>
+              <p class="lede lede-accent">
+                Y esterilizamos, porque es lo &uacute;nico que reduce de verdad la poblaci&oacute;n
+                en calle.
+              </p>
+            </div>
+          </div>
+
+          <ol class="pillars">
+            <li>
+              <span class="pillar-num">01</span>
+              <h3>Familia</h3>
+              <p>Hogar definitivo siempre que se pueda, y temporal para los casos m&aacute;s urgentes.</p>
+            </li>
+            <li>
+              <span class="pillar-num">02</span>
+              <h3>Un techo</h3>
+              <p>Cuando no hay hogar disponible, construimos refugio para que no duerman a la intemperie.</p>
+            </li>
+            <li>
+              <span class="pillar-num">03</span>
+              <h3>Alimento</h3>
+              <p>Alimentaci&oacute;n constante y seguimiento del estado de cada animal por parte de voluntarios.</p>
+            </li>
+            <li>
+              <span class="pillar-num">04</span>
+              <h3>Esterilizaci&oacute;n</h3>
+              <p>El eje de todo. Es la &uacute;nica forma de disminuir significativamente la poblaci&oacute;n en calle.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ================= AYUDA ================= -->
+      <section class="sheet sheet-dark" id="ayuda" aria-labelledby="ayuda-title">
+        <div class="wrap">
+          <div class="sheet-head">
+            <div>
+              <p class="eyebrow">C&oacute;mo ayudar</p>
+              <h2 class="sheet-title" id="ayuda-title">Entre todos podemos lograr cosas muy grandes.</h2>
+            </div>
+            <div class="sheet-head-aside">
+              <p class="lede">Hay muchas formas de aportar, y ninguna es peque&ntilde;a. Elige la tuya.</p>
+            </div>
+          </div>
+
+          <div class="help-grid">
+            <article class="help-card">
+              <p class="card-tag">Voluntariado</p>
+              <h3>S&uacute;mate al equipo</h3>
+              <p>
+                Las inscripciones se hacen desde <strong>MascotaApp</strong>. Completas
+                un formulario y eliges en qu&eacute; puedes aportar:
+              </p>
+              <ul class="chips">
+                <li>Mano de obra</li>
+                <li>Materiales</li>
+                <li>Traslados</li>
+                <li>Donaciones</li>
+                <li>Hogar temporal</li>
+                <li>Hogar definitivo</li>
+              </ul>
+              <p class="fine">
+                Hay un campo abierto para que cuentes c&oacute;mo quieres ayudar, aunque no
+                encaje en ninguna de esas casillas.
+              </p>
+              <div class="card-foot">
+                <a class="btn btn-primary" href="https://mascotaapp.cl" target="_blank" rel="noopener noreferrer">
+                  Inscribirme en MascotaApp
+                </a>
+                <p class="store-links">
+                  <a href="https://play.google.com/store/search?q=mascotaapp&amp;c=apps&amp;hl=es_419" target="_blank" rel="noopener noreferrer">Android</a>
+                  <span aria-hidden="true">&middot;</span>
+                  <a href="https://apps.apple.com/cl/app/mascotaapp/id6759985719" target="_blank" rel="noopener noreferrer">iPhone</a>
+                </p>
+              </div>
+            </article>
+
+            <!--
+              DATOS BANCARIOS REALES.
+              El RUT lleg&oacute; como 652800726 y se formate&oacute; a 65.280.072-6 con el
+              visto bueno de la fundaci&oacute;n. Cualquier cambio aqu&iacute; hay que
+              verificarlo dos veces: un d&iacute;gito mal en una cuenta de donaciones
+              manda el dinero a otra parte.
+            -->
+            <article class="help-card help-card-accent">
+              <p class="card-tag">Donaci&oacute;n</p>
+              <h3>Transferencia directa</h3>
+              <dl class="bank">
+                <div><dt>Titular</dt><dd>Fundaci&oacute;n Patitas Unidas</dd></div>
+                <div><dt>RUT</dt><dd>65.280.072-6</dd></div>
+                <div><dt>Banco</dt><dd>Mercado Pago</dd></div>
+                <div><dt>Tipo</dt><dd>Cuenta Vista</dd></div>
+                <div><dt>N.&ordm; de cuenta</dt><dd>1065922498</dd></div>
+                <div><dt>Correo</dt><dd class="dd-mail">fundacionpatitasunidaschile@gmail.com</dd></div>
+              </dl>
+              <div class="card-foot">
+                <button class="btn btn-primary" type="button" data-copy="bank">
+                  Copiar datos de la cuenta
+                </button>
+                <p class="fine" data-copy-status role="status" aria-live="polite"></p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VETERINARIOS ================= -->
+      <section class="sheet" id="veterinarios" aria-labelledby="vet-title">
+        <div class="wrap">
+          <div class="split">
+            <div class="split-text">
+              <p class="eyebrow">Veterinarios</p>
+              <h2 class="sheet-title" id="vet-title">Tu cl&iacute;nica ordenada, y una mano para los que no tienen a nadie.</h2>
+              <p class="lede">
+                MascotaApp incluye una plataforma para veterinarios que resuelve la
+                gesti&oacute;n de la cl&iacute;nica y la comunicaci&oacute;n directa con el tutor, con
+                ficha m&eacute;dica digital.
+              </p>
+              <p class="discount">
+                <strong>70&nbsp;%</strong>
+                <span>de descuento en la membres&iacute;a para quienes colaboran con la fundaci&oacute;n</span>
+              </p>
+              <ul class="ticks">
+                <li>Gesti&oacute;n completa de la cl&iacute;nica, sin planillas sueltas</li>
+                <li>Ficha m&eacute;dica digital e historial de cada mascota</li>
+                <li>Comunicaci&oacute;n directa con el tutor, sin intermediarios</li>
+              </ul>
+              <p class="fine">
+                El software es independiente: si prefieres ayudar sin usar la plataforma,
+                tambi&eacute;n se puede. Y para los tutores la app es gratuita &mdash; nos permite
+                resolver casos m&aacute;s r&aacute;pido y hacer seguimiento.
+              </p>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="https://mascotaapp.cl" target="_blank" rel="noopener noreferrer">
+                  Ver MascotaApp
+                </a>
+              </div>
+            </div>
+            <figure class="split-media">
+              <img src="img/split-right.jpg" alt="" loading="lazy" decoding="async" />
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PIE ================= -->
+      <footer class="site-footer" aria-label="Contacto">
+        <div class="wrap">
+          <div class="footer-grid">
+            <div>
+              <img class="footer-logo" src="img/logo.png" alt="" loading="lazy" onerror="this.remove()" />
+              <p class="footer-brand">Fundaci&oacute;n Patitas Unidas</p>
+              <p class="fine">Chile &middot; RUT 65.280.072-6</p>
+            </div>
+            <div>
+              <p class="footer-head">Contacto</p>
+              <p><a href="mailto:fundacionpatitasunidaschile@gmail.com">fundacionpatitasunidaschile@gmail.com</a></p>
+            </div>
+            <div>
+              <p class="footer-head">MascotaApp</p>
+              <p><a href="https://mascotaapp.cl" target="_blank" rel="noopener noreferrer">mascotaapp.cl</a></p>
+              <p>
+                <a href="https://play.google.com/store/search?q=mascotaapp&amp;c=apps&amp;hl=es_419" target="_blank" rel="noopener noreferrer">Android</a>
+                <span aria-hidden="true"> &middot; </span>
+                <a href="https://apps.apple.com/cl/app/mascotaapp/id6759985719" target="_blank" rel="noopener noreferrer">iPhone</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,439 @@
+(() => {
+  const section = document.querySelector(".cinema-scroll");
+  const root = document.documentElement;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const sightsTrack = document.querySelector(".sights-track");
+  const sightsControls = document.querySelector(".sights-controls");
+  const sightPrev = document.querySelector(".sight-prev");
+  const sightNext = document.querySelector(".sight-next");
+  const originalSightCards = Array.from(document.querySelectorAll(".sight-card"));
+
+  if (!section) return;
+
+  let targetMouseX = 0;
+  let targetMouseY = 0;
+  let mouseX = 0;
+  let mouseY = 0;
+  let targetScroll = 0;
+  let smoothScroll = 0;
+  let initialized = false;
+  let rafPending = false;
+  let sightCards = [];
+  const originalSightCount = originalSightCards.length;
+  let activeSight = originalSightCount;
+
+  /* ---------- helpers ---------- */
+
+  /* Escritura de custom properties con caché.
+     En la mayor parte del recorrido casi todas las variables valen lo mismo que
+     en el frame anterior (los tramos frame2/frame3 están inactivos, el ratón
+     está quieto…). Cada setProperty invalida estilos aunque el valor no cambie,
+     así que sólo escribimos lo que de verdad se movió. */
+  const varCache = new Map();
+
+  function setVar(name, value) {
+    const next = String(value);
+    if (varCache.get(name) === next) return;
+    varCache.set(name, next);
+    root.style.setProperty(name, next);
+  }
+
+  const clamp = (v, min = 0, max = 1) => Math.min(max, Math.max(min, v));
+
+  const smoothstep = (e0, e1, v) => {
+    const x = clamp((v - e0) / (e1 - e0));
+    return x * x * (3 - 2 * x);
+  };
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  const segmentInOut = (s, a, b, c, d) => {
+    const enter = smoothstep(a, b, s);
+    const exit = smoothstep(c, d, s);
+    return { enter, exit, active: enter * (1 - exit) };
+  };
+
+  const getScrollDistance = () =>
+    clamp(-section.getBoundingClientRect().top, 0, section.offsetHeight - window.innerHeight);
+
+  /* ---------- slider ---------- */
+
+  function updateSightSlider() {
+    if (!sightsTrack || !sightCards.length) return;
+
+    const cardWidth = sightCards[0].offsetWidth;
+    const gap = parseFloat(getComputedStyle(sightsTrack).columnGap || "0") || 0;
+    setVar("--sights-shift", `${-(cardWidth + gap) * activeSight}px`);
+
+    sightCards.forEach((card, index) => {
+      card.classList.toggle("is-active", index === activeSight);
+    });
+  }
+
+  function moveSightSlider(direction) {
+    activeSight += direction;
+    updateSightSlider();
+  }
+
+  function selectSightCard(card) {
+    const index = Number(card.dataset.sightIndex);
+    if (Number.isFinite(index)) {
+      activeSight = index;
+    }
+    updateSightSlider();
+  }
+
+  function jumpSightSlider(index) {
+    if (!sightsTrack) return;
+    sightsTrack.classList.add("is-jumping");
+    activeSight = index;
+    updateSightSlider();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        sightsTrack.classList.remove("is-jumping");
+      });
+    });
+  }
+
+  function normalizeSightSlider() {
+    if (activeSight >= originalSightCount * 2) {
+      jumpSightSlider(activeSight - originalSightCount);
+    } else if (activeSight < originalSightCount) {
+      jumpSightSlider(activeSight + originalSightCount);
+    }
+  }
+
+  function setupSightSlider() {
+    if (!sightsTrack || !originalSightCount) return;
+
+    sightsTrack.replaceChildren();
+
+    for (let setIndex = 0; setIndex < 3; setIndex += 1) {
+      originalSightCards.forEach((card, cardIndex) => {
+        const clone = card.cloneNode(true);
+        clone.dataset.sightIndex = String(setIndex * originalSightCount + cardIndex);
+        sightsTrack.appendChild(clone);
+      });
+    }
+
+    sightCards = Array.from(sightsTrack.querySelectorAll(".sight-card"));
+    activeSight = originalSightCount;
+
+    sightCards.forEach((card) => {
+      card.addEventListener("click", () => selectSightCard(card));
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectSightCard(card);
+        }
+      });
+    });
+
+    sightsTrack.addEventListener("transitionend", normalizeSightSlider);
+
+    updateSightSlider();
+  }
+
+  /* ---------- animation engine ---------- */
+
+  function update() {
+    rafPending = false;
+
+    targetScroll = getScrollDistance();
+
+    if (!initialized || reduceMotion.matches) {
+      smoothScroll = targetScroll;
+      initialized = true;
+    } else {
+      smoothScroll = lerp(smoothScroll, targetScroll, 0.14);
+    }
+
+    if (Math.abs(smoothScroll - targetScroll) < 0.08) {
+      smoothScroll = targetScroll;
+    }
+
+    mouseX = lerp(mouseX, targetMouseX, 0.12);
+    mouseY = lerp(mouseY, targetMouseY, 0.12);
+
+    const frame2 = segmentInOut(smoothScroll, 560, 900, 1300, 1620);
+    const frame3 = segmentInOut(smoothScroll, 1760, 2140, 2540, 2700);
+    const progress = clamp(smoothScroll / 2700);
+    const introExit = smoothstep(90, 650, smoothScroll);
+    const sightsEnterRaw = smoothstep(2760, 3560, smoothScroll);
+    const sightsEnter = Math.pow(sightsEnterRaw, 1.55);
+    const sightsControlsEnter = smoothstep(3360, 3660, smoothScroll);
+    const blurActive = clamp(frame2.active + frame3.active);
+    const frame2Opacity = frame2.active * (1 - frame3.enter);
+    const splitDrift = Math.pow(frame2.enter, 1.5);
+    const panel2Opacity = frame2.active * (1 - frame2.exit);
+    const panel3Opacity = frame3.active * (1 - frame3.exit);
+    const backScale = 0.76 + progress * 0.2 + frame2.enter * 0.18 + frame3.enter * 0.16;
+    const sharedHeroY = progress * -74;
+    const sharedHeroScale = progress * 0.23;
+    const sightsScreenTop = Math.min(220, Math.max(112, window.innerHeight * 0.19)) - 50;
+    const sightsParentTop = window.innerHeight - (window.innerHeight - sightsScreenTop) / backScale;
+
+    setVar("--mx", (reduceMotion.matches ? 0 : mouseX).toFixed(4));
+    setVar("--my", (reduceMotion.matches ? 0 : mouseY).toFixed(4));
+
+    setVar("--back-opacity", 1 - frame2.active * 0.06);
+    setVar("--back-x", `${mouseX * -12}px`);
+    setVar("--back-y", `${mouseY * -4}px`);
+    setVar("--back-scale", backScale);
+    setVar("--four-y", `${10 + progress * 10}vh`);
+    setVar("--four-scale", 0.78 + progress * 0.16);
+    setVar("--bazaar-y", `${20 - progress * 8}vh`);
+    /* Un filtro cuesta un pase de composición completo sobre imágenes a
+       pantalla completa. Mientras no haya nada que aplicar vale "none", que es
+       gratis; blur(0px) NO lo es. */
+    setVar(
+      "--scene-filter",
+      blurActive < 0.002
+        ? "none"
+        : `blur(${blurActive * 14}px) brightness(${1 - blurActive * 0.255})`
+    );
+    setVar(
+      "--ground-filter",
+      frame2.active < 0.002 && frame3.active < 0.002
+        ? "none"
+        : `blur(${frame2.active * 14}px)` +
+          ` brightness(${1 - frame2.active * 0.255 - frame3.active * 0.06})` +
+          ` saturate(${1 + frame3.active * 0.18})`
+    );
+    setVar("--shade-opacity", "1");
+    // z 6 (no 2): la foto de frame-two vive en z 5, así que con el valor
+    // original el velo quedaba por debajo y no la atenuaba nada.
+    setVar("--shade-z", frame2.active > 0.02 ? "6" : "0");
+    setVar("--shade-top-alpha", blurActive * 0.465);
+    setVar("--shade-mid-alpha", blurActive * 0.42);
+    setVar("--shade-bottom-alpha", blurActive * 0.51);
+
+    setVar("--title-y", `${introExit * -210}px`);
+    setVar("--title-scale", 1 - introExit * 0.08);
+    setVar("--title-opacity", 1 - introExit);
+
+    setVar("--bridge-x", `calc(-50% + ${mouseX * 18}px)`);
+    setVar(
+      "--bridge-y",
+      `calc(${mouseY * 8 + sharedHeroY - frame2.exit * 760}px + ${frame2.enter * 34}vh)`
+    );
+    /* La lámina sigue yendo de 44vw/34vh a ~105vw/80vh, pero ahora por scale()
+       en vez de animar width/height/bottom. Ambos ejes crecían con factores casi
+       idénticos (2.39 y 2.35), así que un escalado uniforme lo reproduce y deja
+       de forzar relayout en cada frame. */
+    const bridgeGrow = 1 + frame2.enter * 1.386;
+    setVar("--bridge-scale", (1.02 + sharedHeroScale + frame2.exit * 0.46) * bridgeGrow);
+    setVar("--bridge-opacity", 1 - frame2.exit);
+
+    setVar("--split-left-x", `calc(-50% + ${-splitDrift * 46}vw + ${mouseX * 22}px)`);
+    setVar("--split-left-y", `${mouseY * 10 + sharedHeroY - splitDrift * 180}px`);
+    setVar("--split-left-scale", 1 + sharedHeroScale + frame2.enter * 0.74);
+    setVar("--split-right-x", `calc(-50% + ${splitDrift * 46}vw + ${mouseX * 22}px)`);
+    setVar("--split-right-y", `${mouseY * 10 + sharedHeroY - splitDrift * 180}px`);
+    setVar("--split-right-scale", 1 + sharedHeroScale + frame2.enter * 0.74);
+
+    setVar("--frame2-opacity", frame2Opacity);
+    setVar("--frame2-x", `calc(-50% + ${mouseX * 10}px)`);
+    setVar("--frame2-y", `calc(-50% + ${mouseY * 8 - frame2.exit * 150}px)`);
+    setVar("--frame2-scale", 1.06 + frame2.enter * 0.08 + frame2.exit * 0.08);
+
+    setVar("--intro-copy-y", `${introExit * 90}px`);
+    setVar("--intro-copy-opacity", 1 - introExit);
+    setVar("--panel2-opacity", panel2Opacity);
+    setVar(
+      "--panel2-y",
+      `calc(-50% + ${-frame2.exit * 86 + (1 - frame2.enter) * 58}px)`
+    );
+    setVar("--panel3-opacity", panel3Opacity);
+    setVar(
+      "--panel3-y",
+      `calc(-50% + ${-frame3.exit * 86 + (1 - frame3.enter) * 58}px)`
+    );
+
+    setVar("--sights-opacity", sightsEnter);
+    setVar("--sights-controls-opacity", sightsControlsEnter);
+    if (sightsControls) {
+      sightsControls.classList.toggle("is-ready", sightsControlsEnter > 0.98);
+    }
+    setVar("--sights-visibility", sightsEnter > 0.01 ? "visible" : "hidden");
+    // lo que antes era `top` viaja ahora dentro del translate del slider
+    setVar("--sights-y", `${sightsParentTop}px`);
+    setVar("--sights-enter-x", `${(1 - sightsEnter) * 420}vw`);
+    setVar("--sights-scale", 1 / backScale);
+
+    setVar("--sights-screen-top", `${sightsScreenTop}px`);
+
+    highlightNav(smoothScroll);
+
+    if (
+      Math.abs(smoothScroll - targetScroll) > 0.08 ||
+      Math.abs(mouseX - targetMouseX) > 0.001 ||
+      Math.abs(mouseY - targetMouseY) > 0.001
+    ) {
+      requestTick();
+    }
+  }
+
+  function requestTick() {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(update);
+  }
+
+  /* ---------- listeners ---------- */
+
+  window.addEventListener("scroll", requestTick, { passive: true });
+
+  window.addEventListener("resize", () => {
+    updateSightSlider();
+    requestTick();
+  });
+
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      targetMouseX = event.clientX / window.innerWidth - 0.5;
+      targetMouseY = event.clientY / window.innerHeight - 0.5;
+      requestTick();
+    },
+    { passive: true }
+  );
+
+  if (sightPrev) sightPrev.addEventListener("click", () => moveSightSlider(-1));
+  if (sightNext) sightNext.addEventListener("click", () => moveSightSlider(1));
+
+  /* ---------- navegación ----------
+     La página es una sola escena continua: no hay secciones separadas a las que
+     saltar, así que cada enlace lleva a su momento dentro del scroll. El valor
+     va en data-scroll y es la misma distancia que consume el motor de arriba. */
+
+  function goTo(distance) {
+    const top = section.offsetTop + distance;
+    window.scrollTo({
+      top,
+      behavior: reduceMotion.matches ? "auto" : "smooth"
+    });
+  }
+
+  document.querySelectorAll("[data-scroll]").forEach((el) => {
+    el.addEventListener("click", (event) => {
+      event.preventDefault();
+      goTo(Number(el.dataset.scroll) || 0);
+    });
+  });
+
+  // Marca en el menú el tramo en el que estás.
+  const navLinks = Array.from(document.querySelectorAll(".site-nav [data-scroll]"));
+
+  function highlightNav(distance) {
+    let active = null;
+    for (const link of navLinks) {
+      if (distance >= Number(link.dataset.scroll) - 260) active = link;
+    }
+    navLinks.forEach((link) => {
+      link.classList.toggle("is-current", link === active);
+      if (link === active) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    });
+  }
+
+  /* El conmutador de idioma: por ahora sólo hay español, así que en vez de
+     fingir un desplegable avisa de que la versión en inglés no existe todavía.
+     Cuando haya traducción, este bloque se sustituye por el cambio real. */
+  const langSwitcher = document.querySelector(".language-switcher");
+  if (langSwitcher) {
+    langSwitcher.addEventListener("click", () => {
+      const label = langSwitcher.querySelector(".lang-current");
+      if (!label || langSwitcher.dataset.busy) return;
+      langSwitcher.dataset.busy = "1";
+      const original = label.textContent;
+      label.textContent = "Sólo ES";
+      window.setTimeout(() => {
+        label.textContent = original;
+        delete langSwitcher.dataset.busy;
+      }, 1600);
+    });
+  }
+
+  /* Copiar los datos de transferencia.
+     Se leen del propio <dl> del DOM en vez de duplicarlos aquí: si alguien
+     corrige el número de cuenta en el HTML, el botón copia el valor corregido
+     y no una copia obsoleta escondida en el JS. */
+  const copyButton = document.querySelector("[data-copy]");
+  const copyStatus = document.querySelector("[data-copy-status]");
+
+  if (copyButton) {
+    copyButton.addEventListener("click", async () => {
+      const rows = document.querySelectorAll(".bank > div");
+      const text = Array.from(rows)
+        .map((row) => {
+          const dt = row.querySelector("dt");
+          const dd = row.querySelector("dd");
+          return dt && dd ? `${dt.textContent.trim()}: ${dd.textContent.trim()}` : "";
+        })
+        .filter(Boolean)
+        .join("\n");
+
+      try {
+        await navigator.clipboard.writeText(text);
+        if (copyStatus) copyStatus.textContent = "Datos copiados al portapapeles.";
+      } catch {
+        // clipboard falla sin HTTPS o sin permiso: seleccionamos el bloque
+        // para que la persona pueda copiarlo a mano en vez de quedarse sin nada
+        const list = document.querySelector(".bank");
+        if (list) {
+          const range = document.createRange();
+          range.selectNodeContents(list);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+        if (copyStatus) copyStatus.textContent = "No se pudo copiar: los datos quedaron seleccionados.";
+      }
+
+      window.setTimeout(() => {
+        if (copyStatus) copyStatus.textContent = "";
+      }, 4000);
+    });
+  }
+
+  /* ---------- cifras reales desde MascotaApp ----------
+     Lee data/cifras.json, que genera scripts/traer-datos.mjs. No se llama a la
+     API desde el navegador a propósito: exige una cabecera X-API-Key y este
+     sitio es estático, así que la llave quedaría a la vista en el código fuente.
+     Si el archivo no existe todavía, los marcadores 000 se quedan como están. */
+
+  async function cargarCifras() {
+    const huecos = document.querySelectorAll("[data-cifra]");
+    if (!huecos.length) return;
+
+    let cifras;
+    try {
+      const r = await fetch("data/cifras.json", { cache: "no-cache" });
+      if (!r.ok) return;
+      ({ cifras } = await r.json());
+    } catch {
+      return; // sin datos aún: se queda el marcador
+    }
+    if (!cifras) return;
+
+    const valor = (ruta) =>
+      ruta.split(".").reduce((o, k) => (o == null ? undefined : o[k]), cifras);
+
+    huecos.forEach((el) => {
+      const n = valor(el.dataset.cifra);
+      // un 0 real es un dato válido, pero anunciar "0 esterilizaciones" en
+      // portada no ayuda a nadie: se deja el marcador hasta que haya cifra
+      if (typeof n !== "number" || n <= 0) return;
+      el.textContent = new Intl.NumberFormat("es-CL").format(n);
+      el.removeAttribute("data-placeholder");
+      const pie = el.parentElement?.querySelector("[data-cifra-pie]");
+      if (pie) pie.textContent = pie.dataset.cifraPie || pie.textContent;
+    });
+  }
+
+  cargarCifras();
+
+  setupSightSlider();
+  requestTick();
+})();
