@@ -25,7 +25,7 @@
       },
       "comuna": "Arica",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/b271cdea-5a4f-4403-aee2-2a6f0b4f351c",
-      "foto": "img/casos/adopcion-1.jpg"
+      "foto": "img/casos/adopcion-1.webp"
     },
     {
       "id": "3927bc4c-739d-4adf-8c0f-8c535ec0590b",
@@ -50,7 +50,7 @@
       },
       "comuna": "Valparaíso",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/3927bc4c-739d-4adf-8c0f-8c535ec0590b",
-      "foto": "img/casos/adopcion-2.jpg"
+      "foto": "img/casos/adopcion-2.webp"
     },
     {
       "id": "46201147-7af9-4094-b7d6-5b134bb17992",
@@ -75,7 +75,7 @@
       },
       "comuna": "Villa Alemana",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/46201147-7af9-4094-b7d6-5b134bb17992",
-      "foto": "img/casos/adopcion-3.jpg"
+      "foto": "img/casos/adopcion-3.webp"
     },
     {
       "id": "e1ba1e03-8870-4866-8a79-a8529265e77e",
@@ -100,7 +100,7 @@
       },
       "comuna": "Vitacura",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/e1ba1e03-8870-4866-8a79-a8529265e77e",
-      "foto": "img/casos/adopcion-4.jpg"
+      "foto": "img/casos/adopcion-4.webp"
     },
     {
       "id": "d88cbf47-2182-497d-b56e-7bfc9e83d658",
@@ -125,7 +125,7 @@
       },
       "comuna": "Conchalí",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/d88cbf47-2182-497d-b56e-7bfc9e83d658",
-      "foto": "img/casos/adopcion-5.jpg"
+      "foto": "img/casos/adopcion-5.webp"
     },
     {
       "id": "82dd5855-997b-49ab-9f0e-346e13856bcb",
@@ -150,7 +150,7 @@
       },
       "comuna": "Arica",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/82dd5855-997b-49ab-9f0e-346e13856bcb",
-      "foto": "img/casos/adopcion-6.jpg"
+      "foto": "img/casos/adopcion-6.webp"
     },
     {
       "id": "8bad92b8-ba94-4bd6-9bad-0a00cdfee0ac",
@@ -175,7 +175,7 @@
       },
       "comuna": "Algarrobo",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/8bad92b8-ba94-4bd6-9bad-0a00cdfee0ac",
-      "foto": "img/casos/adopcion-7.jpg"
+      "foto": "img/casos/adopcion-7.webp"
     },
     {
       "id": "d1fc4f83-7f2b-43cd-8d17-4fbdb6d634f1",
@@ -200,7 +200,7 @@
       },
       "comuna": "Buin",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/d1fc4f83-7f2b-43cd-8d17-4fbdb6d634f1",
-      "foto": "img/casos/adopcion-8.jpg"
+      "foto": "img/casos/adopcion-8.webp"
     },
     {
       "id": "5ffb7377-72d2-40ba-ab6a-f1706dbd7361",
@@ -225,7 +225,7 @@
       },
       "comuna": "La Florida",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/5ffb7377-72d2-40ba-ab6a-f1706dbd7361",
-      "foto": "img/casos/adopcion-9.jpg"
+      "foto": "img/casos/adopcion-9.webp"
     },
     {
       "id": "56848d2d-5aad-4c91-80a8-e5d69e1afc11",
@@ -250,7 +250,7 @@
       },
       "comuna": "Algarrobo",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/56848d2d-5aad-4c91-80a8-e5d69e1afc11",
-      "foto": "img/casos/adopcion-10.jpg"
+      "foto": "img/casos/adopcion-10.webp"
     },
     {
       "id": "2ed0832c-00b0-49b6-8eba-ebaa959173cb",
@@ -275,7 +275,7 @@
       },
       "comuna": "Arica",
       "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/2ed0832c-00b0-49b6-8eba-ebaa959173cb",
-      "foto": "img/casos/adopcion-11.jpg"
+      "foto": "img/casos/adopcion-11.webp"
     },
     {
       "id": "383a36ad-44f0-4cce-ba20-039b557297c6",

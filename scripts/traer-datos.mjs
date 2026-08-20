@@ -200,6 +200,14 @@ async function main() {
     );
   }
 
+  // Las fotos llegan como salen del teléfono: ~900x1200 y hasta 250 KB, para
+  // mostrarse en tarjetas de 280 px. Sin este paso la página arrastra ~2 MB.
+  console.log(
+    "\nSiguiente paso obligatorio:\n" +
+      "  python scripts/optimizar-fotos.py\n" +
+      "  (reduce las fotos y actualiza las rutas en data/)"
+  );
+
   if (fallos.length) {
     console.log(`\n${fallos.length} fallo(s):`);
     for (const f of fallos) console.log(`  ✗ ${f.ruta}\n      ${f.detalle}`);
