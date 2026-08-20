@@ -58,11 +58,28 @@ Debajo de la escena, con la paleta del logo (crema, terracota, marrón):
 
 ## Pendiente
 
-- [ ] **Sustituir las dos cifras `000`** de la escena por datos reales de la
-      fundación (ver comentario en `index.html`). Están en blanco a propósito.
+- [ ] **La API devuelve 500** en `/foundations/patitas-unidas`. La llave se
+      acepta (ya no es 401), así que el fallo está dentro del servidor de
+      MascotaApp: hay que mirar los logs de Cloud Run.
+- [ ] **Las cifras siguen en `000`** hasta que `scripts/traer-datos.mjs` pueda
+      generar `data/cifras.json`. Bloqueado por el punto anterior.
+- [ ] **El correo de la API no coincide.** Devuelve `contacto@patitasunidas.cl`;
+      el correcto es `fundacionpatitasunidaschile@gmail.com`, que es el que
+      muestra la web. Conviene corregirlo en MascotaApp.
 - [ ] **El menú desaparece al salir de la escena.** El header vive dentro del
       `.stage` sticky, así que en las secciones de contenido no hay navegación.
-      Se arregla con un segundo header fijo; dímelo y lo hago.
-- [ ] Cambiar las fotos de stock por fotos propias de los perros de la fundación.
+- [ ] **El enlace de Android va a una búsqueda** en Play Store, no a la ficha de
+      la app. Falta el enlace directo `play.google.com/store/apps/details?id=...`.
+- [ ] Fotos de ambiente propias para la escena (ver `img/reales/LEEME.md`).
 - [ ] Borrar `_seleccion.html` antes de publicar (es un archivo de trabajo).
 - [ ] Aviso legal y política de privacidad.
+
+## Publicación
+
+El sitio vive en **https://fundacionpatitasunidas.cl** (GitHub Pages).
+
+El dominio está registrado en NIC Chile, que no aloja zonas DNS: sólo delega.
+Por eso los servidores de nombres apuntan a Cloudflare (`kehlani` y
+`woz.ns.cloudflare.com`), y los registros A del apex y el CNAME de `www` viven
+en Cloudflare, en modo **DNS only** — con el proxy activo GitHub no puede emitir
+el certificado.

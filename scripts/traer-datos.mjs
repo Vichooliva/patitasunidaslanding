@@ -1,52 +1,77 @@
 /**
- * Trae datos de la API pública de MascotaApp y los deja como JSON estático
- * en data/, para que la web los lea sin exponer la llave.
+ * Trae datos y fotos de la API pública de MascotaApp y los deja como archivos
+ * estáticos, para que la web los use sin exponer la llave.
  *
  * POR QUÉ ASÍ
- * La API exige la cabecera X-API-Key (comprobado: sin ella responde 401). Este
- * sitio es estático y no tiene servidor donde esconder un secreto: si el
- * navegador hiciera la petición, la llave viajaría en el código fuente y
- * cualquiera podría leerla. Así que la petición se hace AQUÍ, en tu máquina o
- * en CI, y al repositorio sólo llega el resultado ya filtrado.
+ * La API exige la cabecera X-API-Key. Este sitio es estático y no tiene
+ * servidor donde esconder un secreto: si el navegador hiciera la petición, la
+ * llave viajaría en el código fuente. Así que la petición se hace AQUÍ, en tu
+ * máquina o en CI, y al repositorio sólo llega el resultado.
  *
  * USO
- *   set MASCOTAAPP_API_KEY=la_llave      (PowerShell: $env:MASCOTAAPP_API_KEY="...")
+ *   $env:MASCOTAAPP_API_KEY = "la_llave"     (PowerShell)
  *   node scripts/traer-datos.mjs
  *
- * La llave NUNCA se escribe en un archivo del repositorio.
+ * Cada endpoint se pide por separado y un fallo no aborta el resto: si uno
+ * devuelve 500, verás cuál fue y con qué cuerpo, y los demás datos igual se
+ * descargan.
  */
 
 import { writeFile, mkdir } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { dirname, resolve, extname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const BASE = "https://mascotaapp.cl/api/public/v1";
-const SLUG = "patitas-unidas";
+const SLUG = process.env.MASCOTAAPP_SLUG || "patitas-unidas";
 const LLAVE = process.env.MASCOTAAPP_API_KEY;
 
 const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const SALIDA = resolve(RAIZ, "data");
+const DATOS = resolve(RAIZ, "data");
+const FOTOS = resolve(RAIZ, "img", "casos");
 
 if (!LLAVE) {
   console.error(
-    "Falta MASCOTAAPP_API_KEY.\n" +
-      "  PowerShell:  $env:MASCOTAAPP_API_KEY = \"la_llave\"\n" +
-      "  bash:        export MASCOTAAPP_API_KEY=la_llave"
+    'Falta MASCOTAAPP_API_KEY.\n  $env:MASCOTAAPP_API_KEY = "la_llave"'
   );
   process.exit(1);
 }
 
+const cabeceras = { "X-API-Key": LLAVE, Accept: "application/json" };
+const fallos = [];
+
+/** Pide una ruta. Nunca lanza: devuelve null y anota el fallo. */
 async function pedir(ruta) {
-  const r = await fetch(BASE + ruta, { headers: { "X-API-Key": LLAVE } });
-  if (r.status === 401) throw new Error(`401 en ${ruta}: la llave no es válida`);
-  if (r.status === 429) throw new Error(`429 en ${ruta}: espera ${r.headers.get("retry-after")}s`);
-  if (!r.ok) throw new Error(`${r.status} en ${ruta}`);
-  return r.json();
+  let r;
+  try {
+    r = await fetch(BASE + ruta, { headers: cabeceras });
+  } catch (e) {
+    fallos.push({ ruta, detalle: `sin red: ${e.message}` });
+    return null;
+  }
+
+  if (!r.ok) {
+    // el cuerpo del error suele traer la causa; es lo que necesitas para el log
+    let cuerpo = "";
+    try {
+      cuerpo = (await r.text()).slice(0, 400).replace(/\s+/g, " ").trim();
+    } catch {}
+    fallos.push({
+      ruta,
+      detalle: `HTTP ${r.status}${cuerpo ? ` — ${cuerpo}` : " (sin cuerpo)"}`,
+    });
+    return null;
+  }
+
+  try {
+    return await r.json();
+  } catch (e) {
+    fallos.push({ ruta, detalle: `respuesta no es JSON: ${e.message}` });
+    return null;
+  }
 }
 
-/* Lista blanca de campos.
-   Copiamos sólo lo que la web pinta. Si mañana la API añade un campo con datos
-   sensibles, no acaba en el repositorio por accidente. */
+/* Lista blanca de campos: copiamos sólo lo que la web pinta, para que un campo
+   nuevo con datos sensibles no acabe en el repositorio por inercia. */
 
 const soloCaso = (c) => ({
   id: c.id,
@@ -58,8 +83,8 @@ const soloCaso = (c) => ({
   nombre: c.animal?.nombre ?? null,
   comuna: c.ubicacion?.comuna ?? null,
   region: c.ubicacion?.region ?? null,
-  foto: c.fotoPrincipalUrl ?? null,
-  fotos: c.cantidadDeFotos ?? 0,
+  fotoRemota: c.fotoPrincipalUrl ?? null,
+  foto: null, // se rellena al descargar
   creadoEn: c.creadoEn ?? null,
 });
 
@@ -73,67 +98,122 @@ const soloAdopcion = (a) => ({
   salud: a.salud ?? null,
   convivencia: a.convivencia ?? null,
   comuna: a.ubicacion?.comuna ?? null,
-  foto: a.fotoPrincipalUrl ?? null,
+  fotoRemota: a.fotoPrincipalUrl ?? null,
+  foto: null,
 });
 
-async function main() {
-  await mkdir(SALIDA, { recursive: true });
-  const generado = new Date().toISOString();
-  const escritos = [];
-
-  async function guardar(nombre, datos) {
-    const ruta = resolve(SALIDA, nombre);
-    await writeFile(ruta, JSON.stringify({ generado, ...datos }, null, 2) + "\n", "utf8");
-    escritos.push(nombre);
+/**
+ * Descarga una foto al repositorio.
+ * Se guardan localmente en vez de enlazar a la API en caliente: así la web no
+ * depende de que la API esté arriba para mostrar una imagen, y las fotos siguen
+ * cargando aunque cambie la llave o el endpoint.
+ */
+async function bajarFoto(url, nombre) {
+  if (!url) return null;
+  try {
+    const r = await fetch(url, { headers: cabeceras, redirect: "follow" });
+    if (!r.ok) {
+      fallos.push({ ruta: `foto ${nombre}`, detalle: `HTTP ${r.status}` });
+      return null;
+    }
+    const tipo = r.headers.get("content-type") || "";
+    const ext = tipo.includes("png")
+      ? ".png"
+      : tipo.includes("webp")
+      ? ".webp"
+      : extname(new URL(url).pathname) || ".jpg";
+    const archivo = `${nombre}${ext}`;
+    await writeFile(resolve(FOTOS, archivo), Buffer.from(await r.arrayBuffer()));
+    return `img/casos/${archivo}`;
+  } catch (e) {
+    fallos.push({ ruta: `foto ${nombre}`, detalle: e.message });
+    return null;
   }
+}
+
+async function guardar(nombre, datos) {
+  await writeFile(
+    resolve(DATOS, nombre),
+    JSON.stringify({ generado: new Date().toISOString(), ...datos }, null, 2) + "\n",
+    "utf8"
+  );
+  console.log(`  ✓ data/${nombre}`);
+}
+
+async function main() {
+  await mkdir(DATOS, { recursive: true });
+  await mkdir(FOTOS, { recursive: true });
+
+  console.log(`API  : ${BASE}`);
+  console.log(`Slug : ${SLUG}\n`);
 
   // --- ficha ---
   const ficha = await pedir(`/foundations/${SLUG}`);
-  await guardar("fundacion.json", {
-    nombre: ficha.data.nombre,
-    descripcion: ficha.data.descripcion,
-    email: ficha.data.contacto?.email ?? null,
-    telefono: ficha.data.contacto?.telefono ?? null,
-    logoUrl: ficha.data.logoUrl ?? null,
-  });
+  if (ficha?.data) {
+    await guardar("fundacion.json", {
+      nombre: ficha.data.nombre,
+      descripcion: ficha.data.descripcion,
+      email: ficha.data.contacto?.email ?? null,
+      telefono: ficha.data.contacto?.telefono ?? null,
+    });
+  }
 
   // --- cifras ---
   const stats = await pedir(`/foundations/${SLUG}/stats`);
-  await guardar("cifras.json", { cifras: stats.data });
+  if (stats?.data) await guardar("cifras.json", { cifras: stats.data });
 
-  // --- casos que necesitan ayuda y finales felices ---
-  const ayuda = await pedir(`/foundations/${SLUG}/cases?featured=help&limit=6`);
-  await guardar("casos-ayuda.json", {
-    total: ayuda.paginacion?.total ?? ayuda.data.length,
-    casos: ayuda.data.map(soloCaso),
-  });
-
-  const exito = await pedir(`/foundations/${SLUG}/cases?featured=success&limit=6`);
-  await guardar("casos-exito.json", {
-    total: exito.paginacion?.total ?? exito.data.length,
-    casos: exito.data.map(soloCaso),
-  });
+  // --- casos, con sus fotos ---
+  for (const [destacado, archivo] of [
+    ["help", "casos-ayuda.json"],
+    ["success", "casos-exito.json"],
+  ]) {
+    const res = await pedir(`/foundations/${SLUG}/cases?featured=${destacado}&limit=6`);
+    if (!res?.data) continue;
+    const casos = res.data.map(soloCaso);
+    for (const [i, c] of casos.entries()) {
+      c.foto = await bajarFoto(c.fotoRemota, `${destacado}-${i + 1}`);
+    }
+    await guardar(archivo, { total: res.paginacion?.total ?? casos.length, casos });
+  }
 
   // --- animales en adopción ---
-  const adopciones = await pedir(`/foundations/${SLUG}/adoptions?status=available&limit=12`);
-  await guardar("adopciones.json", {
-    total: adopciones.paginacion?.total ?? adopciones.data.length,
-    animales: adopciones.data.map(soloAdopcion),
-  });
+  const ad = await pedir(`/foundations/${SLUG}/adoptions?status=available&limit=12`);
+  if (ad?.data) {
+    const animales = ad.data.map(soloAdopcion);
+    for (const [i, a] of animales.entries()) {
+      a.foto = await bajarFoto(a.fotoRemota, `adopcion-${i + 1}`);
+    }
+    await guardar("adopciones.json", {
+      total: ad.paginacion?.total ?? animales.length,
+      animales,
+    });
+  }
 
-  console.log(`Listo. ${escritos.length} archivos en data/:`);
-  for (const n of escritos) console.log("  " + n);
+  // --- resumen ---
+  if (stats?.data) {
+    const c = stats.data;
+    console.log(
+      `\n${c.casos?.total ?? "?"} casos · ` +
+        `${c.voluntarios?.activos ?? "?"} voluntarios · ` +
+        `${c.esterilizaciones?.realizadas ?? "?"} esterilizaciones · ` +
+        `${c.adopciones?.concretadas ?? "?"} adopciones`
+    );
+  }
 
-  const c = stats.data;
-  console.log(
-    `\nResumen: ${c.casos?.total ?? "?"} casos · ` +
-      `${c.voluntarios?.activos ?? "?"} voluntarios · ` +
-      `${c.esterilizaciones?.realizadas ?? "?"} esterilizaciones · ` +
-      `${c.adopciones?.concretadas ?? "?"} adopciones`
-  );
+  if (fallos.length) {
+    console.log(`\n${fallos.length} fallo(s):`);
+    for (const f of fallos) console.log(`  ✗ ${f.ruta}\n      ${f.detalle}`);
+    console.log(
+      "\nUn 500 significa que la llave se aceptó y el error está dentro del\n" +
+        "servidor de MascotaApp: revisa los logs de Cloud Run para esa ruta."
+    );
+    process.exitCode = 1;
+  } else {
+    console.log("\nSin fallos.");
+  }
 }
 
 main().catch((e) => {
-  console.error("Falló:", e.message);
+  console.error("Error inesperado:", e);
   process.exit(1);
 });

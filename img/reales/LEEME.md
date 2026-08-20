@@ -1,31 +1,34 @@
-# Fotos reales de la fundación
+# Fotos de la fundación
 
-Guarda aquí las fotos **con el nombre del archivo tal cual** aparece abajo. Da igual
-el tamaño o el formato (`.jpg`, `.jpeg`, `.png`, `.webp`): el procesado se encarga de
-recortar, ajustar el tono cálido y optimizar.
+## De dónde salen ahora
 
-## Las que ya me enseñaste por el chat
+Las fotos de **casos y animales en adopción** las trae la API de MascotaApp:
 
-| Nombre a poner | Cuál es | Dónde va |
+```powershell
+$env:MASCOTAAPP_API_KEY = "la_llave"
+node scripts/traer-datos.mjs
+```
+
+Eso descarga las imágenes a `img/casos/` y deja las fichas en `data/*.json`.
+Se guardan como archivos del repositorio en vez de enlazar a la API en caliente,
+para que la web siga mostrando las fotos aunque la API esté caída o cambie la
+llave.
+
+## Lo que la API no cubre
+
+Las capas de ambiente de la escena de portada no son fotos de casos, así que
+siguen siendo de stock (CC0). Si consigues fotos propias para estas, ponlas aquí
+con estos nombres y dime:
+
+| Nombre | Qué necesito | Orientación |
 |---|---|---|
-| `hero.jpg` | Perro negro sobre hojas secas, mirando de frente | Lámina central de la escena |
-| `izq.jpg` | Perro blanco y negro entre la maleza | Hoja izquierda |
-| `der.jpg` | Perro beige con la persona que lo sujeta | Hoja derecha |
-| `refugio.jpg` | La sala con cuatro perros en sus camas | Sección Veterinarios / ambiente |
-| `rescate.jpg` | El perro con el cono, en la calle | Tarjeta de Rescate |
-| `pin-1.jpg` | Perro tricolor mirando hacia arriba | Icono de tarjeta |
-| `pin-2.jpg` | Cachorro beige con la lengua fuera | Icono de tarjeta |
-| `pin-3.jpg` | Cachorro con abrigo | Icono de tarjeta |
-| `pin-4.jpg` | Cachorro tipo collie | Icono de tarjeta |
+| `cielo.jpg` | Entorno amplio: terreno, calle, el refugio por fuera | Horizontal, grande |
+| `suelo.jpg` | Otra vista del mismo sitio, para la banda inferior | Horizontal, grande |
 
-Faltarían dos horizontales grandes para el fondo de la escena (`cielo.jpg` y
-`suelo.jpg`): un terreno, una calle, el refugio por fuera. Si no las hay, dejo las
-actuales de fondo y pongo las vuestras en todo lo que se ve de cerca.
+Fotos de celular directas están bien: el procesado recorta, aplica el tono
+cálido y optimiza el peso.
 
-## Avisos
+## Aviso
 
-- **Personas.** En la del perro beige aparece alguien. Necesitas su permiso para
-  publicarla. Si no lo tienes, dímelo y la recorto para que sólo salga el perro.
-- **Corazones dibujados.** Un par de fotos traen corazones rojos encima de una app
-  de mensajería. Si tienes el original sin ellos, mejor; si no, se pueden recortar.
-- **No hace falta que edites nada.** Fotos de celular directas están bien.
+Si sale gente reconocible (voluntarios, adoptantes), hace falta su permiso para
+publicarlas. Con los animales no hay problema.
