@@ -2,11 +2,6 @@
   const section = document.querySelector(".cinema-scroll");
   const root = document.documentElement;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const sightsTrack = document.querySelector(".sights-track");
-  const sightsControls = document.querySelector(".sights-controls");
-  const sightPrev = document.querySelector(".sight-prev");
-  const sightNext = document.querySelector(".sight-next");
-  const originalSightCards = Array.from(document.querySelectorAll(".sight-card"));
 
   if (!section) return;
 
@@ -18,9 +13,6 @@
   let smoothScroll = 0;
   let initialized = false;
   let rafPending = false;
-  let sightCards = [];
-  const originalSightCount = originalSightCards.length;
-  let activeSight = originalSightCount;
 
   /* ---------- helpers ---------- */
 
@@ -56,84 +48,6 @@
   const getScrollDistance = () =>
     clamp(-section.getBoundingClientRect().top, 0, section.offsetHeight - window.innerHeight);
 
-  /* ---------- slider ---------- */
-
-  function updateSightSlider() {
-    if (!sightsTrack || !sightCards.length) return;
-
-    const cardWidth = sightCards[0].offsetWidth;
-    const gap = parseFloat(getComputedStyle(sightsTrack).columnGap || "0") || 0;
-    setVar("--sights-shift", `${-(cardWidth + gap) * activeSight}px`);
-
-    sightCards.forEach((card, index) => {
-      card.classList.toggle("is-active", index === activeSight);
-    });
-  }
-
-  function moveSightSlider(direction) {
-    activeSight += direction;
-    updateSightSlider();
-  }
-
-  function selectSightCard(card) {
-    const index = Number(card.dataset.sightIndex);
-    if (Number.isFinite(index)) {
-      activeSight = index;
-    }
-    updateSightSlider();
-  }
-
-  function jumpSightSlider(index) {
-    if (!sightsTrack) return;
-    sightsTrack.classList.add("is-jumping");
-    activeSight = index;
-    updateSightSlider();
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        sightsTrack.classList.remove("is-jumping");
-      });
-    });
-  }
-
-  function normalizeSightSlider() {
-    if (activeSight >= originalSightCount * 2) {
-      jumpSightSlider(activeSight - originalSightCount);
-    } else if (activeSight < originalSightCount) {
-      jumpSightSlider(activeSight + originalSightCount);
-    }
-  }
-
-  function setupSightSlider() {
-    if (!sightsTrack || !originalSightCount) return;
-
-    sightsTrack.replaceChildren();
-
-    for (let setIndex = 0; setIndex < 3; setIndex += 1) {
-      originalSightCards.forEach((card, cardIndex) => {
-        const clone = card.cloneNode(true);
-        clone.dataset.sightIndex = String(setIndex * originalSightCount + cardIndex);
-        sightsTrack.appendChild(clone);
-      });
-    }
-
-    sightCards = Array.from(sightsTrack.querySelectorAll(".sight-card"));
-    activeSight = originalSightCount;
-
-    sightCards.forEach((card) => {
-      card.addEventListener("click", () => selectSightCard(card));
-      card.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          selectSightCard(card);
-        }
-      });
-    });
-
-    sightsTrack.addEventListener("transitionend", normalizeSightSlider);
-
-    updateSightSlider();
-  }
-
   /* ---------- animation engine ---------- */
 
   function update() {
@@ -155,13 +69,12 @@
     mouseX = lerp(mouseX, targetMouseX, 0.12);
     mouseY = lerp(mouseY, targetMouseY, 0.12);
 
-    const frame2 = segmentInOut(smoothScroll, 560, 900, 1300, 1620);
-    const frame3 = segmentInOut(smoothScroll, 1760, 2140, 2540, 2700);
-    const progress = clamp(smoothScroll / 2700);
-    const introExit = smoothstep(90, 650, smoothScroll);
-    const sightsEnterRaw = smoothstep(2760, 3560, smoothScroll);
-    const sightsEnter = Math.pow(sightsEnterRaw, 1.55);
-    const sightsControlsEnter = smoothstep(3360, 3660, smoothScroll);
+    /* Tramos reescalados de 2700 a 1890 px al quitar el carrusel: la escena
+       eran cinco pantallas de animacion antes de llegar a nada accionable. */
+    const frame2 = segmentInOut(smoothScroll, 390, 630, 910, 1130);
+    const frame3 = segmentInOut(smoothScroll, 1230, 1500, 1780, 1890);
+    const progress = clamp(smoothScroll / 1890);
+    const introExit = smoothstep(60, 450, smoothScroll);
     const blurActive = clamp(frame2.active + frame3.active);
     const frame2Opacity = frame2.active * (1 - frame3.enter);
     const splitDrift = Math.pow(frame2.enter, 1.5);
@@ -170,8 +83,6 @@
     const backScale = 0.76 + progress * 0.2 + frame2.enter * 0.18 + frame3.enter * 0.16;
     const sharedHeroY = progress * -74;
     const sharedHeroScale = progress * 0.23;
-    const sightsScreenTop = Math.min(220, Math.max(112, window.innerHeight * 0.19)) - 50;
-    const sightsParentTop = window.innerHeight - (window.innerHeight - sightsScreenTop) / backScale;
 
     setVar("--mx", (reduceMotion.matches ? 0 : mouseX).toFixed(4));
     setVar("--my", (reduceMotion.matches ? 0 : mouseY).toFixed(4));
@@ -250,19 +161,6 @@
       `calc(-50% + ${-frame3.exit * 86 + (1 - frame3.enter) * 58}px)`
     );
 
-    setVar("--sights-opacity", sightsEnter);
-    setVar("--sights-controls-opacity", sightsControlsEnter);
-    if (sightsControls) {
-      sightsControls.classList.toggle("is-ready", sightsControlsEnter > 0.98);
-    }
-    setVar("--sights-visibility", sightsEnter > 0.01 ? "visible" : "hidden");
-    // lo que antes era `top` viaja ahora dentro del translate del slider
-    setVar("--sights-y", `${sightsParentTop}px`);
-    setVar("--sights-enter-x", `${(1 - sightsEnter) * 420}vw`);
-    setVar("--sights-scale", 1 / backScale);
-
-    setVar("--sights-screen-top", `${sightsScreenTop}px`);
-
     highlightNav(smoothScroll);
 
     if (
@@ -284,10 +182,7 @@
 
   window.addEventListener("scroll", requestTick, { passive: true });
 
-  window.addEventListener("resize", () => {
-    updateSightSlider();
-    requestTick();
-  });
+  window.addEventListener("resize", requestTick);
 
   window.addEventListener(
     "pointermove",
@@ -299,13 +194,10 @@
     { passive: true }
   );
 
-  if (sightPrev) sightPrev.addEventListener("click", () => moveSightSlider(-1));
-  if (sightNext) sightNext.addEventListener("click", () => moveSightSlider(1));
-
   /* ---------- navegación ----------
-     La página es una sola escena continua: no hay secciones separadas a las que
-     saltar, así que cada enlace lleva a su momento dentro del scroll. El valor
-     va en data-scroll y es la misma distancia que consume el motor de arriba. */
+     Los enlaces del menú apuntan a secciones reales por ancla; sólo "Inicio" y
+     el logo usan data-scroll, porque su destino es un punto dentro de la escena
+     y no un elemento con id. */
 
   function goTo(distance) {
     const top = section.offsetTop + distance;
@@ -562,6 +454,5 @@
 
   cargarAdopciones();
 
-  setupSightSlider();
   requestTick();
 })();

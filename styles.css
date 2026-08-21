@@ -59,15 +59,6 @@
   --panel2-y: calc(-50% + 58px);
   --panel3-opacity: 0;
   --panel3-y: calc(-50% + 58px);
-  --sights-opacity: 0;
-  --sights-controls-opacity: 0;
-  --sights-y: 0px;
-  --sights-enter-x: 420vw;
-  --sights-visibility: hidden;
-  --sights-shift: 0px;
-  --sights-scale: 1;
-  --sights-top: clamp(112px, 19vh, 220px);
-  --sights-screen-top: clamp(112px, 19vh, 220px);
   /* Paleta tomada del logo: crema, marrón oscuro, terracota y caramelo. */
   --ink: #2b2420;
   --paper: #faf2ea;
@@ -112,7 +103,10 @@ button {
 
 .cinema-scroll {
   position: relative;
-  height: calc(100vh + 3700px);
+  /* 1950 px: antes eran 3700, casi cinco pantallas de animacion antes de
+     llegar a nada accionable. Al quitar el carrusel se recorto la escena a
+     lo que de verdad cuenta algo. */
+  height: calc(100vh + 1950px);
 }
 
 .stage {
@@ -131,8 +125,6 @@ button {
 .shade,
 .scene-img,
 .site-header,
-.sights-slider,
-.sights-controls,
 .hero-title,
 .intro-copy,
 .story-panel {
@@ -357,163 +349,6 @@ button {
   );
   transform: translate3d(-50%, calc(var(--four-y) - 110px), 0) scale(var(--four-scale));
   will-change: transform;
-}
-
-/* ---------- sights slider ---------- */
-
-/* z 4: por encima de .back-ground (3). En el original el slider iba en z 2
-   porque la capa del bazar era un recorte y las tarjetas asomaban por detrás;
-   con una foto opaca delante quedaban ocultas. */
-.sights-slider {
-  z-index: 4;
-  left: 0;
-  right: 0;
-  /* top fijo: el desplazamiento vertical va dentro del transform,
-     para no provocar relayout de las 15 tarjetas en cada frame. */
-  top: 0;
-  padding: 0;
-  opacity: 1;
-  visibility: var(--sights-visibility);
-  transform: translate3d(var(--sights-enter-x), var(--sights-y), 0) scale(var(--sights-scale));
-  transform-origin: 0 0;
-  pointer-events: auto;
-  will-change: transform;
-}
-
-.sights-track {
-  display: flex;
-  gap: clamp(16px, 1.15vw, 24px);
-  align-items: stretch;
-  transform: translate3d(calc(var(--sights-shift) - 18vw), 0, 0);
-  transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
-}
-
-.sights-track.is-jumping {
-  transition: none;
-}
-
-.sight-card {
-  position: relative;
-  flex: 0 0 clamp(360px, 19.4vw, 430px);
-  height: 220px;
-  padding: 24px;
-  overflow: hidden;
-  border: 1px solid rgba(253, 241, 225, 0.42);
-  border-radius: 24px;
-  color: #000;
-  background: #fdf1e1;
-  box-shadow: 0 18px 52px rgba(2, 47, 64, 0.12);
-  backdrop-filter: none;
-  cursor: pointer;
-  pointer-events: auto;
-  user-select: none;
-}
-
-.sight-card::before,
-.sight-card::after {
-  content: none;
-}
-
-.sight-card .sight-kicker,
-.sight-card h3,
-.sight-card p {
-  position: relative;
-  z-index: 1;
-  text-shadow: none;
-}
-
-.sight-card:focus-visible,
-.sight-card.is-active {
-  outline: none;
-}
-
-.sight-kicker {
-  display: block;
-  margin-bottom: 56px;
-  color: #000;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.05;
-  text-transform: uppercase;
-}
-
-/* Los pines originales eran recortes PNG con fondo transparente; ahora son
-   fotos cuadradas, así que se redondean para que no lean como sellos pegados. */
-.sight-pin {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  width: 67.2px;
-  height: 67.2px;
-  object-fit: cover;
-  border-radius: 18px;
-  pointer-events: none;
-}
-
-.sight-card h3 {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: calc(24px + (16px * 1.16 * 2) + 12px);
-  max-width: calc(100% - 76px);
-  margin: 0;
-  color: #000;
-  font-size: 24px;
-  font-weight: 800;
-  line-height: 0.95;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.sight-card p {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: 24px;
-  max-width: 100%;
-  margin: 12px 0 0;
-  color: #000;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.16;
-  display: -webkit-box;
-  max-height: calc(2em * 1.16);
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.sights-controls {
-  z-index: 5;
-  left: 48px;
-  right: auto;
-  top: calc(var(--sights-screen-top) + 220px + 16px);
-  display: flex;
-  justify-content: flex-start;
-  gap: 14px;
-  opacity: var(--sights-controls-opacity);
-  transform: translate3d(0, var(--sights-y), 0);
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-.sights-controls.is-ready {
-  pointer-events: auto;
-}
-
-.sight-nav {
-  width: 54px;
-  height: 54px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  color: #111411;
-  background: rgba(253, 241, 225, 0.94);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
 }
 
 /* ---------- hero ---------- */
@@ -800,6 +635,8 @@ button {
   color: var(--ink);
   background: #fdf1e1;
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+  /* es un <a>, no un <button>: hay que quitarle el subrayado */
+  text-decoration: none;
   pointer-events: auto;
   cursor: pointer;
 }
@@ -814,28 +651,19 @@ button {
    que es parte de por qué los botones parecían muertos. */
 
 .note-button,
-.sight-nav,
-.sight-card,
 .language-switcher {
   transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 200ms ease, background-color 200ms ease;
+    box-shadow 200ms ease, background-color 200ms ease, color 200ms ease;
 }
 
-.note-button:hover,
-.sight-nav:hover {
+.note-button:hover {
   transform: translateY(-2px);
   background: #fffaf3;
   box-shadow: 0 22px 44px rgba(43, 33, 24, 0.32);
 }
 
-.note-button:active,
-.sight-nav:active {
+.note-button:active {
   transform: translateY(0);
-}
-
-.sight-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 26px 60px rgba(43, 33, 24, 0.26);
 }
 
 .language-switcher:hover {
@@ -846,23 +674,10 @@ button {
 .site-nav a:focus-visible,
 .site-logo:focus-visible,
 .note-button:focus-visible,
-.sight-nav:focus-visible,
 .language-switcher:focus-visible {
   outline: 2px solid var(--terracota);
   outline-offset: 4px;
   border-radius: 6px;
-}
-
-/* La tarjeta activa del carrusel se marca con el acento del logo.
-   El diseño original la dejaba idéntica al resto (outline: none). */
-.sight-card.is-active {
-  border-color: var(--terracota);
-  box-shadow: 0 0 0 2px var(--terracota), 0 22px 56px rgba(43, 33, 24, 0.28);
-}
-
-.sight-card:focus-visible {
-  outline: 2px solid var(--terracota);
-  outline-offset: 3px;
 }
 
 /* ---------- media queries ---------- */
@@ -908,10 +723,6 @@ button {
     font-size: 3.2rem;
   }
 
-  .sight-card {
-    flex-basis: clamp(320px, 40vw, 390px);
-    min-height: 178px;
-  }
 }
 
 @media (max-width: 640px) {
@@ -997,45 +808,6 @@ button {
     font-size: 2.5rem;
   }
 
-  .sights-slider {
-    padding: 0;
-  }
-
-  .sights-track {
-    gap: 12px;
-    transform: translate3d(calc(var(--sights-shift) - 18vw), 0, 0);
-  }
-
-  .sight-card {
-    flex-basis: min(82vw, 330px);
-    height: 220px;
-    padding: 24px;
-    border-radius: 24px;
-  }
-
-  .sights-controls {
-    top: calc(var(--sights-screen-top) + 236px);
-  }
-
-  .sight-card h3 {
-    max-width: 78%;
-  }
-
-  .sight-card p {
-    max-width: 100%;
-    margin-top: 10px;
-  }
-
-  .sight-kicker {
-    margin-bottom: 56px;
-  }
-
-  .sight-pin {
-    top: 24px;
-    right: 24px;
-    width: 57.6px;
-    height: 57.6px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1048,10 +820,6 @@ button {
   .hero-title,
   .intro-copy,
   .story-panel,
-  .sights-track,
-  .sights-slider {
-    transition: none;
-  }
 }
 
 /* =====================================================================
@@ -1567,7 +1335,6 @@ button {
     gap: 8px;
   }
 }
-
 
 /* =====================================================================
    CAPA ESTETICA DE LAS SECCIONES
