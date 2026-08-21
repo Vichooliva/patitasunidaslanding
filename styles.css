@@ -1618,17 +1618,17 @@ button {
 }
 
 #nosotros {
-  --sheet-foto: url("img/split-left.jpg");
+  --sheet-foto: url("img/split-left.webp");
   --sheet-foto-op: 0.06;
 }
 
 #ayuda {
-  --sheet-foto: url("img/frame-two.jpg");
+  --sheet-foto: url("img/frame-two.webp");
   --sheet-foto-op: 0.1;
 }
 
 #veterinarios {
-  --sheet-foto: url("img/ground.jpg");
+  --sheet-foto: url("img/ground.webp");
   --sheet-foto-op: 0.05;
 }
 

@@ -6,6 +6,7 @@
     <title>Patitas Unidas Chile</title>
     <meta name="description" content="Fundación chilena dedicada a los animales en situación de calle: hogar, techo, alimento y esterilización." />
     <link rel="icon" href="data:," />
+    <link rel="preload" as="image" href="img/sky.webp" fetchpriority="high" />
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
@@ -14,15 +15,15 @@
       <section class="cinema-scroll" id="cinema" aria-label="Historia visual de Patitas Unidas Chile">
         <div class="stage">
           <div class="world">
-            <img class="scene-img sky-img" src="img/sky.jpg" alt="" />
+            <img class="scene-img sky-img" src="img/sky.webp" alt="" fetchpriority="high" />
 
             <header class="site-header" aria-label="Navegación principal">
               <a class="site-logo" href="#cinema" data-scroll="0">
-                <!-- Guarda el logo como img/logo.png y aparecerá solo.
+                <!-- Guarda el logo como img/logo.webp y aparecerá solo.
                      Si el archivo no existe, el onerror deja el texto. -->
                 <img
                   class="site-logo-mark"
-                  src="img/logo.png"
+                  src="img/logo.webp"
                   alt="Patitas Unidas Chile"
                   onerror="this.remove()"
                 />
@@ -48,42 +49,42 @@
                 <div class="sights-track">
                   <article class="sight-card" tabindex="0" role="button" aria-label="Abrir tarjeta de Adopción">
                     <span class="sight-kicker">Adopción</span>
-                    <img class="sight-pin" src="img/pin-1.jpg" alt="" />
+                    <img class="sight-pin" src="img/pin-1.webp" alt="" loading="lazy" decoding="async" />
                     <h3>Buscamos familia</h3>
                     <p>Siempre la primera opción: hogar temporal o definitivo.</p>
                   </article>
 
                   <article class="sight-card" tabindex="0" role="button" aria-label="Abrir tarjeta de Rescate">
                     <span class="sight-kicker">Rescate</span>
-                    <img class="sight-pin" src="img/pin-2.jpg" alt="" />
+                    <img class="sight-pin" src="img/pin-2.webp" alt="" loading="lazy" decoding="async" />
                     <h3>Rescate en calle</h3>
                     <p>Atendemos avisos de animales heridos o en riesgo.</p>
                   </article>
 
                   <article class="sight-card" tabindex="0" role="button" aria-label="Abrir tarjeta de Salud">
                     <span class="sight-kicker">Salud</span>
-                    <img class="sight-pin" src="img/pin-3.jpg" alt="" />
+                    <img class="sight-pin" src="img/pin-3.webp" alt="" loading="lazy" decoding="async" />
                     <h3>Esterilización</h3>
                     <p>El eje de todo: menos animales en la calle.</p>
                   </article>
 
                   <article class="sight-card" tabindex="0" role="button" aria-label="Abrir tarjeta de Voluntariado">
                     <span class="sight-kicker">Voluntariado</span>
-                    <img class="sight-pin" src="img/pin-1.jpg" alt="" />
+                    <img class="sight-pin" src="img/pin-1.webp" alt="" loading="lazy" decoding="async" />
                     <h3>Hazte voluntario</h3>
                     <p>Mano de obra, materiales, traslados y difusión.</p>
                   </article>
 
                   <article class="sight-card" tabindex="0" role="button" aria-label="Abrir tarjeta de Apadrinamiento">
                     <span class="sight-kicker">Apadrinamiento</span>
-                    <img class="sight-pin" src="img/pin-2.jpg" alt="" />
+                    <img class="sight-pin" src="img/pin-2.webp" alt="" loading="lazy" decoding="async" />
                     <h3>Apadrina</h3>
                     <p>Cubre el tratamiento de un animal que aún espera.</p>
                   </article>
                 </div>
               </section>
 
-              <img class="scene-img back-img back-ground" src="img/ground.jpg" alt="" />
+              <img class="scene-img back-img back-ground" src="img/ground.webp" alt="" fetchpriority="low" decoding="async" />
             </div>
 
             <div class="sights-controls" aria-label="Controles del carrusel">
@@ -93,12 +94,12 @@
 
             <h1 class="hero-title">Patitas<br />Unidas</h1>
 
-            <img class="scene-img splitframe-img splitframe-left" src="img/split-left.jpg" alt="" />
-            <img class="scene-img splitframe-img splitframe-right" src="img/split-right.jpg" alt="" />
+            <img class="scene-img splitframe-img splitframe-left" src="img/split-left.webp" alt="" decoding="async" />
+            <img class="scene-img splitframe-img splitframe-right" src="img/split-right.webp" alt="" decoding="async" />
 
-            <img class="scene-img bridge-img" src="img/hero.jpg" alt="" />
+            <img class="scene-img bridge-img" src="img/hero.webp" alt="" fetchpriority="high" />
 
-            <img class="scene-img frame-two-img" src="img/frame-two.jpg" alt="" />
+            <img class="scene-img frame-two-img" src="img/frame-two.webp" alt="" fetchpriority="low" decoding="async" />
 
             <div class="shade"></div>
             <!-- Velo cálido: liga el verde frío de las fotos con la paleta
@@ -358,7 +359,7 @@
               </div>
             </div>
             <figure class="split-media">
-              <img src="img/split-right.jpg" alt="" loading="lazy" decoding="async" />
+              <img src="img/split-right.webp" alt="" loading="lazy" decoding="async" />
             </figure>
           </div>
         </div>
@@ -369,7 +370,7 @@
         <div class="wrap">
           <div class="footer-grid">
             <div>
-              <img class="footer-logo" src="img/logo.png" alt="" loading="lazy" onerror="this.remove()" />
+              <img class="footer-logo" src="img/logo.webp" alt="" loading="lazy" onerror="this.remove()" />
               <p class="footer-brand">Fundaci&oacute;n Patitas Unidas</p>
               <p class="fine">Chile &middot; RUT 65.280.072-6</p>
             </div>
