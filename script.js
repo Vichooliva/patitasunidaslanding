@@ -324,6 +324,27 @@
     });
   }
 
+  /* ---------- barra fija ----------
+     El header de la escena vive dentro del .stage sticky y desaparece con
+     ella. Esta barra toma el relevo justo en ese punto. Se usa un
+     IntersectionObserver sobre la propia escena en vez de leer scrollY en cada
+     frame: el navegador avisa solo y no cuesta nada durante el scroll. */
+
+  const topbar = document.getElementById("topbar");
+
+  if (topbar && "IntersectionObserver" in window) {
+    const observador = new IntersectionObserver(
+      ([entrada]) => {
+        // visible cuando la escena ya salió por arriba
+        const fuera = !entrada.isIntersecting && entrada.boundingClientRect.top < 0;
+        topbar.classList.toggle("is-visible", fuera);
+        topbar.setAttribute("aria-hidden", fuera ? "false" : "true");
+      },
+      { threshold: 0 }
+    );
+    observador.observe(section);
+  }
+
   cargarCifras();
 
   /* ---------- animales en adopción ----------
@@ -450,16 +471,6 @@
         return art;
       })
     );
-
-    const resumen = document.querySelector("[data-adopta-resumen]");
-    if (resumen) {
-      // el total viene de la API: es cuántos hay de verdad, no cuántos pintamos
-      const n = datos.total || conFoto.length;
-      resumen.textContent =
-        n > animales.length
-          ? `${animales.length} de los ${n} que hoy esperan familia.`
-          : `${n} ${n === 1 ? "animal espera" : "animales esperan"} familia ahora mismo.`;
-    }
 
     seccion.hidden = false;
   }

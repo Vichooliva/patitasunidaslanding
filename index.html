@@ -5,7 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Patitas Unidas Chile</title>
     <meta name="description" content="Fundación chilena dedicada a los animales en situación de calle: hogar, techo, alimento y esterilización." />
-    <link rel="icon" href="data:," />
+    <link rel="canonical" href="https://fundacionpatitasunidas.cl/" />
+    <meta name="theme-color" content="#2b2420" />
+
+    <!-- Iconos. Antes era `href="data:,"`: la pestaña salía en blanco. -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+
+    <!-- Tarjeta al compartir. Sin esto, pegar el enlace en WhatsApp o Instagram
+         mostraba una URL pelada, sin imagen ni texto. Para una fundación que
+         depende de que la compartan, era el agujero más caro de la página. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Patitas Unidas Chile" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:url" content="https://fundacionpatitasunidas.cl/" />
+    <meta property="og:title" content="Patitas Unidas · Fundación chilena de rescate y adopción" />
+    <meta property="og:description" content="Siempre buscamos familia. Cuando no se puede, les damos un techo y seguimiento. Y esterilizamos, porque es lo único que reduce la población en calle." />
+    <meta property="og:image" content="https://fundacionpatitasunidas.cl/img/compartir.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Patitas Unidas — fundación chilena de rescate y adopción" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Patitas Unidas · Fundación chilena de rescate y adopción" />
+    <meta name="twitter:description" content="Siempre buscamos familia. Cuando no se puede, les damos un techo y seguimiento." />
+    <meta name="twitter:image" content="https://fundacionpatitasunidas.cl/img/compartir.jpg" />
+
     <link rel="preload" as="image" href="img/sky.webp" fetchpriority="high" />
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
@@ -106,6 +131,28 @@
         </div>
       </section>
 
+      <!-- ================= BARRA FIJA =================
+        El header vive dentro del .stage sticky, asi que se va con la escena y
+        las secciones de contenido quedaban sin navegacion. Esta barra aparece
+        justo cuando aquel desaparece, y lleva ademas el boton de donar para
+        que la accion principal este siempre a un clic.
+      -->
+      <div class="topbar" id="topbar" aria-hidden="true">
+        <div class="topbar-in">
+          <a class="topbar-logo" href="#cinema" data-scroll="0">
+            <img src="img/logo.webp" alt="" width="38" height="38" onerror="this.remove()" />
+            <span>Patitas Unidas</span>
+          </a>
+          <nav class="topbar-nav" aria-label="Navegaci&oacute;n secundaria">
+            <a href="#nosotros">Nosotros</a>
+            <a href="#adopta">Adopta</a>
+            <a href="#ayuda">Ayuda</a>
+            <a href="#veterinarios">Veterinarios</a>
+          </nav>
+          <a class="btn btn-primary topbar-cta" href="#ayuda">Donar</a>
+        </div>
+      </div>
+
       <!-- ================= NOSOTROS ================= -->
       <section class="sheet" id="nosotros" aria-labelledby="nosotros-title">
         <div class="wrap">
@@ -173,7 +220,6 @@
                 Todos fueron rescatados por la fundaci&oacute;n y hoy buscan hogar. Estos
                 cambian cada vez que entras, para que todos tengan su turno.
               </p>
-              <p class="fine" data-adopta-resumen></p>
             </div>
           </div>
 
