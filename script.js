@@ -370,8 +370,19 @@
       return; // sin datos: la sección se queda oculta
     }
 
-    const animales = (datos.animales || []).filter((a) => a.foto);
-    if (!animales.length) return; // sin fotos no hay sección que mostrar
+    const conFoto = (datos.animales || []).filter((a) => a.foto);
+    if (!conFoto.length) return; // sin fotos no hay sección que mostrar
+
+    /* Se muestran sólo tres, elegidos al azar en cada visita.
+       Con la reja completa siempre salían los mismos y el resto no lo veía
+       nadie; rotando, todos tienen su turno de que alguien se fije en ellos.
+       Barajado de Fisher-Yates sobre una copia, para no tocar los datos. */
+    const barajado = conFoto.slice();
+    for (let i = barajado.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [barajado[i], barajado[j]] = [barajado[j], barajado[i]];
+    }
+    const animales = barajado.slice(0, 3);
 
     lista.replaceChildren(
       ...animales.map((a) => {
@@ -441,12 +452,13 @@
     );
 
     const resumen = document.querySelector("[data-adopta-resumen]");
-    if (resumen && datos.total) {
-      const n = datos.total;
+    if (resumen) {
+      // el total viene de la API: es cuántos hay de verdad, no cuántos pintamos
+      const n = datos.total || conFoto.length;
       resumen.textContent =
         n > animales.length
-          ? `Mostramos ${animales.length} de ${n} animales disponibles ahora mismo.`
-          : `${n} ${n === 1 ? "animal disponible" : "animales disponibles"} ahora mismo.`;
+          ? `${animales.length} de los ${n} que hoy esperan familia.`
+          : `${n} ${n === 1 ? "animal espera" : "animales esperan"} familia ahora mismo.`;
     }
 
     seccion.hidden = false;
