@@ -1,8 +1,43 @@
 (() => {
-  const section = document.querySelector(".cinema-scroll");
   const root = document.documentElement;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+  /* Marca que hay JS. El estado inicial de .reveal (invisible) sólo se aplica
+     bajo .js, así que si el script no llega el contenido se ve igualmente en
+     vez de quedar oculto para siempre. */
+  root.classList.add("js");
+
+  /* ---------- aparición al entrar en pantalla ----------
+     Vale para todas las páginas, también legal.html y 404.html, por eso va
+     antes del early return de la escena. */
+
+  function activarReveal() {
+    const piezas = document.querySelectorAll(".reveal, .reveal-stagger");
+    if (!piezas.length) return;
+
+    if (!("IntersectionObserver" in window) || reduceMotion.matches) {
+      piezas.forEach((el) => el.classList.add("is-in"));
+      return;
+    }
+
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        for (const e of entradas) {
+          if (!e.isIntersecting) continue;
+          e.target.classList.add("is-in");
+          observador.unobserve(e.target); // una vez dentro, se queda
+        }
+      },
+      // se dispara un poco antes de que el borde entre, para que no se note
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.05 }
+    );
+
+    piezas.forEach((el) => observador.observe(el));
+  }
+
+  activarReveal();
+
+  const section = document.querySelector(".cinema-scroll");
   if (!section) return;
 
   let targetMouseX = 0;

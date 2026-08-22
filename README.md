@@ -26,6 +26,8 @@ python -m http.server 3008
 
 ```
 index.html        escena de portada + secciones de contenido
+legal.html        aviso legal, privacidad y créditos
+404.html          página de error (GitHub Pages la sirve sola)
 styles.css        capas de la escena, custom properties, y las secciones
 script.js         motor de scroll (rAF + lerp), navegación, datos de la API
 data/             JSON generado desde MascotaApp (no se edita a mano)
@@ -85,8 +87,6 @@ hace falta si las reemplazas.
       secciones más: «Necesitan ayuda ahora» y «Finales felices».
 - [ ] **El correo de la API no coincide.** Devuelve `contacto@patitasunidas.cl`;
       el correcto es `fundacionpatitasunidaschile@gmail.com`.
-- [ ] **El menú desaparece al salir de la escena.** El header vive dentro del
-      `.stage` sticky, así que en las secciones de contenido no hay navegación.
 - [ ] **El enlace de Android va a una búsqueda** en Play Store, no a la ficha de
       la app. Falta el enlace directo `play.google.com/store/apps/details?id=...`.
 - [ ] **Cloud Run usa una cuenta de servicio prestada.** `mascota-app-us` corre con
@@ -94,8 +94,12 @@ hace falta si las reemplazas.
       `cloudsql.client` sobre el proyecto `sit-holding`. Funciona, pero conviene
       pedirle a Hugo el permiso y volver a la cuenta propia.
 - [ ] Fotos de ambiente propias para la escena (ver `img/reales/LEEME.md`).
+- [ ] **Falta el domicilio de la fundación** en `legal.html`. Es el único dato
+      del aviso legal que no se puede deducir; está marcado como pendiente.
+- [ ] **Que alguien con criterio legal revise `legal.html`.** El texto describe
+      con exactitud lo que hace el sitio (que es muy poco: sin formularios, sin
+      cookies, sin analítica), pero eso no lo convierte en un documento validado.
 - [ ] Borrar `_seleccion.html` antes de publicar (es un archivo de trabajo).
-- [ ] Aviso legal y política de privacidad.
 
 ## Publicación
 

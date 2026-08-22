@@ -1889,3 +1889,290 @@ button {
     font-size: 0.98rem;
   }
 }
+
+/* ---------- aparicion al entrar en pantalla ----------
+   Un desplazamiento corto y un fundido. El estado inicial solo se aplica si
+   hay JS (.js en el <html>): sin el, todo queda visible desde el principio en
+   vez de invisible para siempre. */
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* escalonado: los hijos entran uno detras de otro */
+.js .reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 560ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.js .reveal-stagger.is-in > * {
+  opacity: 1;
+  transform: none;
+}
+
+.js .reveal-stagger.is-in > *:nth-child(2) { transition-delay: 90ms; }
+.js .reveal-stagger.is-in > *:nth-child(3) { transition-delay: 180ms; }
+.js .reveal-stagger.is-in > *:nth-child(4) { transition-delay: 270ms; }
+.js .reveal-stagger.is-in > *:nth-child(5) { transition-delay: 360ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal,
+  .js .reveal-stagger > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* =====================================================================
+   PAGINAS DE TEXTO (legal.html) Y ERROR (404.html)
+   Reusan la paleta y la tipografia del sitio para que no parezcan
+   pegadas de otro lado.
+   ===================================================================== */
+
+.pagina-texto,
+.pagina-404 {
+  color: var(--ink);
+  background: var(--paper);
+}
+
+/* ---------- cabecera simple ---------- */
+
+.texto-top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px clamp(16px, 4vw, 40px);
+  background: rgba(250, 242, 234, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(43, 36, 32, 0.1);
+}
+
+.texto-wrap {
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 76px) clamp(20px, 5vw, 24px) clamp(48px, 6vw, 80px);
+}
+
+.texto-titulo {
+  margin: 0 0 18px;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.4vw, 3rem);
+  font-weight: 500;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.texto-bloque {
+  margin-top: clamp(36px, 5vw, 60px);
+  padding-top: clamp(28px, 3.4vw, 40px);
+  border-top: 1px solid rgba(196, 99, 76, 0.3);
+  scroll-margin-top: 80px;
+}
+
+.texto-bloque h2 {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.8vw, 2.1rem);
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.texto-bloque h3 {
+  margin: 30px 0 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.texto-bloque p {
+  margin: 0 0 14px;
+  font-size: 1rem;
+  line-height: 1.66;
+  opacity: 0.86;
+}
+
+.texto-bloque a {
+  color: #a24734;
+  text-underline-offset: 3px;
+  word-break: break-word;
+}
+
+.texto-lista {
+  margin: 0 0 14px;
+  padding-left: 1.15rem;
+  line-height: 1.66;
+  opacity: 0.86;
+}
+
+.texto-lista li {
+  margin-bottom: 8px;
+}
+
+/* la frase que de verdad importa de la politica de privacidad */
+.texto-destacado {
+  margin: 20px 0 26px;
+  padding: 18px 22px;
+  border-left: 3px solid var(--terracota);
+  border-radius: 0 12px 12px 0;
+  background: rgba(196, 99, 76, 0.09);
+}
+
+.texto-destacado p {
+  margin: 0;
+  opacity: 1;
+}
+
+.texto-datos {
+  margin: 0 0 18px;
+}
+
+.texto-datos > div {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 4px 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(43, 36, 32, 0.1);
+}
+
+.texto-datos dt {
+  opacity: 0.6;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.texto-datos dd {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.texto-datos em {
+  opacity: 0.55;
+  font-weight: 400;
+}
+
+.texto-volver {
+  margin-top: clamp(40px, 5vw, 64px);
+  font-size: 1rem;
+}
+
+.texto-volver a {
+  color: #a24734;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.texto-volver a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 404 ---------- */
+
+.error-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: clamp(32px, 6vw, 64px) 24px;
+  text-align: center;
+}
+
+.error-logo {
+  width: 96px;
+  height: 96px;
+  margin-bottom: 26px;
+  border-radius: 999px;
+}
+
+.pagina-404 .eyebrow {
+  justify-content: center;
+}
+
+.pagina-404 h1 {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 5vw, 3.2rem);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.pagina-404 .lede {
+  max-width: 46ch;
+  margin: 0 auto;
+}
+
+.error-acciones {
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.pagina-404 .btn-ghost {
+  color: var(--ink);
+  border-color: rgba(43, 36, 32, 0.32);
+}
+
+.pagina-404 .fine {
+  margin-top: 30px;
+}
+
+.pagina-404 .fine a {
+  color: #a24734;
+}
+
+/* ---------- pie: redes y barra legal ---------- */
+
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.footer-social svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-top: clamp(28px, 3.4vw, 44px);
+  padding-top: 22px;
+  border-top: 1px solid rgba(250, 242, 234, 0.14);
+}
+
+.footer-legal p {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.72;
+  font-size: 0.88rem;
+}
+
+.pagina-texto .footer-legal {
+  justify-content: center;
+  text-align: center;
+}
