@@ -698,16 +698,30 @@ button {
     font-size: 5.4rem;
   }
 
+  /* En pantalla estrecha las tres láminas se pisan. Se acercan las hojas al
+     borde y se estrecha la central para que el tríptico siga leyéndose. */
   .splitframe-img {
-    width: min(64vw, 720px);
+    width: min(40vw, 420px);
+    height: 24vh;
+  }
+
+  .splitframe-left {
+    transform: translate3d(calc(var(--split-left-x) - 38vw), var(--split-left-y), 0)
+      scale(var(--split-left-scale));
+  }
+
+  .splitframe-right {
+    transform: translate3d(calc(var(--split-right-x) + 38vw), var(--split-right-y), 0)
+      scale(var(--split-right-scale));
   }
 
   .bridge-img {
-    width: 138vw;
+    width: min(46vw, 480px);
+    height: 30vh;
   }
 
   .frame-two-img {
-    width: 132vw;
+    width: 150vw;
   }
 
   .story-panel h2 {
@@ -736,40 +750,64 @@ button {
     padding: 24px;
   }
 
+  .site-logo {
+    gap: 9px;
+    font-size: 18px;
+  }
+
+  .site-logo-mark {
+    width: 46px;
+    height: 46px;
+  }
+
   .site-nav {
     grid-column: 1 / -1;
     grid-row: 2;
     justify-content: flex-start;
-    gap: 18px;
+    gap: 20px;
     overflow-x: auto;
     scrollbar-width: none;
+    /* el padding negativo deja que el último enlace llegue al borde al
+       desplazar, en vez de quedar cortado bajo el margen del header */
+    padding-right: 24px;
+    margin-right: -24px;
   }
 
   .site-nav::-webkit-scrollbar {
     display: none;
   }
 
-  .hero-title {
-    top: 16vh;
-    font-size: 3.4rem;
+  .site-nav a {
+    font-size: 16px;
+    white-space: nowrap;
   }
 
+  /* el header ocupa dos filas en móvil (logo arriba, menú debajo), así que el
+     título tiene que arrancar más abajo que en escritorio */
+  .hero-title {
+    top: 17vh;
+    font-size: 3.1rem;
+  }
+
+  /* A 390 px no caben tres láminas en fila: las hojas laterales se solapaban
+     con la central formando una franja ilegible. En móvil la escena se queda
+     con una sola foto, que es lo que de verdad se ve a este tamaño. */
   .splitframe-img {
-    bottom: 12vh;
-    width: min(78vw, 420px);
+    display: none;
   }
 
   .bridge-img {
-    bottom: 2vh;
-    width: 190vw;
+    bottom: 30vh;
+    width: min(86vw, 420px);
+    height: 26vh;
   }
 
   .frame-two-img {
-    width: 176vw;
+    width: 210vw;
   }
 
   .intro-copy {
-    bottom: 42px;
+    bottom: 7vh;
   }
 
   .intro-copy p,
