@@ -168,7 +168,31 @@ hace falta si las reemplazas.
 
 ## Publicación
 
-GitHub Pages sirve la rama `main` (Settings → Pages → «Deploy from a branch»).
+**Hoy publica Cloudflare**, gratis (desde el 24-11-2026):
+
+- Proyecto **`patitasunidaslanding`** (Workers & Pages → Worker de sólo
+  archivos estáticos, configurado en `wrangler.jsonc`). Se construye solo en
+  cada push a `main` con `scripts/construir.mjs`, que trae los datos frescos
+  de MascotaApp con la llave guardada en Cloudflare (Settings → Builds →
+  Variables and secrets → `MASCOTAAPP_API_KEY`, tipo *Secret*).
+- Worker **`patitas-reconstruir`** (código en
+  `cloudflare/reconstruir-cada-6h.js`): cron `23 */6 * * *` que llama al
+  deploy hook `cada-6-horas` del proyecto (secreto `DEPLOY_HOOK_URL`). Así
+  los datos se actualizan cada 6 horas aunque nadie haga push.
+- Dominio: `fundacionpatitasunidas.cl` es *Custom domain* del proyecto, y
+  `www` es un CNAME *proxied* al dominio más una *Route*
+  `www.fundacionpatitasunidas.cl/*` al mismo proyecto.
+- El `data/` del repositorio es sólo respaldo: si la API falla durante una
+  publicación, se usa ése.
+
+**GitHub Pages ya no recibe el dominio** (sus registros DNS se borraron al
+pasar a Cloudflare). `.github/workflows/publicar.yml` sigue en el repo pero
+GitHub Actions está bloqueado en la cuenta por facturación, así que sus
+ejecuciones fallan; si algún día se vuelve a GitHub, ver abajo.
+
+### Antes: GitHub Pages
+
+GitHub Pages servía la rama `main` (Settings → Pages → «Deploy from a branch»).
 
 Está preparado `.github/workflows/publicar.yml` para que publique el flujo en
 vez de GitHub por su cuenta. Se activa cambiando la fuente a **GitHub
@@ -221,6 +245,11 @@ dominio dentro de Cloudflare.
 
 El dominio está en NIC Chile, que no aloja
 zonas DNS: sólo delega. Por eso los servidores de nombres apuntan a Cloudflare
-(`kehlani` y `woz.ns.cloudflare.com`), y los registros A del apex y el CNAME de
-`www` viven en Cloudflare **en modo DNS only** — con el proxy activo GitHub no
-puede emitir el certificado.
+(`kehlani` y `woz.ns.cloudflare.com`). **NIC no se tocó al pasar a Cloudflare.**
+
+Registros en Cloudflare desde el 24-11-2026: el apex es un registro de tipo
+*Worker* (lo crea Cloudflare al agregar el *Custom domain*) y `www` es un CNAME
+al apex, ambos **proxied**. Antes, con GitHub Pages, eran cuatro A a
+`185.199.108–111.153` y un CNAME a `vichooliva.github.io` en modo *DNS only*
+(con el proxy activo GitHub no podía emitir el certificado); si algún día se
+vuelve a GitHub, hay que reponerlos así.
