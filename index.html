@@ -97,7 +97,7 @@
                  a la sección que corresponde. -->
             <nav class="hero-tags" aria-label="Áreas de trabajo">
               <a href="#nosotros">Rescate</a>
-              <a href="#adopta">Adopción</a>
+              <a href="#nosotros">Adopción</a>
               <a href="#ayuda">Voluntariado</a>
             </nav>
           </section>
@@ -207,12 +207,12 @@
       </section>
 
       <!-- ================= ADOPTA =================
-        Un anillo 3D con hasta doce animales al azar. Lo pinta js/anillo.js
-        con lo que hay en data/adopciones.json, que genera
-        scripts/traer-datos.mjs desde la API de MascotaApp. Si el archivo no
-        existe todavia, la seccion entera se oculta: mas vale que no aparezca
-        a que aparezca vacia.
-        El catalogo completo, con buscador y filtros, esta en adopta.html.
+        Las tarjetas las pinta script.js con lo que hay en data/adopciones.json,
+        que genera scripts/traer-datos.mjs desde la API de MascotaApp. Si el
+        archivo no existe todavia, la seccion entera se oculta: mas vale que no
+        aparezca a que aparezca vacia.
+        El anillo 3D lo pinta js/anillo.js con los mismos datos, y el catalogo
+        completo, con buscador y filtros, esta en adopta.html.
       -->
       <section class="sheet sheet-dark sheet-adopta" id="adopta" aria-labelledby="adopta-title" hidden>
         <div class="wrap">
@@ -223,7 +223,8 @@
             </div>
             <div class="sheet-head-aside">
               <p class="lede">
-                Todos fueron rescatados por la fundaci&oacute;n y hoy buscan hogar. Gira la
+                Todos fueron rescatados por la fundaci&oacute;n y hoy buscan hogar. Estos
+                cambian cada vez que entras, para que todos tengan su turno. Gira la
                 rueda, toca el que te mire y conoce su historia completa.
               </p>
             </div>
@@ -245,6 +246,22 @@
               <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
+
+          <div class="adopta-grid reveal" data-adopta-lista></div>
+
+          <aside class="adopta-cta reveal">
+            <div>
+              <h3>Los publicamos todos en MascotaApp</h3>
+              <p>
+                Ah&iacute; est&aacute;n los que buscan familia y los que a&uacute;n necesitan ayuda para
+                salir adelante. Te sirve tanto si quieres <strong>ser voluntario</strong>
+                como si simplemente quieres <strong>darle un hogar a un animal</strong>.
+              </p>
+            </div>
+            <a class="btn btn-primary" href="https://mascotaapp.cl" target="_blank" rel="noopener noreferrer">
+              Ver todos los casos
+            </a>
+          </aside>
         </div>
       </section>
 

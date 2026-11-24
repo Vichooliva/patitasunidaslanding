@@ -1605,14 +1605,29 @@ button {
   }
 }
 
-/* ---------- tarjetas de animal (catalogo de adopta.html) ----------
+/* ---------- animales en adopcion ----------
    Las fotos vienen de telefonos: casi todas verticales y de proporcion
    distinta. Se recortan a un alto fijo para que la reja no quede a saltos.
-   En la portada ya no hay reja: ahi esta el anillo (mas abajo). */
+   Las mismas tarjetas se usan en el catalogo de adopta.html. */
 
 .sheet-adopta[hidden],
 .sheet-historias[hidden] {
   display: none;
+}
+
+.adopta-grid {
+  display: grid;
+  /* auto-fit y no auto-fill: al mostrar solo tres, las columnas se estiran a
+     lo ancho en vez de dejar un hueco vacio a la derecha */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+  margin-top: clamp(34px, 4vw, 54px);
+}
+
+/* la seccion Adopta ahora es oscura (por el anillo): las tarjetas siguen
+   blancas, asi que el texto tiene que volver a ser oscuro */
+.sheet-dark .adopta-card {
+  color: var(--ink);
 }
 
 .adopta-card {
@@ -1712,9 +1727,10 @@ button {
 }
 
 
-/* ---------- llamada a MascotaApp al pie de adopta.html ----------
-   Para quien no puede adoptar: en la app tambien se ofrece hogar temporal,
-   traslados o materiales. */
+/* ---------- llamada a MascotaApp bajo las tarjetas ----------
+   En la web solo salen tres animales al azar; este bloque explica que el
+   catalogo completo vive en la app, y para quien sirve. Tambien va al pie de
+   adopta.html. */
 
 .adopta-cta {
   display: flex;

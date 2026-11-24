@@ -30,7 +30,8 @@ adopta.html       todos los animales en adopción, con buscador y filtros
 legal.html        aviso legal, privacidad y créditos
 404.html          página de error (GitHub Pages la sirve sola)
 styles.css        capas de la escena, custom properties, y las secciones
-script.js         motor de scroll (rAF + lerp), navegación, cifras
+script.js         motor de scroll (rAF + lerp), navegación, datos de la API
+                  (cifras y las tres tarjetas al azar de #adopta)
 js/animales.js    datos de adopción y la ficha de cada animal (<dialog>)
 js/anillo.js      anillo 3D de la sección Adopta
 js/historias.js   carrusel y relato animado de Finales felices
@@ -61,7 +62,8 @@ el resto. Nada de librerías de animación.
 ## Secciones de contenido
 
 - `#nosotros` — misión y los cuatro pilares (familia, techo, alimento, esterilización)
-- `#adopta` — anillo 3D con hasta doce animales al azar: gira solo, se
+- `#adopta` — animales reales con foto, comuna e historia, desde la API: tres
+  tarjetas al azar y, encima, un anillo 3D con hasta doce animales al azar: gira solo, se
   arrastra con inercia y cada foto abre la ficha completa. Lleva a
   `adopta.html`, donde están todos con buscador (sin tildes: «nunoa» encuentra
   «Ñuñoa»), filtros y orden. Los filtros se arman con lo que traen los datos:
@@ -78,6 +80,10 @@ el resto. Nada de librerías de animación.
 
 ## Actualizar los datos
 
+Las cifras y las fotos de casos vienen de la API pública de MascotaApp. La llave
+**nunca** llega al navegador: la petición se hace desde tu máquina y al repositorio
+sólo llega el resultado.
+
 Todo viene de la API pública de MascotaApp (documentada en
 `mascotas-main/docs/api-publica-fundacion.md`). La API exige `X-API-Key`
 **también para las fotos**, así que el navegador no puede llamarla: la llave
@@ -93,13 +99,16 @@ A mano, para probar en local:
 
 ```powershell
 $env:MASCOTAAPP_API_KEY = "la_llave"
-node scripts/traer-datos.mjs      # JSON + fotos nuevas
+node scripts/traer-datos.mjs      # descarga JSON y fotos (sólo las nuevas)
 python scripts/optimizar-fotos.py # obligatorio: llegan a 900x1200 y ~250 KB
+git add -A ; git commit -m "Actualiza datos" ; git push
 ```
 
 | Archivo | Endpoint | Lo usa |
 |---|---|---|
 | `data/cifras.json` | `/stats` | contadores de la escena |
+| `data/casos-ayuda.json` | `/cases?featured=help` | (aún ninguna sección) |
+| `data/casos-exito.json` | `/cases?featured=success` | (aún ninguna sección) |
 | `data/adopciones.json` | `/adoptions?status=available`, todas las páginas | anillo y `adopta.html` |
 | `data/historias.json` | `/cases?status=resolved` + `/adoptions?status=adopted` + `/cases/{id}` por cada una | Finales felices |
 
@@ -108,8 +117,8 @@ Lo que conviene saber del script:
 - **Sólo escribe si algo cambió** (ignora las marcas de tiempo), y sólo baja
   fotos que no tenga: las nombra por id (`adopcion-<id>.webp`). Con
   `--todas-las-fotos` las vuelve a bajar todas.
-- **Borra las fotos que ya no menciona ningún JSON** (animales adoptados que
-  salieron del catálogo).
+- **No borra nada.** Al final lista las fotos de `img/casos` que ningún JSON
+  usa (animales que salieron del catálogo); borrarlas lo decide la fundación.
 - **Si un conjunto falla, conserva el archivo anterior.** Una web con datos de
   ayer es mejor que una vacía.
 - **Tapa teléfonos y correos** que alguien haya escrito dentro de un texto
@@ -129,8 +138,9 @@ hace falta si las reemplazas.
       está en blanco. O no se registran, o falta la función en MascotaApp.
 - [ ] **«Finales felices» está oculta** hasta la primera pasada del flujo
       `publicar.yml`: `data/historias.json` todavía no existe.
-- [ ] **Necesitan ayuda ahora.** `featured=help` devuelve vacío. Si un
-      administrador marca casos en la app, se puede montar esa sección.
+- [ ] **Ningún caso destacado.** `featured=help` y `featured=success` devuelven
+      vacío. Si un administrador marca casos en la app, se pueden montar dos
+      secciones más: «Necesitan ayuda ahora» y «Finales felices».
 - [ ] **El correo de la API no coincide.** Devuelve `contacto@patitasunidas.cl`;
       el correcto es `fundacionpatitasunidaschile@gmail.com`.
 - [ ] **El enlace de Android va a una búsqueda** en Play Store, no a la ficha de
@@ -149,8 +159,12 @@ hace falta si las reemplazas.
 
 ## Publicación
 
-Publica el flujo `.github/workflows/publicar.yml`, no GitHub por su cuenta
-(en **Settings → Pages**, la fuente es **GitHub Actions**):
+GitHub Pages sirve la rama `main` (Settings → Pages → «Deploy from a branch»).
+
+Está preparado `.github/workflows/publicar.yml` para que publique el flujo en
+vez de GitHub por su cuenta. Se activa cambiando la fuente a **GitHub
+Actions** en **Settings → Pages**, y sólo cuando Actions funcione en la cuenta
+(hoy está bloqueado por un tema de facturación de GitHub). Con eso:
 
 - cada push a `main` publica el sitio;
 - cada 6 horas trae los datos de MascotaApp y, si cambiaron, hace commit y

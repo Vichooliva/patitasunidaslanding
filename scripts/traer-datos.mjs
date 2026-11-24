@@ -22,6 +22,8 @@
  * QUÉ GENERA
  *   data/fundacion.json   ficha
  *   data/cifras.json      contadores de la portada
+ *   data/casos-ayuda.json   casos destacados como "necesita ayuda"
+ *   data/casos-exito.json   casos destacados como "final feliz"
  *   data/adopciones.json  TODOS los animales en adopción (el anillo de la
  *                         portada elige unos pocos; adopta.html los filtra)
  *   data/historias.json   finales felices: casos resueltos y adopciones
@@ -32,7 +34,7 @@
  * con datos de ayer que una web vacía.
  */
 
-import { writeFile, readFile, mkdir, readdir, unlink } from "node:fs/promises";
+import { writeFile, readFile, mkdir, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -146,6 +148,21 @@ const siNoNulo = (v) => (typeof v === "boolean" ? v : null);
    OJO: especie, sexo, raza, edad y tamaño vienen DENTRO de `animal`. La
    versión anterior los leía del primer nivel y por eso salían siempre en
    null. */
+
+const soloCaso = (c) => ({
+  id: c.id,
+  titulo: c.titulo,
+  descripcion: c.descripcion,
+  estado: c.estado,
+  urgencia: c.urgencia,
+  especie: c.animal?.especie ?? null,
+  nombre: c.animal?.nombre ?? null,
+  comuna: c.ubicacion?.comuna ?? null,
+  region: c.ubicacion?.region ?? null,
+  fotoRemota: c.fotoPrincipalUrl ?? null,
+  foto: null, // se rellena al descargar
+  creadoEn: c.creadoEn ?? null,
+});
 
 const soloAdopcion = (a) => ({
   id: a.id,
@@ -306,27 +323,28 @@ async function guardar(nombre, datos) {
 }
 
 /**
- * Borra las fotos que ya no menciona ningún JSON: animales que se adoptaron y
+ * AVISA (no borra) de las fotos que ya no menciona ningún JSON: animales que
  * salieron del catálogo, o los nombres por posición de la versión anterior
- * (adopcion-1, adopcion-2…). Sin esto, img/casos sólo crecería.
- * Lee los JSON tal como quedaron en disco, así que si un conjunto falló y se
- * conservó el archivo anterior, sus fotos también se conservan.
+ * (adopcion-1, adopcion-2…). Borrarlas o no lo decide la fundación: el
+ * script no elimina nada por su cuenta.
  */
-async function limpiarFotos() {
+async function avisarFotosSinUso() {
   const usadas = new Set();
-  for (const archivo of ["adopciones.json", "historias.json"]) {
+  for (const archivo of ["adopciones.json", "historias.json", "casos-ayuda.json", "casos-exito.json"]) {
     try {
       const texto = await readFile(resolve(DATOS, archivo), "utf8");
       for (const m of texto.matchAll(/img\/casos\/([^"/]+?)\.(?:webp|jpe?g|png)/g)) usadas.add(m[1]);
     } catch {}
   }
-  if (!usadas.size) return; // sin JSON legibles no se toca nada
+  if (!usadas.size) return;
 
-  for (const f of await readdir(FOTOS)) {
+  const sobran = (await readdir(FOTOS)).filter((f) => {
     const base = f.replace(/\.(webp|jpe?g|png)$/i, "");
-    if (base === f || usadas.has(base)) continue;
-    await unlink(resolve(FOTOS, f));
-    console.log(`  - img/casos/${f} (ya no se usa)`);
+    return base !== f && !usadas.has(base);
+  });
+  if (sobran.length) {
+    console.log(`\n  i ${sobran.length} foto(s) en img/casos que ningún JSON usa (no se borran):`);
+    for (const f of sobran) console.log(`      img/casos/${f}`);
   }
 }
 
@@ -409,9 +427,26 @@ async function main() {
   const stats = await pedir(`/foundations/${SLUG}/stats`);
   if (stats?.data) await guardar("cifras.json", { cifras: stats.data });
 
+  // --- casos destacados, con sus fotos ---
+  // Las fotos van por id y no por posición (help-1, help-2…): como el script
+  // ya no vuelve a bajar una foto que existe, con nombres por posición un caso
+  // nuevo heredaría la foto del anterior.
+  for (const [destacado, archivo] of [
+    ["help", "casos-ayuda.json"],
+    ["success", "casos-exito.json"],
+  ]) {
+    const res = await pedir(`/foundations/${SLUG}/cases?featured=${destacado}&limit=6`);
+    if (!res?.data) continue;
+    const casos = res.data.map(soloCaso);
+    for (const c of casos) {
+      c.foto = await bajarFoto(c.fotoRemota, `${destacado}-${c.id}`);
+    }
+    await guardar(archivo, { total: res.paginacion?.total ?? casos.length, casos });
+  }
+
   await traerAdopciones();
   await traerHistorias();
-  await limpiarFotos();
+  await avisarFotosSinUso();
 
   // --- resumen ---
   if (stats?.data) {
