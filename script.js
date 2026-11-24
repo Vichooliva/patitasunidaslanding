@@ -514,6 +514,16 @@
           cuerpoEl.appendChild(r);
         }
 
+        // el código con que se postula a la adopción en MascotaApp
+        if (a.codigo) {
+          const c = document.createElement("p");
+          c.className = "adopta-codigo";
+          const cod = document.createElement("span");
+          cod.textContent = a.codigo;
+          c.append(cod, document.createTextNode(" Postula en MascotaApp"));
+          cuerpoEl.appendChild(c);
+        }
+
         art.append(fig, cuerpoEl);
         return art;
       })

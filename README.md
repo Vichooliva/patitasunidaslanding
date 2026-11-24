@@ -62,14 +62,20 @@ el resto. Nada de librerías de animación.
 ## Secciones de contenido
 
 - `#nosotros` — misión y los cuatro pilares (familia, techo, alimento, esterilización)
-- `#adopta` — animales reales con foto, comuna e historia, desde la API: tres
-  tarjetas al azar y, encima, un anillo 3D con hasta doce animales al azar: gira solo, se
+- `#adopta` — animales reales con foto, comuna e historia, desde la API: un
+  anillo 3D con hasta doce al azar (las tres tarjetas al azar se quitaron a
+  pedido; el código sigue en `script.js`). Cada uno muestra su código de
+  MascotaApp, donde se postula a la adopción: gira solo, se
   arrastra con inercia y cada foto abre la ficha completa. Lleva a
   `adopta.html`, donde están todos con buscador (sin tildes: «nunoa» encuentra
   «Ñuñoa»), filtros y orden. Los filtros se arman con lo que traen los datos:
   si nadie cargó el tamaño, no aparece un filtro de tamaño. La URL guarda la
   búsqueda (`?sexo=Hembra&ideal=ninos`) y `adopta.html#<id>` abre la ficha de
   un animal: es el enlace que sale al pulsar «Compartir».
+- `#casitas` — «Un techo»: cómo se llega a una casita, en seis pasos, con
+  una ilustración que se arma sola (`js/casita.js`). La idea que manda: sin un
+  vecino comprometido no hay casita. Muestra «N casitas instaladas» sólo si el
+  dato de `/stats` es mayor que cero.
 - `#historias` — finales felices: casos resueltos y adopciones concretadas.
   Arriba, tiras que se abren; abajo, el relato de la activa: dónde (un punto
   que cae sobre el largo de Chile hasta su región), cuántos días tardó (un

@@ -3830,3 +3830,715 @@ html:has(dialog.ficha[open]) {
     transition: none !important;
   }
 }
+
+/* ---------- postular en MascotaApp: ficha, tarjetas y catalogo ----------
+   La adopcion se postula en la app. Cada animal lleva su codigo (ADO-XXXX)
+   para que la fundacion sepa a quien eligio la persona. */
+
+.ficha-postular {
+  margin-top: 24px;
+  padding: 18px 20px;
+  border: 1px solid rgba(196, 99, 76, 0.24);
+  border-radius: 16px;
+  background: rgba(196, 99, 76, 0.07);
+}
+
+.ficha-postular-titulo {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.ficha-postular-texto {
+  margin: 0 0 12px;
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.ficha-codigo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0 0 12px;
+}
+
+.ficha-codigo[hidden],
+.ficha-acciones [hidden] {
+  display: none;
+}
+
+.ficha-codigo span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.62;
+}
+
+.ficha-codigo strong,
+.adopta-codigo span {
+  border: 1px dashed var(--terracota);
+  color: #a24734;
+  background: #fff;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+  letter-spacing: 0.05em;
+}
+
+.ficha-codigo strong {
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 1.05rem;
+}
+
+.ficha-copiar {
+  padding: 5px 12px;
+  border: 1px solid rgba(43, 36, 32, 0.22);
+  border-radius: 999px;
+  color: inherit;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ficha-copiar:hover {
+  border-color: var(--terracota);
+}
+
+.ficha-copiar:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 2px;
+}
+
+.ficha-tiendas {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  opacity: 0.78;
+}
+
+.ficha-tiendas a,
+.catalogo-postular a {
+  color: #a24734;
+}
+
+.adopta-codigo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.adopta-codigo span {
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.anillo-codigo {
+  margin-top: 2px;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+  font-size: 0.68rem;
+  font-style: normal;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+
+.catalogo-postular {
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--terracota);
+  border-radius: 0 12px 12px 0;
+  background: rgba(196, 99, 76, 0.07);
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+/* ---------- un techo: la casita que se construye ----------
+   Cada pieza del SVG tiene data-desde / data-hasta y js/casita.js le pone
+   .is-on cuando toca. El estado final esta siempre escrito: sin movimiento
+   se ve la casita terminada. */
+
+/* sin foto de fondo: la ilustracion ya llena la seccion */
+#casitas {
+  --sheet-foto: none;
+}
+
+.casitas {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+  margin-top: clamp(30px, 4vw, 52px);
+}
+
+.casitas-arte {
+  position: relative;
+}
+
+.casita-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 26px;
+  box-shadow: 0 24px 60px rgba(43, 33, 24, 0.16);
+}
+
+/* arriba a la izquierda: al final la nube ya se fue y ese rincon queda
+   libre; abajo tapaba los platos de comida y agua */
+.casitas-repetir {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(43, 36, 32, 0.16);
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(250, 242, 234, 0.94);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.casitas-repetir[hidden] {
+  display: none;
+}
+
+.casitas-repetir svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.casitas-repetir:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 2px;
+}
+
+/* --- piezas del dibujo --- */
+
+.casita-svg .capa {
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.casita-svg .capa.is-on {
+  opacity: 1;
+}
+
+.cs-cielo {
+  fill: #dfe2e0;
+  transition: fill 1200ms ease;
+}
+
+.casitas[data-paso="6"] .cs-cielo {
+  fill: #f6e2cc;
+}
+
+.cs-suelo {
+  fill: #d9c3a5;
+}
+
+.cs-pasto {
+  fill: none;
+  stroke: #a8936f;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cs-nube {
+  fill: #b9bfc0;
+}
+
+.cs-gotas path {
+  fill: none;
+  stroke: #8fa6b3;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  animation: cs-gota 900ms linear infinite;
+}
+
+.cs-gotas path:nth-child(2n) {
+  animation-delay: -300ms;
+}
+
+.cs-gotas path:nth-child(3n) {
+  animation-delay: -600ms;
+}
+
+@keyframes cs-gota {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(28px);
+    opacity: 0;
+  }
+}
+
+.cs-sol circle {
+  fill: #f2b66d;
+}
+
+.cs-rayos {
+  fill: none;
+  stroke: #f2b66d;
+  stroke-width: 4;
+  stroke-linecap: round;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cs-girar 20s linear infinite;
+}
+
+@keyframes cs-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cs-plano path {
+  fill: none;
+  stroke: var(--terracota);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 7 6;
+  animation: cs-hormigas 1.2s linear infinite;
+}
+
+.cs-plano .cs-cota {
+  stroke-width: 1.5;
+  stroke-dasharray: none;
+  opacity: 0.7;
+  animation: none;
+}
+
+@keyframes cs-hormigas {
+  to {
+    stroke-dashoffset: -26;
+  }
+}
+
+.cs-base {
+  fill: var(--marron);
+}
+
+.cs-muros rect {
+  fill: #e7bd8f;
+}
+
+.cs-muros path {
+  fill: none;
+  stroke: #c99a6b;
+  stroke-width: 2;
+}
+
+.cs-puerta {
+  fill: #4b3a29;
+}
+
+.cs-techo path:first-child {
+  fill: var(--terracota);
+}
+
+.cs-tejas {
+  fill: none;
+  stroke: #a9503c;
+  stroke-width: 2;
+}
+
+.cs-placa rect {
+  fill: var(--paper);
+}
+
+.cs-placa path {
+  fill: var(--terracota);
+}
+
+.cs-plato {
+  fill: var(--terracota);
+}
+
+.cs-plato-agua {
+  fill: #6f9fb4;
+}
+
+.cs-agua {
+  fill: none;
+  stroke: #cbe6f1;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.cs-croqueta {
+  fill: #7a5537;
+}
+
+.cs-pelo {
+  fill: #c79a6e;
+}
+
+.cs-oreja {
+  fill: #8a6243;
+}
+
+.cs-cola {
+  fill: none;
+  stroke: #c79a6e;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.cs-nariz,
+.cs-ojo {
+  fill: var(--ink);
+}
+
+.cs-panuelo,
+.cs-corazon path,
+.cs-alegria path {
+  fill: var(--terracota);
+}
+
+.cs-burbuja {
+  fill: #fff;
+  stroke: rgba(43, 36, 32, 0.14);
+  stroke-width: 1.5;
+}
+
+.cs-punto {
+  fill: var(--caramelo);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cs-tecleo 1.2s ease-in-out infinite;
+}
+
+.cs-punto:nth-of-type(2) {
+  animation-delay: 150ms;
+}
+
+.cs-punto:nth-of-type(3) {
+  animation-delay: 300ms;
+}
+
+@keyframes cs-tecleo {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+/* --- el perrito: bajo la lluvia tirita; al final camina a su casita --- */
+
+.cs-perro {
+  transform: translate(120px, 296px);
+  transition: transform 1400ms cubic-bezier(0.45, 0, 0.2, 1) 1500ms;
+}
+
+.casitas[data-paso="6"] .cs-perro {
+  transform: translate(292px, 296px);
+}
+
+.cs-perro-cuerpo {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.casitas[data-paso="1"] .cs-perro-cuerpo {
+  animation: cs-tiritar 220ms ease-in-out infinite alternate;
+}
+
+.casitas[data-paso="6"] .cs-perro-cuerpo {
+  animation: cs-trote 350ms ease-in-out 1500ms 4;
+}
+
+@keyframes cs-tiritar {
+  from {
+    transform: rotate(-1.2deg);
+  }
+  to {
+    transform: rotate(1.2deg);
+  }
+}
+
+@keyframes cs-trote {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* --- la casita se arma pieza por pieza --- */
+
+.cs-casa .cs-base,
+.cs-casa .cs-muros,
+.cs-casa .cs-puerta,
+.cs-casa .cs-techo,
+.cs-casa .cs-placa,
+.cs-corazon path,
+.cs-alegria path,
+.cs-platos > * {
+  transform-box: fill-box;
+}
+
+.cs-casa.is-on .cs-base {
+  transform-origin: center;
+  animation: cs-ancho 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cs-casa.is-on .cs-muros {
+  transform-origin: center bottom;
+  animation: crece-y 600ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
+}
+
+.cs-casa.is-on .cs-puerta {
+  animation: cs-aparece 400ms ease 750ms both;
+}
+
+.cs-casa.is-on .cs-techo {
+  animation: cs-cae 700ms cubic-bezier(0.34, 1.56, 0.64, 1) 850ms both;
+}
+
+.cs-casa.is-on .cs-placa {
+  transform-origin: center;
+  animation: punto-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) 1350ms both;
+}
+
+.cs-platos.is-on > * {
+  transform-origin: center bottom;
+  animation: punto-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.cs-platos.is-on > :nth-child(n + 5) {
+  animation-delay: 200ms;
+}
+
+.cs-corazon.is-on path,
+.cs-alegria.is-on path {
+  transform-origin: center;
+  animation: punto-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both,
+    cs-flotar 2.4s ease-in-out 500ms infinite;
+}
+
+.cs-alegria.is-on path {
+  animation-delay: 2600ms, 3100ms;
+}
+
+.cs-alegria.is-on path:nth-child(2) {
+  animation-delay: 2800ms, 3300ms;
+}
+
+@keyframes cs-ancho {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes cs-aparece {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes cs-cae {
+  from {
+    transform: translateY(-70px);
+    opacity: 0;
+  }
+}
+
+@keyframes cs-flotar {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* --- los seis pasos --- */
+
+.casitas-pasos {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.casitas-paso {
+  position: relative;
+  padding: 12px 16px;
+  border-radius: 14px;
+  opacity: 0.55;
+  transition: opacity 300ms ease, background-color 300ms ease;
+}
+
+.casitas-paso.is-hecho {
+  opacity: 0.8;
+}
+
+.casitas-paso.is-activo {
+  opacity: 1;
+  background: rgba(196, 99, 76, 0.08);
+}
+
+/* barrita de avance mientras la animacion se cuenta sola */
+.casitas.is-reproduciendo .casitas-paso.is-activo::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--terracota);
+  transform-origin: left;
+  animation: cs-avance 2600ms linear both;
+}
+
+@keyframes cs-avance {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.casitas-paso-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  color: inherit;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.casitas-paso-btn:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.casitas-num {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--terracota);
+  border-radius: 50%;
+  color: var(--terracota);
+  font-family: var(--font-display);
+  font-weight: 600;
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.casitas-paso.is-activo .casitas-num,
+.casitas-paso.is-hecho .casitas-num {
+  color: #fff;
+  background: var(--terracota);
+}
+
+.casitas-paso-titulo {
+  font-size: 1.06rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.casitas-paso p {
+  margin: 6px 0 0 44px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  opacity: 0.85;
+}
+
+.casitas-cifra {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 18px 0 0;
+}
+
+.casitas-cifra[hidden] {
+  display: none;
+}
+
+.casitas-cifra strong {
+  color: var(--terracota);
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3.6vw, 3rem);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.casitas-nota {
+  margin-top: clamp(30px, 4vw, 50px);
+  padding: clamp(24px, 2.8vw, 36px);
+  border: 1px solid rgba(196, 99, 76, 0.34);
+  border-radius: 20px;
+  background: rgba(196, 99, 76, 0.07);
+}
+
+.casitas-frase {
+  max-width: 46ch;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.casitas-nota .btn-row {
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  .casitas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .casitas-paso {
+    padding: 10px 12px;
+  }
+
+  .casitas-paso p {
+    margin-left: 44px;
+    font-size: 0.92rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .casita-svg *,
+  .casita-svg .capa,
+  .cs-perro {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .casitas.is-reproduciendo .casitas-paso.is-activo::after {
+    display: none;
+  }
+}

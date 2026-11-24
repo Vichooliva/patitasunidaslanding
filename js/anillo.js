@@ -380,7 +380,8 @@ function crearTarjeta(animal, copia) {
   } else {
     boton.setAttribute(
       "aria-label",
-      `${animal.nombre}${animal.comuna ? `, ${animal.comuna}` : ""}. Ver su ficha`
+      `${animal.nombre}${animal.comuna ? `, ${animal.comuna}` : ""}` +
+        `${animal.codigo ? `, código ${animal.codigo}` : ""}. Ver su ficha`
     );
   }
 
@@ -403,6 +404,13 @@ function crearTarjeta(animal, copia) {
     const lugar = document.createElement("small");
     lugar.textContent = animal.comuna;
     texto.append(lugar);
+  }
+  // el código con que se postula en MascotaApp
+  if (animal.codigo) {
+    const codigo = document.createElement("em");
+    codigo.className = "anillo-codigo";
+    codigo.textContent = animal.codigo;
+    texto.append(codigo);
   }
 
   boton.append(marco, texto);

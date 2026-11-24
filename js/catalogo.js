@@ -301,6 +301,11 @@ async function montar() {
       a.salud.forEach((s) => ul.append(el("li", null, s)));
       cuerpo.append(ul);
     }
+    if (a.codigo) {
+      const codigo = el("p", "adopta-codigo");
+      codigo.append(el("span", null, a.codigo), document.createTextNode(" Postula en MascotaApp"));
+      cuerpo.append(codigo);
+    }
 
     art.append(cuerpo);
     tarjetas.set(a.id, art);

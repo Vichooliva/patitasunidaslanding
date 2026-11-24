@@ -11,6 +11,12 @@
 export const CORREO = "fundacionpatitasunidaschile@gmail.com";
 export const INSTAGRAM = "https://www.instagram.com/fundacionpatitasunidaschile/";
 
+/* La adopción se postula en MascotaApp. Los mismos enlaces de tienda que usa
+   la sección "Cómo ayudar" de la portada. */
+export const MASCOTAAPP = "https://mascotaapp.cl";
+export const GOOGLE_PLAY = "https://play.google.com/store/search?q=mascotaapp&c=apps&hl=es_419";
+export const APP_STORE = "https://apps.apple.com/cl/app/mascotaapp/id6759985719";
+
 const movimientoReducido = window.matchMedia("(prefers-reduced-motion: reduce)");
 export const sinMovimiento = () => movimientoReducido.matches;
 
@@ -219,8 +225,24 @@ function crearDialogo() {
         <h2 class="ficha-nombre" id="ficha-nombre" data-f="nombre"></h2>
         <ul class="ficha-datos" data-f="datos"></ul>
         <div class="ficha-texto" data-f="texto"></div>
+        <div class="ficha-postular" data-f="postular">
+          <p class="ficha-postular-titulo">Para adoptar, postula en MascotaApp</p>
+          <p class="ficha-postular-texto" data-f="postular-texto"></p>
+          <p class="ficha-codigo" data-f="codigo-caja">
+            <span>C&oacute;digo MascotaApp</span>
+            <strong data-f="codigo"></strong>
+            <button class="ficha-copiar" type="button" data-f="copiar">Copiar</button>
+          </p>
+          <p class="ficha-tiendas">
+            Desc&aacute;rgala en
+            <a href="${GOOGLE_PLAY}" target="_blank" rel="noopener noreferrer">Google Play</a> o
+            <a href="${APP_STORE}" target="_blank" rel="noopener noreferrer">App Store</a>,
+            o entra en <a href="${MASCOTAAPP}" target="_blank" rel="noopener noreferrer">mascotaapp.cl</a>.
+          </p>
+        </div>
         <div class="ficha-acciones">
-          <a class="btn btn-primary" data-f="adoptar"></a>
+          <a class="btn btn-primary" data-f="postular-btn" href="${MASCOTAAPP}" target="_blank" rel="noopener noreferrer">Postular en MascotaApp</a>
+          <a class="btn btn-ghost" data-f="adoptar"></a>
           <button class="btn btn-ghost" type="button" data-f="compartir">Compartir</button>
         </div>
         <p class="ficha-nota" data-f="nota" role="status" aria-live="polite"></p>
@@ -323,10 +345,35 @@ export function abrirFicha(animal, origen) {
     `¿Me cuentan cuáles son los pasos?\n\n${enlace}`;
   const adoptar = parte("adoptar");
   adoptar.href = `mailto:${CORREO}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
-  adoptar.textContent = animal.conNombre ? `Quiero adoptar a ${animal.nombre}` : "Quiero adoptar";
+
+  // Se postula en MascotaApp. La búsqueda de la app encuentra por nombre o
+  // comuna (no por código), así que se dice cómo encontrarlo y el código va
+  // como referencia para la postulación.
+  const dondeBuscar = [animal.conNombre ? `«${animal.nombre}»` : null, animal.comuna]
+    .filter(Boolean)
+    .join(" en ");
+  const conFicha = Boolean(animal.codigo);
+  parte("codigo-caja").hidden = !conFicha;
+  parte("codigo").textContent = animal.codigo || "";
+  parte("postular-btn").hidden = !conFicha;
+  parte("postular-texto").textContent = conFicha
+    ? `Descarga la app, entra a Adopción y busca ${dondeBuscar || "este animal"}. Al postular, menciona su código.`
+    : "Este caso está listo para adoptar, pero todavía no tiene su ficha en la app. Escríbenos y te contamos cómo postular.";
+  // con ficha, el correo queda como segunda opción; sin ficha es la única
+  adoptar.className = conFicha ? "btn btn-ghost" : "btn btn-primary";
+  adoptar.textContent = conFicha ? "Escribir a la fundación" : animal.conNombre ? `Quiero adoptar a ${animal.nombre}` : "Quiero adoptar";
 
   const nota = parte("nota");
-  nota.textContent = animal.codigo ? `Código ${animal.codigo}` : "";
+  nota.textContent = "";
+
+  parte("copiar").onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(animal.codigo);
+      nota.textContent = `Código ${animal.codigo} copiado.`;
+    } catch {
+      nota.textContent = `Su código es ${animal.codigo}.`;
+    }
+  };
 
   const compartir = parte("compartir");
   compartir.onclick = async () => {
