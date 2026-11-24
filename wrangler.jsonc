@@ -9,6 +9,12 @@
 {
   "name": "patitasunidaslanding",
   "compatibility_date": "2026-10-01",
+  // "npx wrangler deploy" corre esto antes de publicar: así se construye
+  // aunque el campo "Build command" del panel quede vacío (y si se llena con
+  // lo mismo, sólo se construye dos veces, sin romper nada)
+  "build": {
+    "command": "node scripts/construir.mjs"
+  },
   "assets": {
     // lo arma scripts/construir.mjs: el sitio sin scripts/ ni archivos
     // internos, con los datos frescos de MascotaApp

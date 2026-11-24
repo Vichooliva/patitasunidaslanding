@@ -72,7 +72,7 @@ if (process.env.MASCOTAAPP_API_KEY) {
 } else {
   console.log(
     "Sin MASCOTAAPP_API_KEY: se publica con los datos del repositorio.\n" +
-      "(Se agrega en Cloudflare → el proyecto → Settings → Variables and Secrets.)"
+      "(Se agrega en Cloudflare → el proyecto → Settings → Build → Variables and secrets.)"
   );
 }
 
