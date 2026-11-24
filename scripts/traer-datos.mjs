@@ -68,11 +68,26 @@ function cabecerasPara(url) {
     : {};
 }
 
+/**
+ * fetch que respeta el límite de la API (120 peticiones por minuto por IP,
+ * y las fotos cuentan). Si responde 429 espera lo que dice Retry-After y
+ * reintenta, hasta dos veces. Importa sobre todo en Cloudflare, donde cada
+ * publicación parte de cero y baja todas las fotos seguidas.
+ */
+async function traer(url, opciones, intento = 1) {
+  const r = await fetch(url, opciones);
+  if (r.status !== 429 || intento > 2) return r;
+  const segundos = Math.min(65, Number(r.headers.get("retry-after")) || 30);
+  console.log(`  … la API pide calma (429): espero ${segundos} s y reintento`);
+  await new Promise((listo) => setTimeout(listo, segundos * 1000));
+  return traer(url, opciones, intento + 1);
+}
+
 /** Pide una ruta. Nunca lanza: devuelve null y anota el fallo. */
 async function pedir(ruta) {
   let r;
   try {
-    r = await fetch(BASE + ruta, { headers: cabecerasPara(BASE) });
+    r = await traer(BASE + ruta, { headers: cabecerasPara(BASE) });
   } catch (e) {
     fallos.push({ ruta, detalle: `sin red: ${e.message}` });
     return null;
@@ -264,7 +279,7 @@ async function bajarFoto(url, base) {
     // cabeceras propias al saltar de origen, y la llave acabaría en los logs
     // de un host que no es MascotaApp.
     let actual = url;
-    let r = await fetch(actual, { headers: cabecerasPara(actual), redirect: "manual" });
+    let r = await traer(actual, { headers: cabecerasPara(actual), redirect: "manual" });
     for (let saltos = 0; r.status >= 300 && r.status < 400 && saltos < 4; saltos += 1) {
       const destino = r.headers.get("location");
       if (!destino) break;

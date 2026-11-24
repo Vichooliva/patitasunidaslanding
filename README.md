@@ -183,6 +183,28 @@ Necesita el secreto **`MASCOTAAPP_API_KEY`** en **Settings → Secrets and
 variables → Actions**. Si falta o se rota la llave en Cloud Run, el flujo se
 pone en rojo y GitHub avisa por correo; la web sigue con los últimos datos.
 
+### Publicación en Cloudflare Pages (alternativa gratuita)
+
+Mientras GitHub Actions siga bloqueado, la forma de tener los datos al día sin
+pagar nada es que **Cloudflare** construya y publique la web. El DNS ya vive en
+Cloudflare, así que **NIC Chile no se toca**: sólo cambian los registros del
+dominio dentro de Cloudflare.
+
+| En Cloudflare | Valor |
+|---|---|
+| Build command | `node scripts/construir.mjs` |
+| Build output directory | `dist` |
+| Variable secreta | `MASCOTAAPP_API_KEY` |
+
+- `scripts/construir.mjs` trae los datos frescos (si hay llave), optimiza las
+  fotos y arma `dist/` sin `scripts/`, `README.md` ni nada que empiece por `_`
+  o `.`. Si la API falla, publica igual con los datos del repositorio.
+- Cada 6 horas lo dispara un Worker con tarea programada
+  (`cloudflare/reconstruir-cada-6h.js`) que llama al *deploy hook* del
+  proyecto.
+- Plan gratuito: 500 publicaciones al mes (se usan ~120), 5 tareas
+  programadas por cuenta, 20 minutos por publicación.
+
 El dominio está en NIC Chile, que no aloja
 zonas DNS: sólo delega. Por eso los servidores de nombres apuntan a Cloudflare
 (`kehlani` y `woz.ns.cloudflare.com`), y los registros A del apex y el CNAME de

@@ -10,3 +10,6 @@ node_modules/
 .env
 .env.*
 *.key
+
+# salida de scripts/construir.mjs (Cloudflare Pages)
+dist/
