@@ -1,47 +1,45 @@
 {
-  "generado": "2026-08-20T23:53:02.071Z",
+  "generado": "2026-11-24T20:21:40.809Z",
   "cifras": {
     "fundacion": {
       "slug": "patitas-unidas",
       "nombre": "Patitas Unidas"
     },
     "casos": {
-      "total": 64,
-      "abiertos": 34,
-      "enProgreso": 11,
-      "listosParaAdopcion": 10,
-      "resueltos": 5,
+      "total": 26,
+      "abiertos": 0,
+      "enProgreso": 1,
+      "listosParaAdopcion": 8,
+      "resueltos": 13,
       "cerrados": 4,
       "porUrgencia": {
-        "urgent": 22,
-        "normal": 30,
-        "critical": 12
+        "urgent": 10,
+        "normal": 11,
+        "critical": 5
       },
       "porRegion": {
         "Atacama": 1,
-        "Maule": 4,
-        "La Araucanía": 1,
-        "Los Lagos": 3,
-        "Ñuble": 3,
-        "Metropolitana": 44,
-        "Valparaíso": 4,
-        "Arica y Parinacota": 4
+        "Los Lagos": 1,
+        "Arica y Parinacota": 2,
+        "Ñuble": 4,
+        "Valparaíso": 5,
+        "Metropolitana": 13
       }
     },
     "esterilizaciones": {
-      "realizadas": 0
+      "realizadas": 2
     },
     "casitas": {
-      "instaladas": 1,
+      "instaladas": 8,
       "enProceso": 0
     },
     "voluntarios": {
-      "activos": 96
+      "activos": 256
     },
     "adopciones": {
-      "concretadas": 2,
-      "disponibles": 15
+      "concretadas": 4,
+      "disponibles": 10
     },
-    "actualizadoEn": "2026-08-20T23:53:04.239Z"
+    "actualizadoEn": "2026-11-24T20:21:40.724Z"
   }
 }

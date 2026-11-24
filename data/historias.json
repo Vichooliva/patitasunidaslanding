@@ -1,0 +1,600 @@
+{
+  "generado": "2026-11-24T20:22:04.948Z",
+  "total": 12,
+  "historias": [
+    {
+      "id": "f794be43-564a-4779-b7eb-fb2e1f98bf77",
+      "nombre": null,
+      "titulo": "perrita maltratada",
+      "especie": null,
+      "comuna": "San Esteban",
+      "region": "Valparaíso",
+      "rescatadoEn": "2026-10-22T19:14:32.855Z",
+      "resueltoEn": "2026-10-22T19:15:34.534Z",
+      "adoptado": false,
+      "comoLlego": "perrita abandonada",
+      "historia": null,
+      "final": "adoptado",
+      "foto": "img/casos/historia-f794be43-564a-4779-b7eb-fb2e1f98bf77.webp",
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto",
+          "descripcion": "Caso ingresado a la fundación.",
+          "fecha": "2026-10-22T19:14:33.195Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Caso resuelto",
+          "descripcion": "adoptado",
+          "fecha": "2026-10-22T19:15:34.612Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "a9ef8019-0ac0-4bb8-9349-17595a0a9cdc",
+      "nombre": "Dakar",
+      "titulo": "Adopción express — Dakar",
+      "especie": "Perro",
+      "comuna": "Vitacura",
+      "region": "Metropolitana",
+      "rescatadoEn": "2026-10-17T17:19:19.518Z",
+      "resueltoEn": "2026-10-17T17:19:19.517Z",
+      "adoptado": true,
+      "comoLlego": "Entregado en adopción directa (Candidato adopcion Dakar).",
+      "historia": "Entregado en adopción directa (Candidato adopcion Dakar).",
+      "final": null,
+      "foto": null,
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto",
+          "descripcion": "Ingresado desde un formulario de adopción express.",
+          "fecha": "2026-10-17T17:19:19.597Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "🎉 Adopción completada",
+          "descripcion": "Dakar fue cedid@ a karin grace kiessling piwonka.",
+          "fecha": "2026-10-17T17:19:20.873Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "689409c9-79d6-43c1-9d11-e7c1a1a5e0aa",
+      "nombre": null,
+      "titulo": "Perro en Macul",
+      "especie": "Perro",
+      "comuna": "Macul",
+      "region": "Metropolitana",
+      "rescatadoEn": "2026-07-21T13:28:18.364Z",
+      "resueltoEn": "2026-10-12T14:09:39.201Z",
+      "adoptado": false,
+      "comoLlego": "Perritos abandonados en Macul, tienen un refugio improvisado pero necesitan un hogar porque si no son adoptados, quedarán en la calle.",
+      "historia": null,
+      "final": null,
+      "foto": "img/casos/historia-689409c9-79d6-43c1-9d11-e7c1a1a5e0aa.webp",
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto desde una solicitud ciudadana",
+          "descripcion": "Originado por la solicitud SOL-UMCF de Nidia Carolina Gaete Barraza.",
+          "fecha": "2026-07-21T13:28:18.530Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Caso resuelto",
+          "descripcion": null,
+          "fecha": "2026-10-12T14:09:39.282Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "1da2f27b-36c4-4775-8636-9f82fa47d81e",
+      "nombre": null,
+      "titulo": "Perro en San Bernardo",
+      "especie": "Perro",
+      "comuna": "San Bernardo",
+      "region": "Metropolitana",
+      "rescatadoEn": "2026-07-27T12:28:18.243Z",
+      "resueltoEn": "2026-10-12T14:08:14.235Z",
+      "adoptado": false,
+      "comoLlego": "Este perrito está temporalmente en este lugar , fue rescatado hace algunos meses , está sano y creciendo necesita un hogar definitivo donde pueda ser amado y cuidado como\nMerece, es muy juguetón tiene apenas 8 meses, se entrega con vacunas al\nDía , es un perrito que puede ser un gran guardián para tu hogar .\nSi puedes adoptarlo contactar al [teléfono omitido].",
+      "historia": null,
+      "final": null,
+      "foto": "img/casos/historia-1da2f27b-36c4-4775-8636-9f82fa47d81e.webp",
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto desde una solicitud ciudadana",
+          "descripcion": "Originado por la solicitud SOL-7SBD de Marcela Meyer Martinez.",
+          "fecha": "2026-07-27T12:28:18.396Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Caso resuelto",
+          "descripcion": null,
+          "fecha": "2026-10-12T14:08:14.316Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "577224d7-54e0-427e-8669-ed8ab94914c9",
+      "nombre": null,
+      "titulo": "Perro en Estación Central",
+      "especie": "Perro",
+      "comuna": "Estación Central",
+      "region": "Metropolitana",
+      "rescatadoEn": "2026-07-08T18:07:59.827Z",
+      "resueltoEn": "2026-10-06T17:24:30.488Z",
+      "adoptado": false,
+      "comoLlego": "Es una perrita encontrada en un terreno baldío y la tengo en hogar temporal pero mi espacio es un home studio y ella es una perra mediana grande y está estresada por el espacio limitado ya está vacunada y esterilizada solo de ingresarla a un hogar definitivo",
+      "historia": null,
+      "final": "adoptado",
+      "foto": "img/casos/historia-577224d7-54e0-427e-8669-ed8ab94914c9.webp",
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto desde una solicitud ciudadana",
+          "descripcion": "Originado por la solicitud SOL-X4A5 de Desiree Samira Carrillo Fajardo.",
+          "fecha": "2026-07-08T18:07:59.986Z",
+          "foto": null
+        },
+        {
+          "tipo": "medical",
+          "titulo": "En atención",
+          "descripcion": null,
+          "fecha": "2026-07-09T16:33:24.032Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Caso resuelto",
+          "descripcion": "adoptado",
+          "fecha": "2026-10-06T17:24:30.560Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "7d450141-95ee-4707-a065-cb26ae862643",
+      "nombre": null,
+      "titulo": "13 cachorros buscan con urgencia hogar",
+      "especie": "Perro",
+      "comuna": "Chillán",
+      "region": "Ñuble",
+      "rescatadoEn": "2026-08-25T15:18:40.032Z",
+      "resueltoEn": "2026-09-28T14:06:38.152Z",
+      "adoptado": false,
+      "comoLlego": "13 cachorros rescatados, buscan con urgencia un hogar. Actualmente se encuentran en un hogar temporal, pero deben se re ubicados prontamente, de lo contrario volverán a la calle. También necesitan alimento.",
+      "historia": null,
+      "final": null,
+      "foto": "img/casos/historia-7d450141-95ee-4707-a065-cb26ae862643.webp",
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto",
+          "descripcion": "Caso ingresado a la fundación.",
+          "fecha": "2026-08-25T15:18:40.298Z",
+          "foto": null
+        },
+        {
+          "tipo": "medical",
+          "titulo": "En atención",
+          "descripcion": null,
+          "fecha": "2026-08-25T15:18:49.323Z",
+          "foto": null
+        },
+        {
+          "tipo": "fundraising",
+          "titulo": "Colecta de dinero para compra de alimento",
+          "descripcion": "Con fecha 26 de agosto se logró reunir dinero para comprar alimento.",
+          "fecha": "2026-08-26T12:32:00.000Z",
+          "foto": "img/casos/hito-d686b919-1ff2-4f05-b69d-7bfd0045f9d6.webp"
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Hasta el 20 de septiembre 2026 quedaban 5 cachorritas en adopción",
+          "descripcion": "Con fecha 20 de septiembre 2026, Patitas Unidas Ñuble organizó una jornada de adopción en donde 3 cachorras encontraron una linda familia",
+          "fecha": "2026-09-20T12:28:00.000Z",
+          "foto": "img/casos/hito-f823971d-bd6d-45e9-8683-0e08d25db042.webp"
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Jornada de adopción",
+          "descripcion": "Ultimas 2 de 13 cachorritas se dieron en adopción, en jornada realizada en sábado 26 de septiembre.",
+          "fecha": "2026-09-26T11:00:00.000Z",
+          "foto": "img/casos/hito-b661b3cd-e94a-4d2e-b2cc-2c7dca7296b9.webp"
+        },
+        {
+          "tipo": "other",
+          "titulo": "Listo para adopción",
+          "descripcion": null,
+          "fecha": "2026-09-28T14:02:33.512Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Caso resuelto",
+          "descripcion": null,
+          "fecha": "2026-09-28T14:06:38.242Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "0d4a03a0-e7c1-4d5c-ac52-37515fe70afe",
+      "nombre": "Pepe",
+      "titulo": "Pepe — Perritos rescatados de un canal",
+      "especie": "Perro",
+      "comuna": "Vitacura",
+      "region": "Metropolitana",
+      "rescatadoEn": "2026-09-21T17:40:40.407Z",
+      "resueltoEn": "2026-09-22T18:06:41.673Z",
+      "adoptado": true,
+      "comoLlego": "Estos 2 lindos perritos que rescatamos, vivían al borde de un canal en la comuna de Padre Hurtado. Hace 2 semanas los tenemos en un hogar temporal, son puro amor y nobleza. Creemos que son padre (blanco con negro) e hijo (negrito). Ojalá una familia los quisiera adoptar a ambos ya que se aman, pero sino estamos seguros que donde les entreguen mucho amor y cuidado ellos serán felices aunque sea separados. Se llevan muy bien con otros perritos\nCualquier consulta, preguntar a Patitas Unidas al [teléfono omitido]",
+      "historia": "Estos 2 lindos perritos que rescatamos, vivían al borde de un canal en la comuna de Padre Hurtado. Hace 2 semanas los tenemos en un hogar temporal, son puro amor y nobleza. Creemos que son padre (blanco con negro) e hijo (negrito). Ojalá una familia los quisiera adoptar a ambos ya que se aman, pero sino estamos seguros que donde les entreguen mucho amor y cuidado ellos serán felices aunque sea separados. Se llevan muy bien con otros perritos\nCualquier consulta, preguntar a Patitas Unidas al [teléfono omitido]",
+      "final": null,
+      "foto": "img/casos/historia-0d4a03a0-e7c1-4d5c-ac52-37515fe70afe.webp",
+      "fotoFinal": "img/casos/historia-0d4a03a0-e7c1-4d5c-ac52-37515fe70afe-final.webp",
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto desde una solicitud ciudadana",
+          "descripcion": "Originado por la solicitud SOL-E2RS de Karen González.",
+          "fecha": "2026-06-29T16:46:03.327Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "La perrita fue adoptada",
+          "descripcion": "La perrita nos contó Karen que ya fue adoptada por una familia y ahora solo falta encontrar hogar temporal o definitivo para su hermanito (el negrito) y su papa (blanco con negro)",
+          "fecha": "2026-07-03T17:24:00.000Z",
+          "foto": "img/casos/hito-b0343314-8b6c-4562-882e-758c6b0a90d6.webp"
+        },
+        {
+          "tipo": "fostering",
+          "titulo": "Padre e hijo necesitan hogar temporal o definitivo",
+          "descripcion": "Puede ser en hogares distintos",
+          "fecha": "2026-07-03T17:32:00.000Z",
+          "foto": "img/casos/hito-2ee9a64e-ce2f-4d3b-8906-7e8159ee2b2b.webp"
+        },
+        {
+          "tipo": "medical",
+          "titulo": "En atención",
+          "descripcion": null,
+          "fecha": "2026-07-03T20:53:07.568Z",
+          "foto": null
+        },
+        {
+          "tipo": "fostering",
+          "titulo": "Rescatados el 10 de julio y felizmente en HT",
+          "descripcion": "Estos perritos los pudimos rescatar y llevar a un hogar temporal donde comparten con 2 perritos más. Están felices y muy bien cuidados. Ahora solo nos queda encontrar una familia para ellos, ojalá juntos ya que son muy unidos y serán mucho más felices así.",
+          "fecha": "2026-07-10T13:19:00.000Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Hermosos perritos buscan su familia definitiva",
+          "descripcion": "Estos hermosos perritos ya están listos para encontrar una familia que los ame. Ellos son pura bondad y amor. ❤️",
+          "fecha": "2026-07-25T20:57:00.000Z",
+          "foto": "img/casos/hito-10413d27-a9d1-400a-9887-9ccd3cdc9058.webp"
+        },
+        {
+          "tipo": "other",
+          "titulo": "Listo para adopción",
+          "descripcion": null,
+          "fecha": "2026-07-26T00:57:21.034Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Publicado para adopción",
+          "descripcion": "Disponible públicamente. Código: ADO-HSJVK",
+          "fecha": "2026-07-26T01:06:19.556Z",
+          "foto": null
+        },
+        {
+          "tipo": "other",
+          "titulo": "Rescatado junto a Panchito",
+          "descripcion": "Pepe tiene ahora su propio caso, para poder adoptarse por separado. Viene del caso «Perritos rescatados de un canal» por SIT Admin.",
+          "fecha": "2026-09-21T17:40:40.315Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "🎉 Adopción completada",
+          "descripcion": "Pepe fue cedid@ a Diego Pablo Arenas.\n\nMensaje al adoptante: \"Entregado con contrato de adopción firmado.\"",
+          "fecha": "2026-09-22T18:06:42.730Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "e3c0a255-e6df-42df-bcda-0d410192ac28",
+      "nombre": "Zeus",
+      "titulo": "Cachorro en adopción",
+      "especie": "Perro",
+      "comuna": "Villa Alemana",
+      "region": "Valparaíso",
+      "rescatadoEn": "2026-07-29T14:40:03.403Z",
+      "resueltoEn": "2026-08-22T22:32:26.480Z",
+      "adoptado": false,
+      "comoLlego": "Bebé de 2 meses (fecha de nacimiento: 28 de Mayo)\nMacho\nDesparasitado\n2da vacuna lista\nEstá en su HT ubicado en Villa Alemana\nEs juguetón, se lleva bien con niños y con más perros.\nCarácter dócil y obediente.",
+      "historia": null,
+      "final": "Adoptado tras más de un mes de HT",
+      "foto": "img/casos/historia-e3c0a255-e6df-42df-bcda-0d410192ac28.webp",
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto",
+          "descripcion": "Caso ingresado a la fundación.",
+          "fecha": "2026-07-29T14:40:03.713Z",
+          "foto": null
+        },
+        {
+          "tipo": "other",
+          "titulo": "Listo para adopción",
+          "descripcion": null,
+          "fecha": "2026-07-29T14:40:15.155Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Publicado para adopción",
+          "descripcion": "Disponible públicamente. Código: ADO-MY37G",
+          "fecha": "2026-07-29T14:44:02.865Z",
+          "foto": null
+        },
+        {
+          "tipo": "medical",
+          "titulo": "Segunda vacuna",
+          "descripcion": null,
+          "fecha": "2026-08-12T16:04:00.000Z",
+          "foto": "img/casos/hito-92f4bb3e-505a-44bf-af04-33bc17760fbb.webp"
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Caso resuelto",
+          "descripcion": "Adoptado tras más de un mes de HT",
+          "fecha": "2026-08-22T22:32:26.568Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "🎉 Adopción completada",
+          "descripcion": "Zeus fue cedid@ a Evelyn Herrera.\n\nMensaje al adoptante: \"Gracias!!!\"",
+          "fecha": "2026-08-22T22:32:27.086Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "a760a3b6-48ab-44eb-89c1-4cf937297a9a",
+      "nombre": "Osita",
+      "titulo": "Cachorrita rescatada",
+      "especie": "Perro",
+      "comuna": "Arica",
+      "region": "Arica y Parinacota",
+      "rescatadoEn": "2026-07-22T22:14:57.017Z",
+      "resueltoEn": "2026-08-06T06:52:14.082Z",
+      "adoptado": false,
+      "comoLlego": "Cachorrita de 2 a 3 meses, rescatada de manos de un drogadicto, fue rescatada por una voluntaria y llevada a veterinario para chequeo y desparasitacion, se encuentra en hogar temporal y en cuarentena.",
+      "historia": null,
+      "final": null,
+      "foto": "img/casos/historia-a760a3b6-48ab-44eb-89c1-4cf937297a9a.webp",
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto",
+          "descripcion": "Caso ingresado a la fundación.",
+          "fecha": "2026-07-22T22:14:57.360Z",
+          "foto": null
+        },
+        {
+          "tipo": "medical",
+          "titulo": "En atención",
+          "descripcion": null,
+          "fecha": "2026-07-22T22:15:44.760Z",
+          "foto": null
+        },
+        {
+          "tipo": "medical",
+          "titulo": "Vacuna",
+          "descripcion": "Recibe vacuna, tiene probables adoptantes",
+          "fecha": "2026-08-01T21:10:00.000Z",
+          "foto": null
+        },
+        {
+          "tipo": "other",
+          "titulo": "Listo para adopción",
+          "descripcion": null,
+          "fecha": "2026-08-02T01:10:33.253Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Cachorrita Adoptada",
+          "descripcion": null,
+          "fecha": "2026-08-04T19:30:00.000Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Caso resuelto",
+          "descripcion": null,
+          "fecha": "2026-08-06T06:52:14.200Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "a557474c-1261-4f8e-8243-8e5a3e9c1252",
+      "nombre": null,
+      "titulo": "Perro en La Pintana",
+      "especie": "Perro",
+      "comuna": "La Pintana",
+      "region": "Metropolitana",
+      "rescatadoEn": "2026-07-09T16:32:56.939Z",
+      "resueltoEn": "2026-07-10T02:19:19.997Z",
+      "adoptado": false,
+      "comoLlego": "Está cachorra fue abandonada en la comuna de la pintana , la estamos resguardando en conserjería hasta encontrarle un hogar temporal o definitivo, es súper cariñosa y con los niños se da super bien",
+      "historia": null,
+      "final": null,
+      "foto": "img/casos/historia-a557474c-1261-4f8e-8243-8e5a3e9c1252.webp",
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "medical",
+          "titulo": "Atención veterinaria",
+          "descripcion": "No tiene ningún control",
+          "fecha": "2026-07-09T16:32:52.697Z",
+          "foto": "img/casos/hito-f1c4fb66-a0bd-4de7-827b-0f81db2bda3c.webp"
+        },
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto desde una solicitud ciudadana",
+          "descripcion": "Originado por la solicitud SOL-XN2L de Madeleine Camila Alvarez Espina.",
+          "fecha": "2026-07-09T16:32:57.174Z",
+          "foto": null
+        },
+        {
+          "tipo": "medical",
+          "titulo": "En atención",
+          "descripcion": null,
+          "fecha": "2026-07-09T16:33:36.252Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Caso resuelto",
+          "descripcion": null,
+          "fecha": "2026-07-10T02:19:20.068Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "56166dfa-71a0-49d5-915f-1dc001711df6",
+      "nombre": null,
+      "titulo": "Perro en Chillán",
+      "especie": "Perro",
+      "comuna": "Chillán",
+      "region": "Ñuble",
+      "rescatadoEn": "2026-07-06T19:00:30.674Z",
+      "resueltoEn": "2026-07-08T00:02:27.301Z",
+      "adoptado": false,
+      "comoLlego": "Perritos durmiendo en la interperie de un antejardin los dueños no se preocupan necesitan de una casa, no se molestan en que le donemos una",
+      "historia": null,
+      "final": "Hoy fue entregada la casita y ahora los perritos podrán dormir calentitos",
+      "foto": "img/casos/historia-56166dfa-71a0-49d5-915f-1dc001711df6.webp",
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto desde una solicitud ciudadana",
+          "descripcion": "Originado por la solicitud SOL-PKKP de Natalia Cabrera Bobadilla.",
+          "fecha": "2026-07-06T19:00:30.815Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Caso resuelto",
+          "descripcion": "Hoy fue entregada la casita y ahora los perritos podrán dormir calentitos",
+          "fecha": "2026-07-08T00:02:27.386Z",
+          "foto": null
+        }
+      ]
+    },
+    {
+      "id": "6103a078-c614-4c57-a4d3-de70b8ccfea6",
+      "nombre": null,
+      "titulo": "Perro en La Florida",
+      "especie": "Perro",
+      "comuna": "La Florida",
+      "region": "Metropolitana",
+      "rescatadoEn": "2026-06-25T14:44:49.357Z",
+      "resueltoEn": "2026-07-03T21:35:23.179Z",
+      "adoptado": false,
+      "comoLlego": "Cachorra abandonada hace más de 2 semanas. Ha sido atacada por otros perros, presenta varias heridas y actualmente vive en una calle muy transitada, con alto riesgo de ser atropellada.\n\nEs muy temerosa y al principio huía de las personas, pero con paciencia hemos logrado ganarnos su confianza. Ahora nos deja hacerle cariño y cuenta con una casita que le hicimos donde se refugia.\n\nEs muy cariñosa y adora a los niños. Buscamos con urgencia un hogar temporal o definitivo donde pueda estar segura y recibir el cuidado que merece, luego entrará en celo.",
+      "historia": null,
+      "final": "Nikolle que fue quien subió este caso le encontró una familia a Blanqui y ella hará seguimiento",
+      "foto": "img/casos/historia-6103a078-c614-4c57-a4d3-de70b8ccfea6.webp",
+      "fotoFinal": null,
+      "hitos": [
+        {
+          "tipo": "rescue",
+          "titulo": "Caso abierto desde una solicitud ciudadana",
+          "descripcion": "Originado por la solicitud SOL-VAJ7 de Nikol González Sandoval.",
+          "fecha": "2026-06-25T14:44:49.510Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Publicado para adopción",
+          "descripcion": "Disponible públicamente. Código: ADO-CQHYP",
+          "fecha": "2026-06-25T14:45:06.280Z",
+          "foto": null
+        },
+        {
+          "tipo": "other",
+          "titulo": "Caso reabierto",
+          "descripcion": null,
+          "fecha": "2026-06-25T14:55:01.232Z",
+          "foto": null
+        },
+        {
+          "tipo": "medical",
+          "titulo": "En atención",
+          "descripcion": null,
+          "fecha": "2026-06-29T01:59:54.489Z",
+          "foto": null
+        },
+        {
+          "tipo": "other",
+          "titulo": "Caso reabierto",
+          "descripcion": null,
+          "fecha": "2026-06-29T02:03:01.501Z",
+          "foto": null
+        },
+        {
+          "tipo": "fostering",
+          "titulo": "La perrita ya está en hogar temporal",
+          "descripcion": "Nikol la chica que reportó este caso la está resguardando en su casa. Estamos gestionando su esterilización y ahí estará lista para irse con una familia que la quiera adoptar 💕",
+          "fecha": "2026-06-29T15:18:00.000Z",
+          "foto": "img/casos/hito-2178c6d1-c59b-40a1-a8f3-cf7a84cd3737.webp"
+        },
+        {
+          "tipo": "other",
+          "titulo": "Listo para adopción",
+          "descripcion": null,
+          "fecha": "2026-06-29T19:17:54.152Z",
+          "foto": null
+        },
+        {
+          "tipo": "adoption",
+          "titulo": "Caso resuelto",
+          "descripcion": "Nikolle que fue quien subió este caso le encontró una familia a Blanqui y ella hará seguimiento",
+          "fecha": "2026-07-03T21:35:23.264Z",
+          "foto": null
+        }
+      ]
+    }
+  ]
+}

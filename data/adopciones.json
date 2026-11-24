@@ -1,14 +1,22 @@
 {
-  "generado": "2026-08-20T23:53:09.768Z",
-  "total": 15,
+  "generado": "2026-11-24T20:21:48.439Z",
+  "total": 8,
   "animales": [
     {
       "id": "b271cdea-5a4f-4403-aee2-2a6f0b4f351c",
+      "codigo": "ADO-4XVFN",
+      "casoId": "b5cc5aa2-017f-41dc-8542-9dcae67c2419",
       "nombre": "Lua y Luna",
-      "especie": null,
-      "sexo": null,
+      "especie": "Perro",
+      "raza": null,
+      "esMestizo": true,
+      "edad": null,
+      "sexo": "Hembra",
+      "tamano": null,
+      "color": null,
       "historia": "2 cachorras de no más de 2 meses abandonadas ambas fuera de jardín infantil en ciudad de Arica, se consiguió refugio temporal con una funcionaria, tipo de vivienda departamento, necesita de ayuda para alimentación, desparasitacion, vacunas, buscan hogar definitivo, se encuentran en cuarentena de 7 días\n\nRescatado el 04-07-2026 en Linderos.",
       "personalidad": null,
+      "actividadesFavoritas": null,
       "salud": {
         "vacunado": false,
         "esterilizado": false,
@@ -24,66 +32,25 @@
         "aptoDepartamento": null
       },
       "comuna": "Arica",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/b271cdea-5a4f-4403-aee2-2a6f0b4f351c",
-      "foto": "img/casos/adopcion-1.webp"
-    },
-    {
-      "id": "3927bc4c-739d-4adf-8c0f-8c535ec0590b",
-      "nombre": "Sin nombre",
-      "especie": null,
-      "sexo": null,
-      "historia": "Esta perrita está preñada, es su primer embarazo, es una cachorra aún, está completamente sola, no tiene dueños y no es alimentada por los locatarios de allá\n\nRescatado el 06-07-2026 en Caleta Portales.",
-      "personalidad": null,
-      "salud": {
-        "vacunado": false,
-        "esterilizado": false,
-        "desparasitado": false,
-        "necesidadesEspeciales": false,
-        "detalleNecesidadesEspeciales": null
-      },
-      "convivencia": {
-        "nivelDeEnergia": null,
-        "conNinos": null,
-        "conPerros": null,
-        "conGatos": null,
-        "aptoDepartamento": null
-      },
-      "comuna": "Valparaíso",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/3927bc4c-739d-4adf-8c0f-8c535ec0590b",
-      "foto": "img/casos/adopcion-2.webp"
-    },
-    {
-      "id": "46201147-7af9-4094-b7d6-5b134bb17992",
-      "nombre": "Zeus",
-      "especie": null,
-      "sexo": null,
-      "historia": "Bebé de 2 meses (fecha de nacimiento: 28 de Mayo)\nMacho\nDesparasitado\n1era vacuna lista\nEstá en su HT ubicado en Villa Alemana\nEs juguetón, se lleva bien con niños y con más perros.\nCarácter dócil y obediente.\n\nRescatado el 29-07-2026 en Peña Blanca.",
-      "personalidad": null,
-      "salud": {
-        "vacunado": false,
-        "esterilizado": false,
-        "desparasitado": false,
-        "necesidadesEspeciales": false,
-        "detalleNecesidadesEspeciales": null
-      },
-      "convivencia": {
-        "nivelDeEnergia": null,
-        "conNinos": null,
-        "conPerros": null,
-        "conGatos": null,
-        "aptoDepartamento": null
-      },
-      "comuna": "Villa Alemana",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/46201147-7af9-4094-b7d6-5b134bb17992",
-      "foto": "img/casos/adopcion-3.webp"
+      "ciudad": "Arica",
+      "publicadoEn": "2026-08-02T01:19:22.133Z",
+      "foto": "img/casos/adopcion-b271cdea-5a4f-4403-aee2-2a6f0b4f351c.webp"
     },
     {
       "id": "e1ba1e03-8870-4866-8a79-a8529265e77e",
-      "nombre": "Panchito y Pepe",
-      "especie": null,
-      "sexo": null,
+      "codigo": "ADO-HSJVK",
+      "casoId": "aff9b6a0-af25-4f15-bb0b-47605240b8c9",
+      "nombre": "Panchito",
+      "especie": "Perro",
+      "raza": null,
+      "esMestizo": true,
+      "edad": "",
+      "sexo": "Macho",
+      "tamano": null,
+      "color": null,
       "historia": "3 perritos abandonados en desnutrición en un canal con amenazas de vecinas con hacerlo desaparecer si le doy comida\n\nRescatado el 29-06-2026 en San Ignacio,calle Desiderio Moya a orilla del canal.",
       "personalidad": null,
+      "actividadesFavoritas": null,
       "salud": {
         "vacunado": false,
         "esterilizado": false,
@@ -99,16 +66,25 @@
         "aptoDepartamento": null
       },
       "comuna": "Vitacura",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/e1ba1e03-8870-4866-8a79-a8529265e77e",
-      "foto": "img/casos/adopcion-4.webp"
+      "ciudad": "Vitacura",
+      "publicadoEn": "2026-07-26T01:06:19.477Z",
+      "foto": "img/casos/adopcion-e1ba1e03-8870-4866-8a79-a8529265e77e.webp"
     },
     {
       "id": "d88cbf47-2182-497d-b56e-7bfc9e83d658",
+      "codigo": "ADO-SKSQP",
+      "casoId": "a883bc48-4a45-4967-8334-2ffba5d5a4bc",
       "nombre": "Sin nombre",
-      "especie": null,
-      "sexo": null,
+      "especie": "Perro",
+      "raza": null,
+      "esMestizo": true,
+      "edad": null,
+      "sexo": "Desconocido",
+      "tamano": null,
+      "color": null,
       "historia": "Perrito encontrado en comuna de Recoleta, tiene 6 meses aprox.\n\nRescatado el 26-07-2026 en Renteria 1531.",
       "personalidad": null,
+      "actividadesFavoritas": null,
       "salud": {
         "vacunado": false,
         "esterilizado": false,
@@ -124,116 +100,25 @@
         "aptoDepartamento": null
       },
       "comuna": "Conchalí",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/d88cbf47-2182-497d-b56e-7bfc9e83d658",
-      "foto": "img/casos/adopcion-5.webp"
-    },
-    {
-      "id": "82dd5855-997b-49ab-9f0e-346e13856bcb",
-      "nombre": "Cariñoso y revoltoso",
-      "especie": null,
-      "sexo": null,
-      "historia": "Perritos sin hogar, ambos machos, abandonados en un sector de bodegas industriales, cercano a campamento, el perrito\"cariñoso\" (viejito) sufre de dolor en su pierna delanteras , se queja al moverse probablemente sufre de alguna enfermedad y perrito revoltoso (joven) su compañero no se separan, se cuidan mutuamente. Se necesita resguardo para ambos ojalá juntos a solicitud de persona que viaja cada cierto tiempo a Arica y les deja alimentación y agua. Se requiere hogar de resguardo\n\nRescatado el 27-06-2026.",
-      "personalidad": null,
-      "salud": {
-        "vacunado": false,
-        "esterilizado": false,
-        "desparasitado": false,
-        "necesidadesEspeciales": false,
-        "detalleNecesidadesEspeciales": null
-      },
-      "convivencia": {
-        "nivelDeEnergia": null,
-        "conNinos": null,
-        "conPerros": null,
-        "conGatos": null,
-        "aptoDepartamento": null
-      },
-      "comuna": "Arica",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/82dd5855-997b-49ab-9f0e-346e13856bcb",
-      "foto": "img/casos/adopcion-6.webp"
-    },
-    {
-      "id": "8bad92b8-ba94-4bd6-9bad-0a00cdfee0ac",
-      "nombre": "Niño",
-      "especie": null,
-      "sexo": null,
-      "historia": "Niño es un bebé de 3 años, con bastante energía, ojalá tenga más hermanos para interactuar, idealmente tutores adultos jóvenes que tengan la fuerza y paciencia para jugar con él.\nLe encanta correr y jugar.\n\nRescatado el 29-06-2026 en San José, cerca de Tunquen.",
-      "personalidad": null,
-      "salud": {
-        "vacunado": false,
-        "esterilizado": false,
-        "desparasitado": false,
-        "necesidadesEspeciales": false,
-        "detalleNecesidadesEspeciales": null
-      },
-      "convivencia": {
-        "nivelDeEnergia": null,
-        "conNinos": null,
-        "conPerros": null,
-        "conGatos": null,
-        "aptoDepartamento": null
-      },
-      "comuna": "Algarrobo",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/8bad92b8-ba94-4bd6-9bad-0a00cdfee0ac",
-      "foto": "img/casos/adopcion-7.webp"
-    },
-    {
-      "id": "d1fc4f83-7f2b-43cd-8d17-4fbdb6d634f1",
-      "nombre": "Sin nombre",
-      "especie": null,
-      "sexo": null,
-      "historia": "son 4 perros abandonados hace casi 2 años en el sector donde vivo actualmente tengo 5 perros y 2 gatos propios y con mucho esfuerzo los alimento , me conseguí una casita pero viven a la intemperie y a veces no me alcanza para darles comida todos los días nadie mas ayuda nadie los ve ni se preocupa de ellos\n\nRescatado el 25-06-2026 en camino vecinal 5 el recurso.",
-      "personalidad": null,
-      "salud": {
-        "vacunado": false,
-        "esterilizado": false,
-        "desparasitado": false,
-        "necesidadesEspeciales": false,
-        "detalleNecesidadesEspeciales": null
-      },
-      "convivencia": {
-        "nivelDeEnergia": null,
-        "conNinos": null,
-        "conPerros": null,
-        "conGatos": null,
-        "aptoDepartamento": null
-      },
-      "comuna": "Buin",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/d1fc4f83-7f2b-43cd-8d17-4fbdb6d634f1",
-      "foto": "img/casos/adopcion-8.webp"
-    },
-    {
-      "id": "5ffb7377-72d2-40ba-ab6a-f1706dbd7361",
-      "nombre": "Sin nombre",
-      "especie": null,
-      "sexo": null,
-      "historia": "Lleva dos semanas en la calle cachorra, pronto entrara en celo\n\nRescatado el 25-06-2026 en Lo caña.",
-      "personalidad": null,
-      "salud": {
-        "vacunado": false,
-        "esterilizado": false,
-        "desparasitado": false,
-        "necesidadesEspeciales": false,
-        "detalleNecesidadesEspeciales": null
-      },
-      "convivencia": {
-        "nivelDeEnergia": null,
-        "conNinos": null,
-        "conPerros": null,
-        "conGatos": null,
-        "aptoDepartamento": null
-      },
-      "comuna": "La Florida",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/5ffb7377-72d2-40ba-ab6a-f1706dbd7361",
-      "foto": "img/casos/adopcion-9.webp"
+      "ciudad": "Conchalí",
+      "publicadoEn": "2026-07-26T00:54:29.189Z",
+      "foto": "img/casos/adopcion-d88cbf47-2182-497d-b56e-7bfc9e83d658.webp"
     },
     {
       "id": "56848d2d-5aad-4c91-80a8-e5d69e1afc11",
+      "codigo": "ADO-JAMRJ",
+      "casoId": "9f65fae7-c76e-4aad-bdb0-d7e1cbd144c6",
       "nombre": "Sin nombre",
-      "especie": null,
-      "sexo": null,
+      "especie": "Perro",
+      "raza": null,
+      "esMestizo": true,
+      "edad": null,
+      "sexo": "Desconocido",
+      "tamano": null,
+      "color": null,
       "historia": "Perra encontrada en carretera en ruta f-90 cerca del enlace, fue trasladada a un domicilio pero necesita hogar temporal o definitivo, ya que en el domicilio hay muchos perros\n\nRescatado el 25-06-2026 en Psje siprofoto con via nautica.",
       "personalidad": null,
+      "actividadesFavoritas": null,
       "salud": {
         "vacunado": false,
         "esterilizado": false,
@@ -249,16 +134,25 @@
         "aptoDepartamento": null
       },
       "comuna": "Algarrobo",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/56848d2d-5aad-4c91-80a8-e5d69e1afc11",
-      "foto": "img/casos/adopcion-10.webp"
+      "ciudad": "Algarrobo",
+      "publicadoEn": "2026-06-25T14:48:18.703Z",
+      "foto": "img/casos/adopcion-56848d2d-5aad-4c91-80a8-e5d69e1afc11.webp"
     },
     {
-      "id": "2ed0832c-00b0-49b6-8eba-ebaa959173cb",
-      "nombre": "Lobito",
-      "especie": null,
-      "sexo": null,
-      "historia": "Necesita construcción de casa y hogar definitivo (adopción)\n\nRescatado el 20-06-2026 en Sector magisterio.",
+      "id": "5b432aca-84d2-49e3-a1c5-fe756abf4887",
+      "codigo": "ADO-E4PNM",
+      "casoId": "d372dd53-fdee-4316-bb90-11131e63418b",
+      "nombre": "Sin nombre",
+      "especie": "Perro",
+      "raza": null,
+      "esMestizo": true,
+      "edad": null,
+      "sexo": "Desconocido",
+      "tamano": null,
+      "color": null,
+      "historia": "Una ex toma fue desalojada y murieron muchos animales aplastados lamentablemente,se reubicaron más de 30 gatos y perros ,pero seguimos en busca de ayuda urgente para sacar a 3 perros tamaño grandes Pero dosiles que solo buscan amor y refugio,en dónde se ubican es muy peligroso ya que está rodeado de carreteras y ya uno fue atropellado,todos los días vamos con un amigo a darles alimento y ver sus remedios ya que se nos han enfermado con el frío ,hablamos con Costanera norte Pero nos impide poner casas o algún refugio pro las noches , necesitamos sacarlos de ahí urgente temporal o darlos en adopción no queremos que mueran o se sigan enfermando ya que no tienen algún tipo de refugio y están en a interperie\n\nRescatado el 22-06-2026 en Calle vivaceta con Costanera norte al lado del rio mapocho.",
       "personalidad": null,
+      "actividadesFavoritas": null,
       "salud": {
         "vacunado": false,
         "esterilizado": false,
@@ -273,17 +167,26 @@
         "conGatos": null,
         "aptoDepartamento": null
       },
-      "comuna": "Arica",
-      "fotoRemota": "https://mascotaapp.cl/api/public/v1/images/adoption-main/2ed0832c-00b0-49b6-8eba-ebaa959173cb",
-      "foto": "img/casos/adopcion-11.webp"
+      "comuna": "Independencia",
+      "ciudad": "Independencia",
+      "publicadoEn": "2026-06-24T13:55:17.777Z",
+      "foto": "img/casos/adopcion-5b432aca-84d2-49e3-a1c5-fe756abf4887.webp"
     },
     {
-      "id": "383a36ad-44f0-4cce-ba20-039b557297c6",
-      "nombre": "No tiene",
-      "especie": null,
+      "id": "a75b049f-c135-406b-89b4-cb886b679235",
+      "codigo": null,
+      "casoId": "a75b049f-c135-406b-89b4-cb886b679235",
+      "nombre": null,
+      "especie": "Perro",
+      "raza": null,
+      "esMestizo": null,
+      "edad": null,
       "sexo": null,
-      "historia": "Mamita abandonado con sus 9 cachorros. Ya está en hogar temporal\n\nRescatado el 22-06-2026 en Copiapo centro.",
+      "tamano": null,
+      "color": null,
+      "historia": "Esta perrita está preñada, es su primer embarazo, es una cachorra aún, está completamente sola, no tiene dueños y no es alimentada por los locatarios de allá",
       "personalidad": null,
+      "actividadesFavoritas": null,
       "salud": {
         "vacunado": false,
         "esterilizado": false,
@@ -298,9 +201,78 @@
         "conGatos": null,
         "aptoDepartamento": null
       },
-      "comuna": "Copiapó",
-      "fotoRemota": null,
-      "foto": null
+      "comuna": "Valparaíso",
+      "ciudad": null,
+      "publicadoEn": "2026-07-06T14:26:31.186Z",
+      "foto": "img/casos/adopcion-a75b049f-c135-406b-89b4-cb886b679235.webp"
+    },
+    {
+      "id": "3f5d1fba-c72b-4d43-9111-65053af05d37",
+      "codigo": null,
+      "casoId": "3f5d1fba-c72b-4d43-9111-65053af05d37",
+      "nombre": "Niño",
+      "especie": "Perro",
+      "raza": null,
+      "esMestizo": null,
+      "edad": "3 años",
+      "sexo": "Macho",
+      "tamano": null,
+      "color": null,
+      "historia": "Niño es un bebé de 3 años, con bastante energía, ojalá tenga más hermanos para interactuar, idealmente tutores adultos jóvenes que tengan la fuerza y paciencia para jugar con él.\nLe encanta correr y jugar.",
+      "personalidad": null,
+      "actividadesFavoritas": null,
+      "salud": {
+        "vacunado": false,
+        "esterilizado": false,
+        "desparasitado": false,
+        "necesidadesEspeciales": false,
+        "detalleNecesidadesEspeciales": null
+      },
+      "convivencia": {
+        "nivelDeEnergia": null,
+        "conNinos": null,
+        "conPerros": null,
+        "conGatos": null,
+        "aptoDepartamento": null
+      },
+      "comuna": "Algarrobo",
+      "ciudad": null,
+      "publicadoEn": "2026-06-29T20:37:30.101Z",
+      "foto": "img/casos/adopcion-3f5d1fba-c72b-4d43-9111-65053af05d37.webp"
+    },
+    {
+      "id": "f17b2a68-a937-4697-8b45-cee2b99fe24b",
+      "codigo": null,
+      "casoId": "f17b2a68-a937-4697-8b45-cee2b99fe24b",
+      "nombre": null,
+      "especie": "Perro",
+      "raza": null,
+      "esMestizo": null,
+      "edad": null,
+      "sexo": null,
+      "tamano": null,
+      "color": null,
+      "historia": "Este Perrito vive afuera de un hospital, tiene más de 12 años. Está con mucho dolor en los huesitos. Lo llevamos al vet para poder darle remedios tiene osteoartritis. Por el frío y ya su edad necesitamos que alguien lo pueda adoptar y que viva sus últimos años calientito y con mucho amor. No sabe lo que es eso 😢Es exquisito, se porta increíble. Sólo necesita un hogar que lo pueda amar. Está esterilizado. Por favor ayúdame a encontrarle una familia a este Viejito. Y que no termine su vida en la calle. Más info me contactan. Lo puedo ir a dejar.",
+      "personalidad": null,
+      "actividadesFavoritas": null,
+      "salud": {
+        "vacunado": false,
+        "esterilizado": false,
+        "desparasitado": false,
+        "necesidadesEspeciales": false,
+        "detalleNecesidadesEspeciales": null
+      },
+      "convivencia": {
+        "nivelDeEnergia": null,
+        "conNinos": null,
+        "conPerros": null,
+        "conGatos": null,
+        "aptoDepartamento": null
+      },
+      "comuna": "Las Condes",
+      "ciudad": null,
+      "publicadoEn": "2026-06-29T02:06:00.020Z",
+      "foto": "img/casos/adopcion-f17b2a68-a937-4697-8b45-cee2b99fe24b.webp"
     }
   ]
 }
