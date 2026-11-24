@@ -8,7 +8,8 @@
  *
  * CONFIGURACIÓN DEL WORKER
  *   Secreto  DEPLOY_HOOK_URL   la URL del "deploy hook" del proyecto de Pages
- *                              (Pages → Settings → Builds → Add deploy hook)
+ *                              (el proyecto → Settings → Builds → Deploy hooks;
+ *                              igual si el proyecto es Pages o Worker)
  *   Cron     23 *\/6 * * *     cada 6 horas (hora UTC), sin la barra invertida
  *
  * Plan gratuito: hasta 5 cron por cuenta y 10 ms de CPU por ejecución; esto

@@ -204,6 +204,11 @@ dominio dentro de Cloudflare.
   proyecto.
 - Plan gratuito: 500 publicaciones al mes (se usan ~120), 5 tareas
   programadas por cuenta, 20 minutos por publicación.
+- **Si el panel ofrece "Worker" en vez de "Pages"** (la modalidad nueva de
+  Cloudflare): mismo *Build command*, *Deploy command* `npx wrangler deploy`,
+  y la llave como **Build variable**. La configuración está en
+  `wrangler.jsonc` (sitio estático desde `dist/`, `404.html` para lo que no
+  existe). El campo `name` tiene que coincidir con el nombre del proyecto.
 
 El dominio está en NIC Chile, que no aloja
 zonas DNS: sólo delega. Por eso los servidores de nombres apuntan a Cloudflare

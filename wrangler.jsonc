@@ -1,0 +1,19 @@
+// Configuración para publicar en Cloudflare como Worker de sólo archivos
+// estáticos (la modalidad que ofrece hoy el panel de Cloudflare).
+//
+// En el panel: Build command  node scripts/construir.mjs
+//              Deploy command npx wrangler deploy
+//              Build variable MASCOTAAPP_API_KEY (secreta)
+//
+// "name" tiene que coincidir con el nombre del proyecto en el panel.
+{
+  "name": "patitasunidaslanding",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    // lo arma scripts/construir.mjs: el sitio sin scripts/ ni archivos
+    // internos, con los datos frescos de MascotaApp
+    "directory": "./dist",
+    // como hacía GitHub Pages: una dirección que no existe muestra 404.html
+    "not_found_handling": "404-page"
+  }
+}

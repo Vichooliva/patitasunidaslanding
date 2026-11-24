@@ -6,6 +6,10 @@
  *   Build output directory:  dist
  *   Variable secreta:        MASCOTAAPP_API_KEY
  *
+ * Si el proyecto se creó como Worker (modalidad nueva del panel), el mismo
+ * Build command; Deploy command "npx wrangler deploy", que lee wrangler.jsonc;
+ * y la llave va en "Build variables and secrets".
+ *
  * QUÉ HACE, EN ORDEN
  *   1. Si hay llave, trae datos frescos de MascotaApp (scripts/traer-datos.mjs).
  *   2. Optimiza las fotos nuevas (scripts/optimizar-fotos.py, con Pillow).
