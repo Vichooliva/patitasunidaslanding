@@ -2,8 +2,9 @@
    FINALES FELICES (portada, sección #historias)
 
    Arriba, un carrusel de tiras que se abren: la activa se ensancha y se ve a
-   color, las demás quedan como lomos de libro. Gira solo hasta que alguien
-   lo toca. Abajo, el relato de la activa: dónde la encontraron (un punto
+   color, las demás quedan como lomos de libro. Gira sola, empieza por una
+   historia distinta en cada visita y, si alguien la toca, vuelve a girar a
+   los 15 segundos. Abajo, el relato de la activa: dónde la encontraron (un punto
    sobre el largo de Chile), cuántos días pasaron hasta su final feliz (un
    contador) y su línea de tiempo, que se dibuja hito a hito con huellas
    entre uno y otro.
@@ -12,9 +13,10 @@
    concretadas, con los hitos públicos que registró la fundación.
    ===================================================================== */
 
-import { leerJSON, recortar, sinMovimiento, tieneNombre, mostrarSeccion } from "./animales.js";
+import { leerJSON, recortar, sinMovimiento, tieneNombre, mostrarSeccion, barajar } from "./animales.js";
 
 const INTERVALO = 9000; // ms entre historias en el giro automático
+const PAUSA_TRAS_TOQUE = 15000; // si alguien la toca, vuelve a girar sola después de esto
 const MIN_TIRAS = 12; // el diseño de tiras necesita doce para llenar la fila
 const MIN_PARA_GIRAR = 4; // con menos se muestran todas, sin girar
 
@@ -316,7 +318,9 @@ async function montar() {
   if (!lista || !relato) return;
 
   const datos = await leerJSON("data/historias.json");
-  const historias = (datos?.historias || []).filter((h) => h.foto).map(normalizar);
+  // Al azar en cada visita, como el anillo de adopción: con el orden por
+  // fecha siempre abría la misma historia y las demás casi no se veían.
+  const historias = barajar((datos?.historias || []).filter((h) => h.foto)).map(normalizar);
   if (!historias.length) return; // sin historias todavía: la sección no aparece
 
   const gira = historias.length >= MIN_PARA_GIRAR;
@@ -338,7 +342,9 @@ async function montar() {
 
   let actual = -1;
   let auto = null;
-  let detenido = sinMovimiento(); // tras tocarlo, ya no gira solo
+  let detenido = sinMovimiento(); // con "reducir movimiento" no gira sola
+  let leyendo = false; // el ratón está sobre el relato
+  let reanudar = null;
   let enPantalla = false;
   let programatico = false;
 
@@ -410,12 +416,20 @@ async function montar() {
     auto = null;
   };
   const arrancar = () => {
-    if (auto || detenido || !enPantalla || document.hidden) return;
+    if (auto || detenido || leyendo || !enPantalla || document.hidden) return;
     auto = window.setInterval(siguiente, INTERVALO);
   };
+  // Tocarla la detiene un rato, no para siempre: la fundación quiere que las
+  // historias vayan pasando.
   const tocado = () => {
-    detenido = true;
     parar();
+    window.clearTimeout(reanudar);
+    if (sinMovimiento()) return;
+    detenido = true;
+    reanudar = window.setTimeout(() => {
+      detenido = false;
+      arrancar();
+    }, PAUSA_TRAS_TOQUE);
   };
 
   carrusel.querySelector("[data-carrusel-siguiente]")?.addEventListener("click", () => {
@@ -453,12 +467,18 @@ async function montar() {
     }
   });
 
-  // mientras el ratón está encima se lee: no se cambia la historia
-  seccion.addEventListener("pointerenter", (e) => {
-    if (e.pointerType === "mouse") parar();
+  // Sólo se pausa con el ratón sobre el relato, mientras se lee. Antes se
+  // pausaba con el ratón en cualquier parte de la sección, y como se baja con
+  // la rueda, casi nunca llegaba a avanzar.
+  relato.addEventListener("pointerenter", (e) => {
+    if (e.pointerType !== "mouse") return;
+    leyendo = true;
+    parar();
   });
-  seccion.addEventListener("pointerleave", (e) => {
-    if (e.pointerType === "mouse") arrancar();
+  relato.addEventListener("pointerleave", (e) => {
+    if (e.pointerType !== "mouse") return;
+    leyendo = false;
+    arrancar();
   });
 
   if ("IntersectionObserver" in window) {
