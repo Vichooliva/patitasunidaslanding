@@ -218,6 +218,36 @@ const soloAdopcion = (a) => ({
 });
 
 /**
+ * Un caso "listo para adoptar" que todavía no tiene ficha de adopción: se
+ * publica con lo que trae el caso, con la misma forma que una ficha para que
+ * la web lo pinte igual. Salud y convivencia quedan sin dato (null), que la
+ * web muestra como "no registrado", nunca como "no".
+ */
+const desdeCaso = (c) => ({
+  id: c.id,
+  codigo: null,
+  casoId: c.id,
+  nombre: c.animal?.nombre ?? null,
+  especie: c.animal?.especie ?? null,
+  raza: null,
+  esMestizo: null,
+  edad: c.animal?.edadAproximada ?? null,
+  sexo: c.animal?.sexo ?? null,
+  tamano: null,
+  color: null,
+  historia: sinContacto(c.descripcion),
+  personalidad: null,
+  actividadesFavoritas: null,
+  salud: { vacunado: false, esterilizado: false, desparasitado: false, necesidadesEspeciales: false, detalleNecesidadesEspeciales: null },
+  convivencia: { nivelDeEnergia: null, conNinos: null, conPerros: null, conGatos: null, aptoDepartamento: null },
+  comuna: c.ubicacion?.comuna ?? null,
+  ciudad: null,
+  publicadoEn: c.creadoEn ?? null,
+  foto: null,
+  _fotoRemota: c.fotoPrincipalUrl ?? null,
+});
+
+/**
  * Una historia junta el caso (dónde y cuándo se rescató, sus hitos, cómo
  * terminó) con la ficha de adopción si la hubo (nombre, foto de después).
  * Se omite a propósito `ubicacion.referencia`: suele ser una dirección exacta,
@@ -365,10 +395,50 @@ async function avisarFotosSinUso() {
 
 /* ---------- conjuntos ---------- */
 
+/**
+ * "En adopción" = casos publicados con estado "listo para adoptar"
+ * (ready_adopt), y nada más: así lo pidió la fundación. Una ficha de
+ * adopción "disponible" cuyo caso sigue abierto, en atención, resuelto o
+ * cerrado NO se publica; el registro dice cuáles quedaron fuera para que la
+ * fundación los revise en MascotaApp.
+ * Si el caso tiene ficha se usan los datos de la ficha (nombre, salud,
+ * convivencia); si no la tiene, los del propio caso.
+ */
 async function traerAdopciones() {
-  const res = await pedirTodo(`/foundations/${SLUG}/adoptions?status=available`, MAX_ADOPCIONES);
-  if (!res) return;
-  const animales = res.filas.map(soloAdopcion);
+  const fichas = await pedirTodo(`/foundations/${SLUG}/adoptions?status=available`, MAX_ADOPCIONES);
+  const listos = await pedirTodo(`/foundations/${SLUG}/cases?status=ready_adopt`, MAX_ADOPCIONES);
+  // sin una de las dos listas no se puede aplicar la regla: se conserva el
+  // archivo anterior
+  if (!fichas || !listos) return;
+
+  const casosListos = new Set(listos.filas.map((c) => c.id));
+  const casosConFicha = new Set();
+  const animales = [];
+  const fuera = [];
+
+  for (const a of fichas.filas) {
+    if (a.casoId && casosListos.has(a.casoId)) {
+      animales.push(soloAdopcion(a));
+      casosConFicha.add(a.casoId);
+    } else {
+      fuera.push(a);
+    }
+  }
+  for (const c of listos.filas) {
+    if (!casosConFicha.has(c.id)) animales.push(desdeCaso(c));
+  }
+
+  console.log(
+    `  i en adopción: ${animales.length} (casos "listos para adoptar": ${listos.filas.length}, ` +
+      `de ellos ${casosConFicha.size} con ficha)`
+  );
+  if (fuera.length) {
+    console.log(
+      `  i ${fuera.length} ficha(s) "disponible" cuyo caso NO está "listo para adoptar" (no se publican):\n` +
+        fuera.map((a) => `      - ${a.nombre || "(sin nombre)"} · ${a.codigo || a.id} · caso ${a.casoId ?? "?"}`).join("\n")
+    );
+  }
+
   for (const a of animales) a.foto = await bajarFoto(a._fotoRemota, `adopcion-${a.id}`);
   await guardar("adopciones.json", { total: animales.length, animales });
 }

@@ -109,7 +109,7 @@ git add -A ; git commit -m "Actualiza datos" ; git push
 | `data/cifras.json` | `/stats` | contadores de la escena |
 | `data/casos-ayuda.json` | `/cases?featured=help` | (aún ninguna sección) |
 | `data/casos-exito.json` | `/cases?featured=success` | (aún ninguna sección) |
-| `data/adopciones.json` | `/adoptions?status=available`, todas las páginas | anillo y `adopta.html` |
+| `data/adopciones.json` | casos `ready_adopt` (con los datos de su ficha `/adoptions?status=available` si la tienen) | anillo, tarjetas y `adopta.html` |
 | `data/historias.json` | `/cases?status=resolved` + `/adoptions?status=adopted` + `/cases/{id}` por cada una | Finales felices |
 
 Lo que conviene saber del script:
@@ -117,6 +117,9 @@ Lo que conviene saber del script:
 - **Sólo escribe si algo cambió** (ignora las marcas de tiempo), y sólo baja
   fotos que no tenga: las nombra por id (`adopcion-<id>.webp`). Con
   `--todas-las-fotos` las vuelve a bajar todas.
+- **En adopción sólo van casos "listos para adoptar"** (`ready_adopt`): así lo
+  pidió la fundación. Una ficha "disponible" cuyo caso sigue abierto, en
+  atención o ya resuelto no se publica, y el registro dice cuál fue.
 - **No borra nada.** Al final lista las fotos de `img/casos` que ningún JSON
   usa (animales que salieron del catálogo); borrarlas lo decide la fundación.
 - **Si un conjunto falla, conserva el archivo anterior.** Una web con datos de
