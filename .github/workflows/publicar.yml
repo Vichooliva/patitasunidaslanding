@@ -1,0 +1,148 @@
+# Publica el sitio en GitHub Pages y mantiene al día los datos de MascotaApp.
+#
+# QUÉ HACE
+#   - Cada push a main: publica el sitio tal como está.
+#   - Cada 6 horas: trae de la API los animales en adopción, las historias y
+#     las cifras. Si algo cambió, hace commit y publica. Si no, no hace nada.
+#   - A mano (Actions → "Publicar el sitio" → Run workflow): trae datos y
+#     publica siempre.
+#
+# POR QUÉ PUBLICA ESTE FLUJO Y NO GITHUB SOLO
+#   La API exige una llave, también para las fotos, así que el navegador no
+#   puede llamarla: la llave quedaría a la vista en el código fuente. La llama
+#   este flujo, con la llave guardada como secreto. Y los commits que hace un
+#   flujo con su token automático no disparan la publicación de Pages
+#   ("Commits pushed by a GitHub Actions workflow that uses the GITHUB_TOKEN
+#   do not trigger a GitHub Pages build", docs de GitHub), así que el propio
+#   flujo publica.
+#
+# PUESTA EN MARCHA (una sola vez, ver README → "Publicación")
+#   1. Settings → Secrets and variables → Actions → New repository secret
+#      Nombre: MASCOTAAPP_API_KEY    Valor: la llave de MascotaApp
+#   2. Settings → Pages → Build and deployment → Source: "GitHub Actions"
+
+name: Publicar el sitio
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # cada 6 horas (hora UTC). Los datos cambian en horas, no en minutos.
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      todas_las_fotos:
+        description: "Volver a descargar todas las fotos (si cambiaron en la app)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write # para el commit de datos
+  pages: write # para publicar
+  id-token: write # lo exige deploy-pages
+
+# dos pasadas a la vez se pisarían el commit o la publicación
+concurrency:
+  group: publicar
+  cancel-in-progress: false
+
+jobs:
+  datos:
+    # un push tuyo publica lo que subiste; los datos se traen en las pasadas
+    # programadas o a mano
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      cambio: ${{ steps.commit.outputs.cambio }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar Pillow
+        run: python -m pip install --disable-pip-version-check --quiet "Pillow>=11,<12"
+
+      # continue-on-error: si un endpoint falla, lo que sí llegó se publica
+      # igual, y el último paso marca el flujo en rojo para que llegue el aviso.
+      - name: Traer datos
+        id: traer
+        continue-on-error: true
+        env:
+          MASCOTAAPP_API_KEY: ${{ secrets.MASCOTAAPP_API_KEY }}
+          TODAS: ${{ inputs.todas_las_fotos && '--todas-las-fotos' || '' }}
+        run: node scripts/traer-datos.mjs $TODAS
+
+      - name: Optimizar fotos nuevas
+        run: python scripts/optimizar-fotos.py
+
+      - name: Guardar si algo cambió
+        id: commit
+        run: |
+          git add -A data img/casos
+          if git diff --cached --quiet; then
+            echo "Sin cambios en los datos."
+            echo "cambio=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Actualiza datos desde MascotaApp"
+          # por si alguien hizo push mientras corría esto
+          git pull --rebase
+          git push
+          echo "cambio=true" >> "$GITHUB_OUTPUT"
+
+      - name: Avisar si la API falló
+        if: steps.traer.outcome == 'failure'
+        run: |
+          echo "::error::traer-datos.mjs terminó con fallos. Abre el paso 'Traer datos' para ver qué endpoint y por qué. Si dice 'Falta MASCOTAAPP_API_KEY', falta el secreto del repositorio."
+          exit 1
+
+  publicar:
+    needs: datos
+    # en un push siempre (datos se salta); a mano siempre; en las pasadas
+    # programadas sólo si los datos cambiaron
+    if: >-
+      !cancelled() && (
+        github.event_name == 'push' ||
+        github.event_name == 'workflow_dispatch' ||
+        needs.datos.outputs.cambio == 'true'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.desplegar.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # main y no el commit que disparó el flujo: así entra el commit de
+          # datos que acaba de hacer el trabajo anterior
+          ref: main
+
+      # Sólo lo que es sitio. Antes publicaba GitHub con Jekyll, que ignora
+      # todo lo que empieza por "_" (_seleccion.html, img/_sin-tono): aquí se
+      # excluye a mano para que siga sin publicarse.
+      - name: Armar la carpeta del sitio
+        run: |
+          rsync -a ./ _site/ \
+            --exclude='.git' --exclude='.github' --exclude='.gitignore' \
+            --exclude='_*' --exclude='scripts' --exclude='README.md'
+          echo "Archivos a publicar: $(find _site -type f | wc -l)"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Publicar en GitHub Pages
+        id: desplegar
+        uses: actions/deploy-pages@v4

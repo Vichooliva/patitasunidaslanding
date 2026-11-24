@@ -3,10 +3,15 @@
     python scripts/optimizar-fotos.py
 
 Llegan tal cual las subio la gente desde el telefono: 900x1200 px y hasta
-250 KB cada una. En la web se muestran en tarjetas de ~280x250, o sea que
-se descargaban diez veces mas pixeles de los que se ven. Aqui se reducen a
-600 px de ancho y se convierten a WebP, que a igual calidad pesa bastante
-menos que JPEG.
+250 KB cada una. Aqui se reducen a 720 px de ancho y se convierten a WebP,
+que a igual calidad pesa bastante menos que JPEG.
+
+720 y no 600: la tarjeta activa de "Finales felices" mide 420 px de ancho y
+el anillo de la portada pinta la foto al 128 % de la tarjeta para el efecto
+de paralaje. Con 600 se veian blandas en pantallas retina.
+
+Solo procesa JPEG y PNG: los .webp de img/casos ya son el resultado de una
+pasada anterior, y traer-datos.mjs no los vuelve a bajar.
 
 Ademas reescribe las rutas en data/*.json, porque cambia la extension.
 
@@ -25,8 +30,8 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FOTOS = os.path.join(RAIZ, "img", "casos")
 DATOS = os.path.join(RAIZ, "data")
 
-ANCHO_MAX = 600   # las tarjetas miden ~280 px; 600 cubre pantallas retina
-CALIDAD = 75
+ANCHO_MAX = 720
+CALIDAD = 74
 
 if not os.path.isdir(FOTOS):
     sys.exit(f"No existe {FOTOS}. Corre antes: node scripts/traer-datos.mjs")

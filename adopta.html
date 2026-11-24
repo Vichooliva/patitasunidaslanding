@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Adopta · Patitas Unidas</title>
+    <meta name="description" content="Todos los animales que la Fundación Patitas Unidas tiene en adopción en Chile. Busca por nombre o comuna y filtra por lo que necesitas." />
+    <link rel="canonical" href="https://fundacionpatitasunidas.cl/adopta.html" />
+    <meta name="theme-color" content="#2b2420" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+
+    <!-- Es la página que más se va a compartir (cada ficha enlaza aquí con
+         #id), así que lleva su propia tarjeta. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Patitas Unidas Chile" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:url" content="https://fundacionpatitasunidas.cl/adopta.html" />
+    <meta property="og:title" content="Adopta · Patitas Unidas" />
+    <meta property="og:description" content="Todos fueron rescatados por la fundación y hoy buscan una familia. Conoce sus historias." />
+    <meta property="og:image" content="https://fundacionpatitasunidas.cl/img/compartir.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+    <script type="module" src="js/catalogo.js"></script>
+  </head>
+  <body class="pagina-texto pagina-catalogo">
+    <header class="texto-top">
+      <a class="topbar-logo" href="index.html">
+        <img src="img/logo.webp" alt="" width="38" height="38" onerror="this.remove()" />
+        <span>Patitas Unidas</span>
+      </a>
+      <nav class="topbar-nav" aria-label="Navegaci&oacute;n principal">
+        <a href="index.html#nosotros">Nosotros</a>
+        <a href="adopta.html" aria-current="page">Adopta</a>
+        <a href="index.html#historias">Historias</a>
+        <a href="index.html#ayuda">Ayuda</a>
+      </nav>
+      <a class="btn btn-primary topbar-cta" href="index.html#ayuda">Donar</a>
+    </header>
+
+    <main class="catalogo" data-catalogo>
+      <div class="catalogo-cabeza">
+        <p class="eyebrow">Adopta</p>
+        <h1 class="texto-titulo">Todos los que buscan familia</h1>
+        <p class="lede">
+          Hoy son <strong data-total>varios</strong>. Todos fueron rescatados por la fundaci&oacute;n.
+          Busca por nombre o comuna, filtra por lo que necesitas y toca cualquiera para
+          conocer su historia completa.
+        </p>
+      </div>
+
+      <!-- Sin data/adopciones.json todavía -->
+      <div class="catalogo-aviso" data-sin-datos hidden>
+        <p>
+          Estamos actualizando la lista. Mientras tanto, todos los animales en adopci&oacute;n
+          est&aacute;n publicados en <a href="https://mascotaapp.cl" target="_blank" rel="noopener noreferrer">MascotaApp</a>.
+        </p>
+      </div>
+
+      <div data-con-datos>
+        <div class="catalogo-barra" role="search">
+          <label class="buscador">
+            <span class="sr-only">Buscar</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" data-buscar placeholder="Busca por nombre, comuna o algo de su historia" autocomplete="off" enterkeyhint="search" />
+          </label>
+          <label class="selector">
+            <span class="sr-only">Comuna</span>
+            <select data-comuna>
+              <option value="">Todas las comunas</option>
+            </select>
+          </label>
+          <label class="selector">
+            <span class="sr-only">Orden</span>
+            <select data-orden>
+              <option value="recientes">M&aacute;s recientes</option>
+              <option value="nombre">Por nombre</option>
+              <option value="azar">Al azar</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="catalogo-filtros" data-chips hidden></div>
+
+        <div class="catalogo-estado">
+          <p class="catalogo-cuenta" data-cuenta role="status" aria-live="polite"></p>
+          <button class="catalogo-limpiar" type="button" data-limpiar hidden>Limpiar filtros</button>
+        </div>
+
+        <div class="catalogo-grid" data-grid></div>
+
+        <div class="catalogo-vacio" data-vacio hidden>
+          <p class="catalogo-vacio-titulo">Ninguno coincide con esa b&uacute;squeda.</p>
+          <p>Prueba con menos filtros: puede que la ficha a&uacute;n no tenga ese dato cargado.</p>
+          <button class="btn btn-ghost" type="button" data-limpiar hidden>Limpiar filtros</button>
+        </div>
+      </div>
+
+      <aside class="adopta-cta">
+        <div>
+          <h2>&iquest;No puedes adoptar? Igual puedes ayudar.</h2>
+          <p>
+            Todos est&aacute;n tambi&eacute;n en MascotaApp, junto con los que a&uacute;n necesitan
+            ayuda para salir adelante. Ah&iacute; puedes ofrecer <strong>hogar temporal</strong>,
+            <strong>traslados</strong> o <strong>materiales</strong>, o inscribirte como
+            voluntario.
+          </p>
+        </div>
+        <a class="btn btn-primary" href="https://mascotaapp.cl" target="_blank" rel="noopener noreferrer">
+          Abrir MascotaApp
+        </a>
+      </aside>
+
+      <p class="fine catalogo-actualizado" data-actualizado></p>
+
+      <p class="texto-volver">
+        <a href="index.html">&larr; Volver al inicio</a>
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-legal">
+          <p>&copy; 2026 Fundaci&oacute;n Patitas Unidas &middot; RUT 65.280.072-6</p>
+          <p>
+            <a href="mailto:fundacionpatitasunidaschile@gmail.com">fundacionpatitasunidaschile@gmail.com</a>
+            <span aria-hidden="true">&middot;</span>
+            <a href="https://www.instagram.com/fundacionpatitasunidaschile/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <span aria-hidden="true">&middot;</span>
+            <a href="legal.html#privacidad">Privacidad</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

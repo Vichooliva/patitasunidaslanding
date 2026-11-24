@@ -94,7 +94,11 @@
       smoothScroll = targetScroll;
       initialized = true;
     } else {
-      smoothScroll = lerp(smoothScroll, targetScroll, 0.14);
+      /* 0.20, no 0.14: con 0.14 la escena tardaba unos 250 ms en alcanzar la
+         posición real de scroll, y ese retraso se lee como que la página va
+         pegada al dedo. 0.20 baja el arrastre a ~150 ms, que sigue limando el
+         escalón del scroll por rueda sin que se note el desfase. */
+      smoothScroll = lerp(smoothScroll, targetScroll, 0.2);
     }
 
     if (Math.abs(smoothScroll - targetScroll) < 0.08) {
@@ -106,10 +110,18 @@
 
     /* Tramos reescalados de 2700 a 1890 px al quitar el carrusel: la escena
        eran cinco pantallas de animacion antes de llegar a nada accionable. */
-    const frame2 = segmentInOut(smoothScroll, 390, 630, 910, 1130);
+    /* El borde de entrada de frame2 se adelanta de 390 a 300, y el de salida
+       se deja donde estaba: así desaparece la espera del arranque sin mover
+       nada de lo que viene después (frame3 y el alto de la escena siguen
+       cuadrando igual). */
+    const frame2 = segmentInOut(smoothScroll, 300, 560, 910, 1130);
     const frame3 = segmentInOut(smoothScroll, 1230, 1500, 1780, 1890);
     const progress = clamp(smoothScroll / 1890);
-    const introExit = smoothstep(60, 450, smoothScroll);
+    /* Arranca en 0, no en 60: esos primeros 60 px no movían absolutamente
+       nada y con el .stage clavado en sticky se sentían como que la página no
+       respondía. Y termina en 300 en vez de 450, para que el título no siga
+       ahí cuando frame2 ya está entrando. */
+    const introExit = smoothstep(0, 300, smoothScroll);
     const blurActive = clamp(frame2.active + frame3.active);
     const frame2Opacity = frame2.active * (1 - frame3.enter);
     const splitDrift = Math.pow(frame2.enter, 1.5);
@@ -382,135 +394,9 @@
 
   cargarCifras();
 
-  /* ---------- animales en adopción ----------
-     Se pintan desde data/adopciones.json. Los datos vienen de personas
-     escribiendo en una app, así que llegan como llegan: nombres tipo
-     "Sin nombre", especie y sexo en null, historias con saltos de línea.
-     Se limpian aquí en vez de exigirle formato a quien rescata un perro. */
-
-  const SIN_NOMBRE = /^(sin nombre|no tiene|s\/n|-+)$/i;
-
-  function nombreDigno(n) {
-    const t = (n || "").trim();
-    return !t || SIN_NOMBRE.test(t) ? "Aún sin nombre" : t;
-  }
-
-  /** La historia suele acabar con "Rescatado el DD-MM-AAAA en X." Se separa
-      para mostrarlo como dato aparte y que el párrafo respire. */
-  function partirHistoria(texto) {
-    const limpio = (texto || "").replace(/\s*\n+\s*/g, " ").trim();
-    const m = limpio.match(/^(.*?)\s*(Rescatad[oa]\s+el\s+.+?)\.?$/i);
-    return m
-      ? { cuerpo: m[1].trim(), rescate: m[2].trim() }
-      : { cuerpo: limpio, rescate: "" };
-  }
-
-  function recortar(texto, max) {
-    if (texto.length <= max) return texto;
-    const corte = texto.slice(0, max);
-    const esp = corte.lastIndexOf(" ");
-    return (esp > max * 0.6 ? corte.slice(0, esp) : corte).replace(/[.,;]$/, "") + "…";
-  }
-
-  async function cargarAdopciones() {
-    const seccion = document.getElementById("adopta");
-    const lista = document.querySelector("[data-adopta-lista]");
-    if (!seccion || !lista) return;
-
-    let datos;
-    try {
-      const r = await fetch("data/adopciones.json", { cache: "no-cache" });
-      if (!r.ok) return;
-      datos = await r.json();
-    } catch {
-      return; // sin datos: la sección se queda oculta
-    }
-
-    const conFoto = (datos.animales || []).filter((a) => a.foto);
-    if (!conFoto.length) return; // sin fotos no hay sección que mostrar
-
-    /* Se muestran sólo tres, elegidos al azar en cada visita.
-       Con la reja completa siempre salían los mismos y el resto no lo veía
-       nadie; rotando, todos tienen su turno de que alguien se fije en ellos.
-       Barajado de Fisher-Yates sobre una copia, para no tocar los datos. */
-    const barajado = conFoto.slice();
-    for (let i = barajado.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [barajado[i], barajado[j]] = [barajado[j], barajado[i]];
-    }
-    const animales = barajado.slice(0, 3);
-
-    lista.replaceChildren(
-      ...animales.map((a) => {
-        const { cuerpo, rescate } = partirHistoria(a.historia);
-        const art = document.createElement("article");
-        art.className = "adopta-card";
-
-        const fig = document.createElement("img");
-        fig.className = "adopta-foto";
-        fig.src = a.foto;
-        fig.alt = `Foto de ${nombreDigno(a.nombre)}`;
-        fig.loading = "lazy";
-        fig.decoding = "async";
-
-        const cuerpoEl = document.createElement("div");
-        cuerpoEl.className = "adopta-cuerpo";
-
-        const h3 = document.createElement("h3");
-        h3.textContent = nombreDigno(a.nombre);
-        cuerpoEl.appendChild(h3);
-
-        if (a.comuna) {
-          const loc = document.createElement("p");
-          loc.className = "adopta-comuna";
-          loc.textContent = a.comuna;
-          cuerpoEl.appendChild(loc);
-        }
-
-        if (cuerpo) {
-          const p = document.createElement("p");
-          p.className = "adopta-historia";
-          p.textContent = recortar(cuerpo, 190);
-          cuerpoEl.appendChild(p);
-        }
-
-        // sólo se muestran las marcas de salud que son ciertas: un listado de
-        // "no vacunado / no esterilizado" no ayuda a que lo adopten
-        const salud = a.salud || {};
-        const marcas = [
-          salud.vacunado && "Vacunado",
-          salud.esterilizado && "Esterilizado",
-          salud.desparasitado && "Desparasitado",
-          salud.necesidadesEspeciales && "Necesidades especiales",
-        ].filter(Boolean);
-
-        if (marcas.length) {
-          const ul = document.createElement("ul");
-          ul.className = "adopta-salud";
-          for (const m of marcas) {
-            const li = document.createElement("li");
-            li.textContent = m;
-            ul.appendChild(li);
-          }
-          cuerpoEl.appendChild(ul);
-        }
-
-        if (rescate) {
-          const r = document.createElement("p");
-          r.className = "adopta-rescate";
-          r.textContent = rescate;
-          cuerpoEl.appendChild(r);
-        }
-
-        art.append(fig, cuerpoEl);
-        return art;
-      })
-    );
-
-    seccion.hidden = false;
-  }
-
-  cargarAdopciones();
+  /* Los animales en adopción y las historias ya no se pintan aquí: viven en
+     js/anillo.js y js/historias.js, que index.html carga como módulos, y
+     comparten datos y ficha con adopta.html a través de js/animales.js. */
 
   requestTick();
 })();

@@ -26,10 +26,15 @@ python -m http.server 3008
 
 ```
 index.html        escena de portada + secciones de contenido
+adopta.html       todos los animales en adopción, con buscador y filtros
 legal.html        aviso legal, privacidad y créditos
 404.html          página de error (GitHub Pages la sirve sola)
 styles.css        capas de la escena, custom properties, y las secciones
-script.js         motor de scroll (rAF + lerp), navegación, datos de la API
+script.js         motor de scroll (rAF + lerp), navegación, cifras
+js/animales.js    datos de adopción y la ficha de cada animal (<dialog>)
+js/anillo.js      anillo 3D de la sección Adopta
+js/historias.js   carrusel y relato animado de Finales felices
+js/catalogo.js    buscador y filtros de adopta.html
 data/             JSON generado desde MascotaApp (no se edita a mano)
 img/              escena en WebP + logo + fotos de casos en img/casos/
 scripts/          descarga de datos y optimización de imágenes
@@ -56,23 +61,63 @@ el resto. Nada de librerías de animación.
 ## Secciones de contenido
 
 - `#nosotros` — misión y los cuatro pilares (familia, techo, alimento, esterilización)
-- `#adopta` — animales reales con foto, comuna e historia, desde la API
+- `#adopta` — anillo 3D con hasta doce animales al azar: gira solo, se
+  arrastra con inercia y cada foto abre la ficha completa. Lleva a
+  `adopta.html`, donde están todos con buscador (sin tildes: «nunoa» encuentra
+  «Ñuñoa»), filtros y orden. Los filtros se arman con lo que traen los datos:
+  si nadie cargó el tamaño, no aparece un filtro de tamaño. La URL guarda la
+  búsqueda (`?sexo=Hembra&ideal=ninos`) y `adopta.html#<id>` abre la ficha de
+  un animal: es el enlace que sale al pulsar «Compartir».
+- `#historias` — finales felices: casos resueltos y adopciones concretadas.
+  Arriba, tiras que se abren; abajo, el relato de la activa: dónde (un punto
+  que cae sobre el largo de Chile hasta su región), cuántos días tardó (un
+  contador) y su línea de tiempo con los hitos que registró la fundación.
 - `#ayuda` — voluntariado vía MascotaApp, botones de tienda, QR, y datos de donación
 - `#veterinarios` — plataforma de gestión clínica y el 70 % de descuento
 - pie — contacto y enlaces a MascotaApp
 
 ## Actualizar los datos
 
-Las cifras y las fotos de casos vienen de la API pública de MascotaApp. La llave
-**nunca** llega al navegador: la petición se hace desde tu máquina y al repositorio
-sólo llega el resultado.
+Todo viene de la API pública de MascotaApp (documentada en
+`mascotas-main/docs/api-publica-fundacion.md`). La API exige `X-API-Key`
+**también para las fotos**, así que el navegador no puede llamarla: la llave
+quedaría a la vista en el código fuente. La petición se hace fuera del
+navegador y al repositorio sólo llega el resultado.
+
+**Normalmente no hay que hacer nada:** `.github/workflows/publicar.yml` lo
+corre solo cada 6 horas con la llave guardada como secreto del repositorio, y
+si algo cambió hace commit y publica. Para forzarlo: pestaña **Actions →
+Publicar el sitio → Run workflow**.
+
+A mano, para probar en local:
 
 ```powershell
 $env:MASCOTAAPP_API_KEY = "la_llave"
-node scripts/traer-datos.mjs      # descarga JSON y fotos
+node scripts/traer-datos.mjs      # JSON + fotos nuevas
 python scripts/optimizar-fotos.py # obligatorio: llegan a 900x1200 y ~250 KB
-git add -A ; git commit -m "Actualiza datos" ; git push
 ```
+
+| Archivo | Endpoint | Lo usa |
+|---|---|---|
+| `data/cifras.json` | `/stats` | contadores de la escena |
+| `data/adopciones.json` | `/adoptions?status=available`, todas las páginas | anillo y `adopta.html` |
+| `data/historias.json` | `/cases?status=resolved` + `/adoptions?status=adopted` + `/cases/{id}` por cada una | Finales felices |
+
+Lo que conviene saber del script:
+
+- **Sólo escribe si algo cambió** (ignora las marcas de tiempo), y sólo baja
+  fotos que no tenga: las nombra por id (`adopcion-<id>.webp`). Con
+  `--todas-las-fotos` las vuelve a bajar todas.
+- **Borra las fotos que ya no menciona ningún JSON** (animales adoptados que
+  salieron del catálogo).
+- **Si un conjunto falla, conserva el archivo anterior.** Una web con datos de
+  ayer es mejor que una vacía.
+- **Tapa teléfonos y correos** que alguien haya escrito dentro de un texto
+  libre, y **no guarda `ubicacion.referencia`**, que suele ser una dirección
+  exacta. Comuna y región bastan.
+- La API redirige las fotos a Google Cloud Storage. El script sigue esa
+  redirección a mano para **no reenviarle la llave a Google**: `fetch` conserva
+  las cabeceras propias al saltar de dominio.
 
 `scripts/optimizar-escena.py` hace lo mismo con las imágenes de la portada; sólo
 hace falta si las reemplazas.
@@ -82,9 +127,10 @@ hace falta si las reemplazas.
 - [ ] **`esterilizaciones` viene en 0** desde la API. Es la métrica insignia de la
       fundación —la web dice que es «lo único que reduce la población en calle»— y
       está en blanco. O no se registran, o falta la función en MascotaApp.
-- [ ] **Ningún caso destacado.** `featured=help` y `featured=success` devuelven
-      vacío. Si un administrador marca casos en la app, se pueden montar dos
-      secciones más: «Necesitan ayuda ahora» y «Finales felices».
+- [ ] **«Finales felices» está oculta** hasta la primera pasada del flujo
+      `publicar.yml`: `data/historias.json` todavía no existe.
+- [ ] **Necesitan ayuda ahora.** `featured=help` devuelve vacío. Si un
+      administrador marca casos en la app, se puede montar esa sección.
 - [ ] **El correo de la API no coincide.** Devuelve `contacto@patitasunidas.cl`;
       el correcto es `fundacionpatitasunidaschile@gmail.com`.
 - [ ] **El enlace de Android va a una búsqueda** en Play Store, no a la ficha de
@@ -103,7 +149,27 @@ hace falta si las reemplazas.
 
 ## Publicación
 
-GitHub Pages sirve la rama `main`. El dominio está en NIC Chile, que no aloja
+Publica el flujo `.github/workflows/publicar.yml`, no GitHub por su cuenta
+(en **Settings → Pages**, la fuente es **GitHub Actions**):
+
+- cada push a `main` publica el sitio;
+- cada 6 horas trae los datos de MascotaApp y, si cambiaron, hace commit y
+  publica;
+- a mano: **Actions → Publicar el sitio → Run workflow**.
+
+Por qué así: los commits que hace un flujo con su token automático **no**
+disparan la publicación de Pages (lo dice la documentación de GitHub), así que
+si sólo hiciera commit de los datos, la web no se enteraría.
+
+No se publican `scripts/`, `.github/`, `README.md` ni nada que empiece por `_`
+(`_seleccion.html`, `img/_sin-tono/`). Antes los ocultaba Jekyll; ahora los
+excluye el flujo.
+
+Necesita el secreto **`MASCOTAAPP_API_KEY`** en **Settings → Secrets and
+variables → Actions**. Si falta o se rota la llave en Cloud Run, el flujo se
+pone en rojo y GitHub avisa por correo; la web sigue con los últimos datos.
+
+El dominio está en NIC Chile, que no aloja
 zonas DNS: sólo delega. Por eso los servidores de nombres apuntan a Cloudflare
 (`kehlani` y `woz.ns.cloudflare.com`), y los registros A del apex y el CNAME de
 `www` viven en Cloudflare **en modo DNS only** — con el proxy activo GitHub no

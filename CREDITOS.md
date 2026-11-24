@@ -14,11 +14,15 @@ si hiciera falta reemplazarlas.
 | `hero.jpg` | [Labrador con pelota](https://pd.w.org/2024/11/2316734abafa97e69.56576607-2048x1536.jpg) — WordPress Photo Directory | — | CC0 |
 | `split-left.jpg` | Border collie corriendo — rawpixel | — | CC0 |
 | `split-right.jpg` | Bulldog corriendo — rawpixel | — | CC0 |
-| `pin-1.jpg` | Cachorro golden retriever — rawpixel | — | CC0 |
-| `pin-2.jpg` | Labrador negro — rawpixel | — | CC0 |
-| `pin-3.jpg` | Cachorro terrier — rawpixel | — | CC0 |
 
-Todas fueron redimensionadas y recomprimidas (15 MB → 4,4 MB) respecto al original.
+Todas fueron redimensionadas y recomprimidas (15 MB → 4,4 MB → 948 KB) respecto
+al original. Las tres `pin-*.jpg` se eliminaron: eran del carrusel que se quitó.
+
+> **Cuidado:** las copias de `img/_sin-tono/` **no son un master fiel**. Llevan el
+> encuadre y el tamaño originales, pero les falta el viraje cálido de color que sí
+> tienen los `.webp` publicados, y ese paso se hizo a mano fuera del repo: no hay
+> script que lo reproduzca. Para recuperar una imagen de la escena, sacarla del
+> historial de git, no de `_sin-tono/`.
 
 > **Recomendación:** en cuanto la fundación tenga fotos propias de sus perros,
 > sustituirlas. Funcionan mucho mejor para captar adopciones que el stock genérico,
@@ -45,3 +49,20 @@ Sustituye a `Ogg Medium`, la fuente del diseño original: es un tipo **comercial
 Sharp Type** y se cargaba desde el CDN de un tercero, es decir, sin licencia. Si la
 fundación adquiere una licencia de Ogg, basta con restaurar el `@font-face` y cambiar
 `--font-display` en [`styles.css`](styles.css).
+
+## Código de terceros
+
+**Carrusel de «Finales felices»** (`js/historias.js` y la sección del mismo
+nombre en `styles.css`): adaptado de un pen de
+[simeydotme](https://codepen.io/simeydotme) en CodePen. Los pens públicos de
+CodePen se publican bajo licencia [MIT](https://blog.codepen.io/documentation/licensing/),
+que permite reutilizarlos citando el origen. Se cambiaron la paleta, los
+textos y el comportamiento del foco (el original movía el foco en cada giro
+automático y hacía saltar la página).
+
+**Anillo 3D de «Adopta»** (`js/anillo.js`): la idea —fotos en el interior de
+un cilindro, arrastre con inercia y paralaje dentro de cada marco— viene de un
+pen hecho con GSAP. Se reescribió desde cero en JavaScript puro, sin GSAP.
+
+**Flechas de los botones Anterior y Siguiente:** iconos de
+[Tabler Icons](https://tabler.io/icons), licencia MIT.

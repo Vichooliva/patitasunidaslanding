@@ -34,6 +34,8 @@
     <link rel="preload" as="image" href="img/sky.webp" fetchpriority="high" />
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
+    <script type="module" src="js/anillo.js"></script>
+    <script type="module" src="js/historias.js"></script>
   </head>
   <body>
     <main class="site-shell">
@@ -58,6 +60,7 @@
                 <a href="#cinema" data-scroll="0">Inicio</a>
                 <a href="#nosotros">Nosotros</a>
                 <a href="#adopta">Adopta</a>
+                <a href="#historias">Historias</a>
                 <a href="#ayuda">Ayuda</a>
                 <a href="#veterinarios">Veterinarios</a>
               </nav>
@@ -94,7 +97,7 @@
                  a la sección que corresponde. -->
             <nav class="hero-tags" aria-label="Áreas de trabajo">
               <a href="#nosotros">Rescate</a>
-              <a href="#nosotros">Adopción</a>
+              <a href="#adopta">Adopción</a>
               <a href="#ayuda">Voluntariado</a>
             </nav>
           </section>
@@ -146,6 +149,7 @@
           <nav class="topbar-nav" aria-label="Navegaci&oacute;n secundaria">
             <a href="#nosotros">Nosotros</a>
             <a href="#adopta">Adopta</a>
+            <a href="#historias">Historias</a>
             <a href="#ayuda">Ayuda</a>
             <a href="#veterinarios">Veterinarios</a>
           </nav>
@@ -203,12 +207,14 @@
       </section>
 
       <!-- ================= ADOPTA =================
-        Las tarjetas las pinta script.js con lo que hay en data/adopciones.json,
-        que genera scripts/traer-datos.mjs desde la API de MascotaApp. Si el
-        archivo no existe todavia, la seccion entera se oculta: mas vale que no
-        aparezca a que aparezca vacia.
+        Un anillo 3D con hasta doce animales al azar. Lo pinta js/anillo.js
+        con lo que hay en data/adopciones.json, que genera
+        scripts/traer-datos.mjs desde la API de MascotaApp. Si el archivo no
+        existe todavia, la seccion entera se oculta: mas vale que no aparezca
+        a que aparezca vacia.
+        El catalogo completo, con buscador y filtros, esta en adopta.html.
       -->
-      <section class="sheet sheet-adopta" id="adopta" aria-labelledby="adopta-title" hidden>
+      <section class="sheet sheet-dark sheet-adopta" id="adopta" aria-labelledby="adopta-title" hidden>
         <div class="wrap">
           <div class="sheet-head reveal">
             <div>
@@ -217,27 +223,67 @@
             </div>
             <div class="sheet-head-aside">
               <p class="lede">
-                Todos fueron rescatados por la fundaci&oacute;n y hoy buscan hogar. Estos
-                cambian cada vez que entras, para que todos tengan su turno.
+                Todos fueron rescatados por la fundaci&oacute;n y hoy buscan hogar. Gira la
+                rueda, toca el que te mire y conoce su historia completa.
               </p>
             </div>
           </div>
 
-          <div class="adopta-grid reveal" data-adopta-lista></div>
+          <div class="anillo" data-anillo aria-roledescription="carrusel" aria-label="Animales en adopci&oacute;n">
+            <div class="anillo-escena">
+              <div class="anillo-rueda" data-rueda></div>
+            </div>
+          </div>
 
-          <aside class="adopta-cta reveal">
+          <div class="anillo-pie reveal">
+            <p class="anillo-ayuda">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4"/></svg>
+              Arrastra para girar &middot; toca uno para ver su ficha
+            </p>
+            <a class="btn btn-primary" href="adopta.html">
+              <span>Ver los <span data-total>todos</span> y filtrar</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= HISTORIAS =================
+        Finales felices: casos resueltos y adopciones concretadas, con los
+        hitos que registro la fundacion. Lo pinta js/historias.js desde
+        data/historias.json. Oculta mientras no haya ninguna.
+      -->
+      <section class="sheet sheet-historias" id="historias" aria-labelledby="historias-title" hidden>
+        <div class="wrap">
+          <div class="sheet-head reveal">
             <div>
-              <h3>Los publicamos todos en MascotaApp</h3>
-              <p>
-                Ah&iacute; est&aacute;n los que buscan familia y los que a&uacute;n necesitan ayuda para
-                salir adelante. Te sirve tanto si quieres <strong>ser voluntario</strong>
-                como si simplemente quieres <strong>darle un hogar a un animal</strong>.
+              <p class="eyebrow">Finales felices</p>
+              <h2 class="sheet-title" id="historias-title">Llegaron de la calle. Esto es lo que pas&oacute; despu&eacute;s.</h2>
+            </div>
+            <div class="sheet-head-aside">
+              <p class="lede">
+                Cada caso empieza con un aviso en MascotaApp. Estos terminaron bien: d&oacute;nde
+                los encontramos, cu&aacute;nto tardaron y cada paso del camino, tal como lo fue
+                registrando la fundaci&oacute;n.
               </p>
             </div>
-            <a class="btn btn-primary" href="https://mascotaapp.cl" target="_blank" rel="noopener noreferrer">
-              Ver todos los casos
-            </a>
-          </aside>
+          </div>
+
+          <div class="carrusel reveal" data-carrusel aria-roledescription="carrusel" aria-label="Historias con final feliz">
+            <div class="carrusel-nav">
+              <button class="carrusel-btn" type="button" data-carrusel-anterior>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.586 4l-6.586 6.586a2 2 0 0 0 0 2.828l6.586 6.586a2 2 0 0 0 2.18 .434l.145 -.068a2 2 0 0 0 1.089 -1.78v-2.586h7a2 2 0 0 0 2 -2v-4l-.005 -.15a2 2 0 0 0 -1.995 -1.85l-7 -.001v-2.585a2 2 0 0 0 -3.414 -1.414z"/></svg>
+                <span>Anterior</span>
+              </button>
+              <button class="carrusel-btn" type="button" data-carrusel-siguiente>
+                <span>Siguiente</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.089 3.634a2 2 0 0 0 -1.089 1.78l-.001 2.586h-6.999a2 2 0 0 0 -2 2v4l.005 .15a2 2 0 0 0 1.995 1.85l6.999 -.001l.001 2.587a2 2 0 0 0 3.414 1.414l6.586 -6.586a2 2 0 0 0 0 -2.828l-6.586 -6.586a2 2 0 0 0 -2.18 -.434l-.145 .068z"/></svg>
+              </button>
+            </div>
+            <ul class="carrusel-lista" data-carrusel-lista></ul>
+          </div>
+
+          <article class="relato" data-relato aria-label="La historia elegida"></article>
         </div>
       </section>
 

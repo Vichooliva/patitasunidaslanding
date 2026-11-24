@@ -1605,21 +1605,14 @@ button {
   }
 }
 
-/* ---------- animales en adopcion ----------
+/* ---------- tarjetas de animal (catalogo de adopta.html) ----------
    Las fotos vienen de telefonos: casi todas verticales y de proporcion
-   distinta. Se recortan a un alto fijo para que la reja no quede a saltos. */
+   distinta. Se recortan a un alto fijo para que la reja no quede a saltos.
+   En la portada ya no hay reja: ahi esta el anillo (mas abajo). */
 
-.sheet-adopta[hidden] {
+.sheet-adopta[hidden],
+.sheet-historias[hidden] {
   display: none;
-}
-
-.adopta-grid {
-  display: grid;
-  /* auto-fit y no auto-fill: al mostrar solo tres, las columnas se estiran a
-     lo ancho en vez de dejar un hueco vacio a la derecha */
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: clamp(18px, 2vw, 28px);
-  margin-top: clamp(34px, 4vw, 54px);
 }
 
 .adopta-card {
@@ -1719,9 +1712,9 @@ button {
 }
 
 
-/* ---------- llamada a MascotaApp bajo las tarjetas ----------
-   En la web solo salen tres animales al azar; este bloque explica que el
-   catalogo completo vive en la app, y para quien sirve. */
+/* ---------- llamada a MascotaApp al pie de adopta.html ----------
+   Para quien no puede adoptar: en la app tambien se ofrece hogar temporal,
+   traslados o materiales. */
 
 .adopta-cta {
   display: flex;
@@ -1740,6 +1733,7 @@ button {
   flex: 1 1 380px;
 }
 
+.adopta-cta h2,
 .adopta-cta h3 {
   margin: 0 0 8px;
   font-family: var(--font-display);
@@ -2175,4 +2169,1648 @@ button {
 .pagina-texto .footer-legal {
   justify-content: center;
   text-align: center;
+}
+
+/* =====================================================================
+   ADOPTA, FINALES FELICES Y CATALOGO
+   El anillo 3D (js/anillo.js), la ficha de cada animal (js/animales.js),
+   las historias (js/historias.js) y la pagina adopta.html (js/catalogo.js).
+   ===================================================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.btn-ghost {
+  color: inherit;
+  background: transparent;
+  border-color: rgba(43, 36, 32, 0.3);
+}
+
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  border-color: var(--terracota);
+  background: rgba(196, 99, 76, 0.08);
+}
+
+.sheet-dark .btn-ghost {
+  border-color: rgba(250, 242, 234, 0.32);
+}
+
+/* ---------- anillo 3D ----------
+   Las medidas (--tarjeta-ancho, --tarjeta-alto, --perspectiva) las calcula
+   js/anillo.js segun el ancho de pantalla; estos son solo los valores de
+   partida. */
+
+.anillo {
+  --tarjeta-ancho: 240px;
+  --tarjeta-alto: 317px;
+  --perspectiva: 1500px;
+  position: relative;
+  /* a sangre: el anillo ocupa todo el ancho aunque el texto vaya en .wrap */
+  width: 100vw;
+  height: calc(var(--tarjeta-alto) + 110px);
+  margin: clamp(22px, 3vw, 44px) 0 0 calc(50% - 50vw);
+  /* el gesto horizontal es del anillo; el vertical sigue siendo scroll */
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  /* los extremos se funden con el fondo en vez de cortarse en seco (hace de
+     la vineta negra del diseno original, sobre cualquier fondo) */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 20%, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 20%, #000 80%, transparent 100%);
+}
+
+.anillo.is-arrastrando {
+  cursor: grabbing;
+}
+
+/* halo calido detras del anillo */
+.anillo::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(1100px, 96vw);
+  height: 78%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(196, 99, 76, 0.24), rgba(196, 99, 76, 0));
+  pointer-events: none;
+}
+
+/* La escena y la rueda son cajas planas en z=0, DELANTE de las tarjetas
+   (que van empujadas hacia atras con translateZ). Si recibieran el puntero
+   se tragarian el clic en la tarjeta del centro, que es justo la que mas se
+   toca. El arrastre lo escucha .anillo, asi que no pierde nada. */
+.anillo-escena {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--tarjeta-ancho);
+  height: var(--tarjeta-alto);
+  margin: calc(var(--tarjeta-alto) / -2) 0 0 calc(var(--tarjeta-ancho) / -2);
+  perspective: var(--perspectiva);
+  pointer-events: none;
+}
+
+.anillo-rueda {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.anillo-tarjeta {
+  position: absolute;
+  inset: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+  pointer-events: auto;
+}
+
+.anillo-boton {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  color: var(--paper);
+  background: #2a211b;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(250, 242, 234, 0.08);
+  cursor: inherit;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* entrada: suben escalonadas la primera vez que el anillo aparece */
+.js .anillo-boton {
+  opacity: 0;
+  transform: translateY(170px);
+  transition: opacity 900ms ease calc(var(--orden, 0) * 90ms),
+    transform 1400ms cubic-bezier(0.16, 1, 0.3, 1) calc(var(--orden, 0) * 90ms);
+}
+
+.js .anillo.is-in .anillo-boton {
+  opacity: 1;
+  transform: none;
+}
+
+.anillo-boton:focus-visible {
+  outline: 3px solid var(--caramelo);
+  outline-offset: -3px;
+}
+
+.anillo-foto {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* la foto es mas ancha que el marco y se desliza segun el angulo (--px) */
+.anillo-foto img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 128%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  transform: translateX(calc(-50% + var(--px, 0px)));
+  transition: scale 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.anillo-boton:hover .anillo-foto img {
+  scale: 1.05;
+}
+
+.anillo-texto {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 48px 16px 15px;
+  background: linear-gradient(to top, rgba(18, 13, 10, 0.88), rgba(18, 13, 10, 0));
+}
+
+.anillo-texto strong {
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.anillo-texto small {
+  color: var(--caramelo);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* las de los extremos se oscurecen (--sombra la pone el JS por angulo) */
+.anillo-boton::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: #120d0a;
+  opacity: var(--sombra, 0);
+  pointer-events: none;
+}
+
+.anillo-pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 28px;
+  margin-top: clamp(14px, 2vw, 26px);
+}
+
+.anillo-ayuda {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  opacity: 0.68;
+  font-size: 0.93rem;
+}
+
+.anillo-ayuda svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.anillo-pie .btn {
+  gap: 10px;
+}
+
+@media (max-width: 640px) {
+  .anillo-pie {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .anillo-ayuda {
+    justify-content: center;
+  }
+}
+
+/* ---------- ficha del animal ---------- */
+
+html:has(dialog.ficha[open]) {
+  overflow: hidden;
+}
+
+.ficha {
+  width: min(1000px, calc(100vw - 32px));
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.ficha::backdrop {
+  background: rgba(20, 15, 12, 0.66);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.ficha[open] {
+  animation: ficha-entra 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ficha[open]::backdrop {
+  animation: fundido 300ms ease;
+}
+
+@keyframes ficha-entra {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+}
+
+@keyframes fundido {
+  from {
+    opacity: 0;
+  }
+}
+
+.ficha-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  height: min(86vh, 720px);
+}
+
+.ficha-foto {
+  position: relative;
+  margin: 0;
+  background: #2a211b;
+}
+
+.ficha-foto img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ficha-foto.is-vacia {
+  background: #efe3d6;
+}
+
+.ficha-foto.is-vacia::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--huellas) center / 110px;
+  opacity: 0.18;
+}
+
+.ficha-cuerpo {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(26px, 3.4vw, 44px);
+}
+
+.ficha-lugar {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  color: var(--terracota);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ficha-lugar::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.ficha-nombre {
+  margin: 8px 0 16px;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.6vw, 2.9rem);
+  font-weight: 500;
+  line-height: 1.04;
+}
+
+.ficha-datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 22px;
+  padding: 0;
+  list-style: none;
+}
+
+.ficha-datos li {
+  padding: 6px 13px;
+  border-radius: 999px;
+  color: #8f3f2d;
+  background: rgba(196, 99, 76, 0.11);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.ficha-texto p {
+  margin: 0 0 14px;
+  font-size: 1rem;
+  line-height: 1.64;
+}
+
+.ficha-historia {
+  font-size: 1.04rem;
+}
+
+.ficha-sub {
+  margin: 24px 0 9px;
+  color: var(--terracota);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ficha-texto .adopta-salud {
+  margin: 0;
+}
+
+.ficha-texto .ficha-necesidades {
+  margin-top: 10px;
+  font-size: 0.94rem;
+}
+
+.ficha-convive {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ficha-convive li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px 6px 11px;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.ficha-convive .es-si {
+  color: #04663d;
+  background: rgba(4, 160, 93, 0.12);
+}
+
+.ficha-convive .es-si::before {
+  content: "\2713";
+}
+
+.ficha-convive .es-no {
+  color: rgba(43, 36, 32, 0.66);
+  background: rgba(43, 36, 32, 0.07);
+}
+
+.ficha-convive .es-no::before {
+  content: "\2715";
+}
+
+.ficha-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.ficha-nota {
+  min-height: 1.2em;
+  margin: 12px 0 0;
+  font-size: 0.86rem;
+  opacity: 0.62;
+  word-break: break-all;
+}
+
+.ficha-cerrar {
+  position: absolute;
+  z-index: 3;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--ink);
+  background: rgba(250, 242, 234, 0.94);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ficha-cerrar svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.ficha-cerrar:hover {
+  transform: rotate(90deg);
+}
+
+.ficha-cerrar:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .ficha {
+    width: calc(100vw - 20px);
+    max-height: calc(100dvh - 20px);
+    border-radius: 20px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .ficha-grid {
+    display: block;
+    height: auto;
+  }
+
+  .ficha-foto {
+    height: 44vh;
+  }
+
+  .ficha-cuerpo {
+    overflow: visible;
+  }
+
+  .ficha-acciones .btn {
+    width: 100%;
+  }
+}
+
+/* ---------- finales felices: carrusel de tiras ----------
+   Adaptado del carrusel de simeydotme en CodePen: tiras que se abren, la
+   activa a color y el resto como lomos. Mismo mecanismo (la fila rota
+   moviendo nodos y los nth-child recortan los bordes) con la paleta del
+   logo en vez del verde y cian del original. */
+
+#historias {
+  /* mas bajo que el original (80vh): debajo va el relato, y las dos cosas
+     tienen que poder leerse sin tanto scroll */
+  --hist-alto: clamp(320px, 50vh, 480px);
+  --hist-ancho: 400px;
+}
+
+.carrusel {
+  display: grid;
+  margin-top: clamp(22px, 2.6vw, 38px);
+}
+
+.carrusel-nav {
+  grid-row: 1;
+  justify-self: end;
+  display: flex;
+  gap: 10px;
+}
+
+.carrusel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(43, 36, 32, 0.22);
+  border-radius: 999px;
+  color: var(--ink);
+  background: transparent;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.carrusel-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.carrusel-btn:hover {
+  border-color: var(--terracota);
+  color: #a24734;
+  background: rgba(196, 99, 76, 0.08);
+}
+
+.carrusel-btn:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 3px;
+}
+
+.carrusel-lista {
+  display: flex;
+  overflow: hidden;
+  margin: 0;
+  padding: 1.2em 0 2.2em;
+  list-style: none;
+  contain: layout;
+  isolation: isolate;
+}
+
+.carrusel.is-pocas .carrusel-lista {
+  justify-content: center;
+}
+
+.carrusel-item {
+  display: grid;
+  position: relative;
+  align-content: start;
+  flex: 1 1 10%;
+  height: var(--hist-alto);
+  margin: 0 8px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: rgba(43, 36, 32, 0.14);
+  box-shadow: rgba(43, 33, 24, 0.3) 0 3px 15px 2px, rgba(43, 33, 24, 0.16) 0 12px 28px 0,
+    rgba(43, 33, 24, 0.1) 0 2px 4px 0;
+  transform: translate3d(0, 0, 0.1px);
+  contain: layout;
+  isolation: isolate;
+  cursor: pointer;
+}
+
+.carrusel-item,
+.carrusel-item * {
+  transition: all 0.6s cubic-bezier(0.55, 0.24, 0.18, 1);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.carrusel-foto,
+.carrusel-texto {
+  width: var(--hist-ancho);
+  height: auto;
+}
+
+.carrusel-item:hover {
+  flex-basis: calc(var(--hist-ancho) / 2);
+  transition: all 0.3s ease;
+}
+
+.carrusel-item[data-activo] {
+  flex-basis: var(--hist-ancho);
+  flex-grow: 0;
+  cursor: default;
+}
+
+.carrusel-item:focus-visible {
+  outline: 3px solid var(--terracota);
+  outline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+  .carrusel-item {
+    flex-basis: 15%;
+  }
+}
+
+@media (max-width: 600px) {
+  .carrusel-item {
+    flex-basis: 10%;
+    margin: 0 5px;
+    border-radius: 9px;
+    font-size: 3vw;
+  }
+
+  .carrusel-item[data-activo] {
+    flex-basis: 45%;
+    flex-grow: 0;
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(3),
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(7) {
+    flex: 0 0 10px;
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(2),
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(8) {
+    flex: 0 0 5px;
+    transform: translateX(-50px);
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(8) {
+    transform: translateX(50px);
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(1),
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(n + 9) {
+    flex: 0 0 0px;
+    margin: 0;
+    box-shadow: none;
+    opacity: 0 !important;
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:not(:nth-child(n + 5)) img,
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(n + 7) img {
+    opacity: 0.8;
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:not(:nth-child(n + 4)) *,
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(n + 7) * {
+    opacity: 0 !important;
+  }
+}
+
+@media (min-width: 601px) {
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(3),
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(10) {
+    flex: 0 0 10px;
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(2),
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(11) {
+    flex: 0 0 5px;
+    transform: translateX(-50px);
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(11) {
+    transform: translateX(50px);
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(1),
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(n + 12) {
+    flex: 0 0 0px;
+    margin: 0;
+    box-shadow: none;
+    opacity: 0 !important;
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:not(:nth-child(n + 5)) img,
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(n + 9) img {
+    opacity: 0.8;
+  }
+
+  .carrusel:not(.is-pocas) .carrusel-item:not(:nth-child(n + 4)) *,
+  .carrusel:not(.is-pocas) .carrusel-item:nth-child(n + 10) * {
+    opacity: 0 !important;
+  }
+}
+
+.carrusel-item img {
+  display: block;
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: var(--hist-ancho);
+  height: 100%;
+  transform: translate(-50%, -50%);
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  filter: saturate(0.2) contrast(0.8) brightness(1.08);
+  pointer-events: none;
+}
+
+/* velo terracota sobre las inactivas; en la activa se va hacia abajo */
+.carrusel-item::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(43, 36, 32, 0) 40%, rgba(196, 99, 76, 0.5) 70%, rgba(199, 154, 110, 0.62) 100%);
+  transition: all 0.66s cubic-bezier(0.55, 0.24, 0.18, 1);
+}
+
+.carrusel-item[data-activo]::after {
+  transform: translateY(100%);
+}
+
+.carrusel-item[data-activo],
+.carrusel-item[data-activo] * {
+  opacity: 1;
+  filter: none;
+}
+
+.carrusel-texto {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: start;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  min-height: 200px;
+  padding: 1.1em 1.2em;
+  background-image: radial-gradient(ellipse at 0 0, rgba(18, 13, 10, 0.55) 20%, transparent 55%);
+  background-size: 170% 220px;
+  background-repeat: no-repeat;
+}
+
+.carrusel-nombre {
+  margin: 0;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 1.9em;
+  font-weight: 500;
+  line-height: 1.05;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.carrusel-sub {
+  margin: 0 0 0.5em;
+  color: transparent;
+  background: linear-gradient(90deg, #f3cfa6, #ec9a83);
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.carrusel-nombre,
+.carrusel-sub {
+  max-width: 16em;
+  opacity: 0;
+  transform: translateX(-200px);
+  transition-duration: 1s;
+  text-wrap: balance;
+}
+
+@media (max-width: 800px) {
+  .carrusel-item img {
+    width: calc(var(--hist-ancho) * 0.5);
+  }
+
+  .carrusel-texto {
+    transform: translateX(-100%) rotate(90deg);
+    transform-origin: bottom right;
+    align-items: end;
+    justify-content: end;
+    flex-direction: column;
+    bottom: 0;
+    left: 0;
+    text-align: right;
+    background-image: radial-gradient(ellipse at 100% 100%, rgba(18, 13, 10, 0.5) 0%, transparent 50%);
+    background-position: -100% 100%;
+  }
+
+  [data-activo] .carrusel-texto {
+    background-position: 100% 100%;
+  }
+
+  .carrusel-nombre,
+  .carrusel-sub {
+    max-width: 70vh;
+    transform: translateX(200px);
+  }
+}
+
+[data-activo] .carrusel-texto * {
+  opacity: 1;
+  transform: translateX(0);
+  transition-duration: 0.66s;
+}
+
+[data-activo] .carrusel-nombre {
+  transition-delay: 0.1s;
+}
+
+[data-activo] .carrusel-sub {
+  transition-delay: 0.05s;
+}
+
+/* ---------- el relato de la historia activa ----------
+   Todo se escribe en su estado final y la animacion solo parte desde el
+   inicial (fill-mode both): con "reducir movimiento" se quitan las
+   animaciones y queda el relato completo, no a medias. */
+
+.relato {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-areas:
+    "donde cabeza cabeza"
+    "donde hitos  textos";
+  gap: 22px clamp(28px, 4vw, 64px);
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid rgba(196, 99, 76, 0.26);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 18px 50px rgba(43, 33, 24, 0.08);
+}
+
+.relato:empty {
+  display: none;
+}
+
+.relato:not(:has(.relato-textos)) .relato-hitos {
+  grid-column: 2 / -1;
+}
+
+@keyframes relato-sube {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.relato-cabeza {
+  grid-area: cabeza;
+  animation: relato-sube 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.relato-donde {
+  grid-area: donde;
+  animation: relato-sube 600ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+}
+
+.relato-etiqueta {
+  margin: 0 0 8px;
+  color: var(--terracota);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.relato-nombre {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  font-weight: 500;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.relato-dias {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin: 12px 0 0;
+  font-size: 1.02rem;
+}
+
+.relato-dias strong {
+  color: var(--terracota);
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.4vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* el largo de Chile, de Arica (arriba) al cabo de Hornos (abajo) */
+
+.chile {
+  position: relative;
+  height: 260px;
+  margin: 6px 0 14px;
+}
+
+.chile-franja {
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 7px;
+  border-radius: 7px;
+  background: linear-gradient(to bottom, rgba(199, 154, 110, 0.6), rgba(196, 99, 76, 0.42));
+  transform-origin: top;
+  animation: crece-y 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.chile-ref {
+  position: absolute;
+  left: 30px;
+  top: calc(var(--lat) * 100%);
+  transform: translateY(-50%);
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  opacity: 0.5;
+}
+
+.chile-ref::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  width: 7px;
+  height: 1px;
+  background: currentColor;
+}
+
+.chile-punto {
+  position: absolute;
+  left: 13.5px;
+  top: calc(var(--lat) * 100%);
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+  background: var(--terracota);
+  animation: punto-llega 1100ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both,
+    latido 2.4s ease-out 1.4s infinite;
+}
+
+@keyframes crece-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+/* cae desde Arica hasta su region: el ojo sigue el viaje */
+@keyframes punto-llega {
+  from {
+    top: 0;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+}
+
+@keyframes latido {
+  0% {
+    box-shadow: 0 0 0 0 rgba(196, 99, 76, 0.5);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 14px rgba(196, 99, 76, 0);
+  }
+}
+
+.relato-lugar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.relato-lugar strong {
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 600;
+}
+
+.relato-lugar span {
+  opacity: 0.7;
+}
+
+/* la linea de tiempo se dibuja de arriba abajo y cada hito aparece cuando
+   la linea lo alcanza; entre uno y otro, huellas */
+
+.relato-hitos {
+  --paso: 420ms;
+  grid-area: hitos;
+  position: relative;
+  margin: 0;
+  padding: 4px 0 0 38px;
+  list-style: none;
+}
+
+.relato-hitos::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 12px;
+  bottom: 14px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, var(--caramelo), var(--terracota));
+  opacity: 0.45;
+  transform-origin: top;
+  animation: crece-y calc(var(--n) * var(--paso)) cubic-bezier(0.45, 0, 0.55, 1) 350ms both;
+}
+
+.hito {
+  position: relative;
+  padding-bottom: 28px;
+  animation: hito-entra 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(350ms + var(--i) * var(--paso));
+}
+
+.hito:last-child {
+  padding-bottom: 0;
+}
+
+@keyframes hito-entra {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+.hito-punto {
+  position: absolute;
+  left: -34px;
+  top: 3px;
+  width: 16px;
+  height: 16px;
+  border: 3px solid var(--terracota);
+  border-radius: 50%;
+  background: var(--paper);
+  animation: punto-pop 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: calc(350ms + var(--i) * var(--paso));
+}
+
+/* el final se marca: punto lleno con halo */
+.hito[data-tipo="adoption"] .hito-punto,
+.hito[data-tipo="fin"] .hito-punto {
+  left: -37px;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  background: var(--terracota);
+  box-shadow: 0 0 0 6px rgba(196, 99, 76, 0.16);
+}
+
+@keyframes punto-pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+.hito-tipo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin: 0 0 3px;
+  color: var(--terracota);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.hito-tipo time {
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  opacity: 0.55;
+}
+
+.hito-titulo {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.hito-desc {
+  margin: 4px 0 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  opacity: 0.75;
+}
+
+.hito-foto {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin-top: 10px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 6px 16px rgba(43, 33, 24, 0.16);
+}
+
+/* tres pasos sobre la linea, alternando a un lado y al otro */
+.huellas {
+  position: absolute;
+  left: -38px;
+  top: 24px;
+  bottom: 0;
+  width: 26px;
+  pointer-events: none;
+}
+
+/* el dibujo de la huella ocupa solo la mitad de su caja de 120: por eso el
+   tamano grande y el recorte con background-size */
+.huellas i {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: var(--huellas) 33% 14% / 180% no-repeat;
+  opacity: 0.75;
+  animation: huella 360ms ease-out both;
+}
+
+.huellas i:nth-child(1) {
+  top: 14%;
+  left: -6px;
+  rotate: 165deg;
+  animation-delay: calc(350ms + var(--i) * var(--paso) + 120ms);
+}
+
+.huellas i:nth-child(2) {
+  top: 42%;
+  left: 10px;
+  rotate: 195deg;
+  animation-delay: calc(350ms + var(--i) * var(--paso) + 220ms);
+}
+
+.huellas i:nth-child(3) {
+  top: 70%;
+  left: -6px;
+  rotate: 165deg;
+  animation-delay: calc(350ms + var(--i) * var(--paso) + 320ms);
+}
+
+@keyframes huella {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+
+.relato-textos {
+  grid-area: textos;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  animation: relato-sube 700ms cubic-bezier(0.22, 1, 0.36, 1) 700ms both;
+}
+
+.relato-cita {
+  margin: 0;
+}
+
+.relato-cita blockquote {
+  margin: 0;
+  padding-left: 16px;
+  border-left: 3px solid rgba(196, 99, 76, 0.36);
+  font-size: 0.98rem;
+  line-height: 1.62;
+  opacity: 0.86;
+}
+
+.relato-cita-final blockquote {
+  border-left-color: var(--terracota);
+  font-weight: 500;
+  opacity: 1;
+}
+
+.relato-despues {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 12px 30px rgba(43, 33, 24, 0.16);
+}
+
+@media (max-width: 900px) {
+  .relato {
+    grid-template-columns: 104px minmax(0, 1fr);
+    grid-template-areas:
+      "cabeza cabeza"
+      "donde  hitos"
+      "donde  textos";
+  }
+
+  .relato:not(:has(.relato-textos)) .relato-hitos {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .relato {
+    grid-template-columns: 70px minmax(0, 1fr);
+    gap: 18px;
+    padding: 22px 16px 24px;
+  }
+
+  .chile {
+    height: 200px;
+  }
+
+  /* no caben las ciudades de referencia: queda la franja y el punto */
+  .chile-ref {
+    display: none;
+  }
+
+  .relato-lugar strong {
+    font-size: 1rem;
+  }
+
+  .relato-lugar span {
+    font-size: 0.78rem;
+  }
+
+  .carrusel-nav {
+    justify-self: stretch;
+    justify-content: space-between;
+  }
+}
+
+/* ---------- catalogo (adopta.html) ---------- */
+
+.pagina-catalogo .texto-top {
+  gap: clamp(12px, 3vw, 32px);
+}
+
+.topbar-nav a[aria-current="page"] {
+  opacity: 1;
+}
+
+.topbar-nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+.catalogo {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: clamp(36px, 5vw, 64px) 24px clamp(48px, 6vw, 80px);
+}
+
+.catalogo-cabeza {
+  max-width: 760px;
+  margin-bottom: clamp(20px, 2.6vw, 30px);
+}
+
+/* el buscador se queda a mano mientras se recorre la lista */
+.catalogo-barra {
+  position: sticky;
+  z-index: 15;
+  top: 64px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 -24px;
+  padding: 12px 24px;
+  background: rgba(250, 242, 234, 0.94);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.buscador {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 320px;
+}
+
+.buscador svg {
+  position: absolute;
+  left: 17px;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.buscador input,
+.selector select {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid rgba(43, 36, 32, 0.18);
+  border-radius: 999px;
+  color: var(--ink);
+  background-color: #fff;
+  font: inherit;
+  font-size: 1rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.buscador input {
+  padding: 0 18px 0 48px;
+}
+
+.selector {
+  flex: 0 1 230px;
+}
+
+.selector select {
+  padding: 0 42px 0 18px;
+  font-size: 0.95rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232b2420' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 15px;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.buscador input:focus,
+.selector select:focus-visible {
+  outline: none;
+  border-color: var(--terracota);
+  box-shadow: 0 0 0 4px rgba(196, 99, 76, 0.16);
+}
+
+.catalogo-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 30px;
+  margin-top: 14px;
+}
+
+.catalogo-filtros[hidden] {
+  display: none;
+}
+
+.filtro-grupo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.filtro-titulo {
+  margin-right: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(43, 36, 32, 0.18);
+  border-radius: 999px;
+  color: var(--ink);
+  background: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.chip:hover {
+  border-color: var(--terracota);
+}
+
+.chip[aria-pressed="true"] {
+  color: #fff;
+  border-color: var(--terracota);
+  background: var(--terracota);
+}
+
+.chip-n {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.62;
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--terracota);
+  outline-offset: 2px;
+}
+
+.catalogo-estado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 34px;
+  margin: 22px 0 16px;
+}
+
+.catalogo-cuenta {
+  margin: 0;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.catalogo-limpiar {
+  padding: 6px 2px;
+  color: #a24734;
+  background: none;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.catalogo-limpiar[hidden],
+.catalogo-vacio [data-limpiar][hidden] {
+  display: none;
+}
+
+.catalogo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+}
+
+.catalogo-card {
+  position: relative;
+}
+
+.catalogo-card:focus-within {
+  outline: 2px solid var(--terracota);
+  outline-offset: 3px;
+}
+
+.adopta-abrir {
+  padding: 0;
+  color: inherit;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* el boton del nombre cubre toda la tarjeta */
+.adopta-abrir::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+}
+
+.adopta-abrir:focus-visible {
+  outline: none;
+}
+
+.adopta-meta {
+  margin: 0;
+  font-size: 0.86rem;
+  opacity: 0.66;
+}
+
+.adopta-foto-vacia {
+  position: relative;
+  display: grid;
+  place-items: center;
+  color: rgba(43, 36, 32, 0.55);
+  background: #efe3d6;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.adopta-foto-vacia::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--huellas) center / 90px;
+  opacity: 0.16;
+}
+
+.adopta-foto-vacia span {
+  position: relative;
+}
+
+.catalogo-vacio {
+  padding: 48px 24px;
+  border: 1px dashed rgba(43, 36, 32, 0.22);
+  border-radius: 20px;
+  text-align: center;
+}
+
+.catalogo-vacio[hidden] {
+  display: none;
+}
+
+.catalogo-vacio p {
+  margin: 0 0 8px;
+  opacity: 0.75;
+}
+
+.catalogo-vacio .catalogo-vacio-titulo {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  opacity: 1;
+}
+
+.catalogo-vacio .btn {
+  margin-top: 14px;
+}
+
+.catalogo-aviso {
+  padding: 22px 24px;
+  border-radius: 16px;
+  background: rgba(196, 99, 76, 0.08);
+}
+
+.catalogo-aviso[hidden] {
+  display: none;
+}
+
+.catalogo-aviso p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.catalogo-aviso a {
+  color: #a24734;
+}
+
+.catalogo .adopta-cta {
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.catalogo-actualizado {
+  text-align: center;
+}
+
+/* las tarjetas se reacomodan deslizandose al filtrar (View Transitions) */
+::view-transition-group(*) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (max-width: 640px) {
+  .catalogo {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .catalogo-barra {
+    top: 62px;
+    margin: 0 -16px;
+    padding: 10px 16px;
+  }
+
+  .selector {
+    flex: 1 1 140px;
+  }
+
+  /* el boton Donar de las barras no debe heredar el ancho completo que los
+     .btn toman en movil: se estiraba hasta comerse media barra */
+  .topbar-cta {
+    width: auto;
+  }
+}
+
+/* ---------- sin movimiento ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .js .anillo-boton {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .ficha[open],
+  .ficha[open]::backdrop,
+  .relato *,
+  .relato *::before {
+    animation: none !important;
+  }
+
+  .carrusel-item,
+  .carrusel-item * {
+    transition: none !important;
+  }
 }

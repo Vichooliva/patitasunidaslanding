@@ -13,6 +13,27 @@ que sirve tambien para el logo.
 Reescribe las referencias en index.html y styles.css. Es idempotente: si ya
 estan convertidas, no hace nada.
 
+--- Segunda pasada, aplicada a mano sobre los .webp ya generados ---
+
+Bajar la calidad no servia de nada: sky, ground y frame-two son cesped y
+follaje, puro detalle de alta frecuencia, y a q55 apenas caian un 3 %. Lo que
+si funciona es un desenfoque gaussiano minimo ANTES de codificar, calibrado
+segun el tamano al que se pinta cada capa:
+
+    sky         blur 0.5  q70    pantalla completa, se ve entera -> conservador
+    ground      blur 0.8  q70    enmascarada arriba y a scale(0.86)
+    frame-two   blur 1.1  q70    se pinta a min(122vw, 2160px): el navegador
+                                 ya la escala x1.7, el desenfoque sale gratis
+    hero        blur 0.4  q68    protagonista: la cara del perro aguanta,
+                                 solo se ablanda el cesped del fondo
+    split-*     blur 0.4  q68    se pintan a ~926 px desde 900 px de origen
+
+Total de la escena: 1455 KB -> 948 KB.
+
+OJO: esa pasada NO es idempotente (desenfocar dos veces emborrona de verdad) y
+no esta automatizada aqui a proposito. Si algun dia hay que rehacer la escena,
+partir de git, no de los .webp actuales.
+
 Requiere Pillow:  python -m pip install Pillow
 """
 from PIL import Image
@@ -31,9 +52,6 @@ PLAN = {
     "hero.jpg": (1400, 76),
     "split-left.jpg": (900, 78),
     "split-right.jpg": (900, 78),
-    "pin-1.jpg": (320, 80),
-    "pin-2.jpg": (320, 80),
-    "pin-3.jpg": (320, 80),
     "logo.png": (400, 82),
 }
 
